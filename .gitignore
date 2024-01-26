@@ -2,7 +2,6 @@
 hyvr.egg-info/*
 dist/*
 build/*
-*.ipynb
 __pycache__
 
 
@@ -11,23 +10,13 @@ docs/_build/
 
 # Tests
 .pytest_chache
-tests/full_testcases/small
-tests/full_testcases/small_reference/HGS*
-tests/full_testcases/small_reference/*.h5
-tests/full_testcases/small_reference/MODFLOW
-tests/simple_testcases/made_simple
-tests/simple_testcases/trough
-hyvr/made.ini
-hyvr/small/*
 
 # profiling
-profile/small
 
-# cythonize output
-hyvr/*.html
-hyvr/geo/*.html
-*.so
 
 # coverage
 .coverage
 htmlcov
+
+# external
+external
