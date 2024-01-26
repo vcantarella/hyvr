@@ -3,6 +3,7 @@ import numpy.typing as npt
 import numba
 import scipy
 
+
 @numba.njit()
 def normal_plane_from_dip_dip_dir(dip: float, dip_dir: float) -> npt.ArrayLike:
     """
@@ -26,21 +27,24 @@ def normal_plane_from_dip_dip_dir(dip: float, dip_dir: float) -> npt.ArrayLike:
     normal_vec[2] = np.cos(dip)
     return normal_vec
 
+
 @numba.njit()
 def rotation_matrix_x(alpha):
-    arr = np.array([[1.,0.,0.],
-                     [0., np.cos(alpha), -np.sin(alpha)],
-                     [0., np.sin(alpha), np.cos(alpha)],
-                     ])
+    arr = np.array([[1., 0., 0.],
+                    [0., np.cos(alpha), -np.sin(alpha)],
+                    [0., np.sin(alpha), np.cos(alpha)],
+                    ])
     return arr
+
 
 @numba.njit()
 def rotation_matrix_z(alpha):
-    arr = np.array([[np.cos(alpha),-np.sin(alpha),0.],
-                     [np.sin(alpha), np.cos(alpha), 0.],
-                     [0., 0., 1.],
-                     ])
+    arr = np.array([[np.cos(alpha), -np.sin(alpha), 0.],
+                    [np.sin(alpha), np.cos(alpha), 0.],
+                    [0., 0., 1.],
+                    ])
     return arr
+
 
 @numba.njit()
 def is_point_inside_ellipsoid(x: np.ndarray, y: np.ndarray, z: np.ndarray,
@@ -134,9 +138,9 @@ def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     ccc = normalized_dz / c
     len_normvec = np.sqrt(aaa ** 2 + bbb ** 2 + ccc ** 2)
     normvec_x = (aaa * cos_alpha
-                    + bbb * sin_alpha) / len_normvec
+                 + bbb * sin_alpha) / len_normvec
     normvec_y = (-aaa * sin_alpha
-                    + bbb * cos_alpha) / len_normvec
+                 + bbb * cos_alpha) / len_normvec
     normvec_z = ccc / len_normvec
 
     len_normvec_xy = np.sqrt(normvec_x ** 2 + normvec_y ** 2)
@@ -149,7 +153,7 @@ def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     # in negative x and z direction.
     # direction.
     dip_bulb = -np.arccos(np.abs(normvec_z)) \
-            * np.sign(normvec_x * normvec_z) / np.pi * 180
+               * np.sign(normvec_x * normvec_z) / np.pi * 180
 
     # The azimuth angle should also be between -90 and 90. It is
     # the angle between the projection of the normal vector into
@@ -161,7 +165,7 @@ def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     # always positive, and the y component is multiplied by the
     # sign of the x component
     dip_dir_counterclockwise = -np.arctan2(np.sign(normvec_x) * normvec_y, np.abs(normvec_x)) \
-                                / np.pi * 180
+                               / np.pi * 180
     dip_dir_bulb = (-dip_dir_counterclockwise + 90) % 360
 
     # if len_normvec != 0:
@@ -178,7 +182,7 @@ def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     dip_output = np.where(dip_output > dip, dip, dip_output)
     dip_output = np.where(dip_output < - dip, -dip, dip_output)
     return dip_output, dip_dir_output, norm_distance
-        
+
 
 @numba.njit()
 def get_alternating_facies(facies, n_layers, facies_ordering) -> np.ndarray:
@@ -186,20 +190,23 @@ def get_alternating_facies(facies, n_layers, facies_ordering) -> np.ndarray:
     Returns a vector of alternating facies numbers 
     """
     if facies_ordering:
-        facies_array = alternating_facies(facies, n_layers) 
+        facies_array = alternating_facies(facies, n_layers)
     else:
         facies_array = np.random.choice(facies, n_layers)
     return facies_array
+
+
 @numba.njit()
 def alternating_facies(facies, n_layers):
     initial_size = np.int32(facies.size)
     reps = np.int32(np.ceil(n_layers / facies.size))
     facies_array = np.repeat(facies, reps)
-    facies_array = np.reshape(facies_array, (initial_size,reps))
+    facies_array = np.reshape(facies_array, (initial_size, reps))
     final_array = facies_array.transpose().copy()
     final_array = np.reshape(final_array, final_array.size)
     final_array = final_array[:n_layers]
     return final_array
+
 
 @numba.njit()
 def coterminal_angle(angle):
@@ -210,18 +217,21 @@ def coterminal_angle(angle):
     normalized_angle_radians = np.deg2rad(normalized_angle)
     return normalized_angle_radians
 
+
 @numba.njit()
 def azimuth_to_counter_clockwise(azimuth: npt.ArrayLike) -> npt.ArrayLike:
     h = 450 - azimuth
     degree = np.where(h >= 360, h - 360, h)
     return degree
 
+
 @numba.njit()
 def sign(x: float):
     return (x >= 0) - (x < 0)
 
-@numba.jit(nopython=True,parallel=True)
-def min_distance(x,y, P):
+
+@numba.jit(nopython=True, parallel=True)
+def min_distance(x, y, P):
     """
     Compute minimum/a distance/s between
     a point P[x0,y0] and a curve (x,y)
@@ -232,17 +242,16 @@ def min_distance(x,y, P):
         
     Returns min indexes and distances array.
     """
-    distance = lambda X, x, y: np.sqrt((X[0] - x)**2 + (X[1] - y)**2)
+    distance = lambda X, x, y: np.sqrt((X[0] - x) ** 2 + (X[1] - y) ** 2)
     # compute distance
-    d_matrix = np.zeros((P.shape[0],x.size))
     d_array = np.zeros((P.shape[0]))
     glob_min_idx = np.zeros((P.shape[0]))
     for i in numba.prange(P.shape[0]):
-        d_line = distance(P[i],x,y)
-        d_matrix[i] = d_line
+        d_line = distance(P[i], x, y)
         d_array[i] = np.min(d_line)
         glob_min_idx[i] = np.argmin(d_line)
     return d_array, glob_min_idx
+
 
 def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
     """
@@ -255,6 +264,7 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
         k:		Wavenumber
         h:		Height
         eps_factor:	Random background noise (normal variance)
+        omega: initial angle
 
     Returns:
         theta : angle array
@@ -263,10 +273,10 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
     """
 
     # Correlated variance calculation => Gaussian function
-    s_range = np.arange(0,s_max, (s_max/1000))
-    dist_arr = scipy.spatial.distance.pdist(np.expand_dims(s_range, axis = 1), 'sqeuclidean')
+    s_range = np.arange(0, s_max, (s_max / 1000))
+    dist_arr = scipy.spatial.distance.pdist(np.expand_dims(s_range, axis=1), 'sqeuclidean')
     variance = eps_factor
-    cov = variance * np.exp(-(1/2)*dist_arr)
+    cov = variance * np.exp(-(1 / 2) * dist_arr)
 
     cov = scipy.spatial.distance.squareform(cov)
     cov[np.diag_indices_from(cov)] = variance
@@ -276,43 +286,44 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
 
     def rhs(t, y, k, h):
         eps_t = np.interp(np.array([t]), s_range, e_s)
-        eps_t = eps_t[0] #from array to float
-        d_tau_ds = (eps_t - y[1] - 2*h/k*y[0])*(k**2)
+        eps_t = eps_t[0]  # from array to float
+        d_tau_ds = (eps_t - y[1] - 2 * h / k * y[0]) * (k ** 2)
         d_theta_ds = y[0]
         dx_ds = np.cos(y[1])
         dy_ds = np.sin(y[1])
         return np.array([d_tau_ds, d_theta_ds, dx_ds, dy_ds])
-    
+
     def jac(t, y, k, h):
-        return np.array([[-2*h*k, -k**2,0,0],
-                         [1,0,0,0],
-                         [0,-np.sin(y[1]),0,0],
-                         [0,np.cos(y[1]),0,0]])
-    
-    y0 = np.array([omega*k, 0., 0., 0.])
-    
+        return np.array([[-2 * h * k, -k ** 2, 0, 0],
+                         [1, 0, 0, 0],
+                         [0, -np.sin(y[1]), 0, 0],
+                         [0, np.cos(y[1]), 0, 0]])
+
+    y0 = np.array([omega * k, 0., 0., 0.])
+
     solution = scipy.integrate.solve_ivp(rhs, (0, s_max), y0, method='BDF', args=(k, h), first_step=0.01,
                                          jac=jac, atol=1e-8, rtol=1e-8)
-    
+
     y = solution.y
-    
+
     s = solution.t
-    
+
     theta = y[1, :]
     x = y[2, :]
     y = y[3, :]
-    
+
     return theta, s, x, y
 
-#so far this function is not jitted. I plan to adapt a gaussian random function generator
-#using linear algebra, instead of fft.The linalg module is accessible in numba.
-#still buggy!!
-def specsim(x:np.array,
-            y:np.array,
+
+# so far this function is not jitted. I plan to adapt a gaussian random function generator
+# using linear algebra, instead of fft.The linalg module is accessible in numba.
+# still buggy!!
+def specsim(x: np.array,
+            y: np.array,
             z=np.array([0.]),
             mean=0.,
             var=1.,
-            corl = np.array([1.,1.]),
+            corl=np.array([1., 1.]),
             z_axis=0,
             mask=None,
             covmod='gaussian'):
@@ -350,37 +361,37 @@ def specsim(x:np.array,
         x_calc = x
         y_calc = y
     else:
-        x_calc = np.where(mask,x,np.nan)
-        y_calc = np.where(mask,y,np.nan)
-    two_dim = len(corl)<3 #boolean weather calculations should be done in two or 3D
+        x_calc = np.where(mask, x, np.nan)
+        y_calc = np.where(mask, y, np.nan)
+    two_dim = len(corl) < 3  # boolean weather calculations should be done in two or 3D
     if two_dim:
         Y = np.empty(x.shape)
-        h_square = (x_calc/corl[0])**2 \
-                + (y_calc/corl[1])**2
+        h_square = (x_calc / corl[0]) ** 2 \
+                   + (y_calc / corl[1]) ** 2
     else:
         if mask is None:
             z_calc = z
         else:
             z_calc = np.where(mask, z, z_calc)
         Y = np.empty(z.shape)
-        h_square = (x_calc/corl[0])**2 \
-                    + (y_calc/corl[1])**2 \
-                    + (z_calc/corl[2])**2
+        h_square = (x_calc / corl[0]) ** 2 \
+                   + (y_calc / corl[1]) ** 2 \
+                   + (z_calc / corl[2]) ** 2
     ntot = h_square.size
     # Covariance matrix of variables
     if covmod == 'gaussian':
         # Gaussian covariance model
         ryy = np.exp(-h_square) * var
-    else:# covmod == 'exp':
+    else:  # covmod == 'exp':
         # Exponential covariance model
         ryy = np.exp(-np.sqrt(h_square)) * var
     # Power spectrum of variable
     syy = np.fft.fftn(np.fft.fftshift(ryy)) / ntot
-    syy = np.abs(syy)       # Remove imaginary artifacts
+    syy = np.abs(syy)  # Remove imaginary artifacts
     syy[0] = 0
     real = np.random.randn(*syy.shape)
     imag = np.random.randn(*syy.shape)
-    epsilon = real + 1j*imag
+    epsilon = real + 1j * imag
     rand = epsilon * np.sqrt(syy)
     Y = np.real(np.fft.ifftn(rand * ntot))
     Y = Y + mean

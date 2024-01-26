@@ -53,7 +53,7 @@ def channel(x,y,z,
     filter_zone = filter_zone.ravel()
     
     # Distance in the xy-plane
-    P = np.column_stack((x.ravel()[filter_zone],y.ravel()[filter_zone]))
+    P = np.column_stack((x.ravel()[filter_zone], y.ravel()[filter_zone]))
     
     xy_dist = np.ones(x.size)*1e10
     idx_curve = np.zeros(x.size, dtype=np.int32)
