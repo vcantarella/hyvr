@@ -2,6 +2,19 @@
 Changelog/Bug Fixes
 ====================
 
+HyVR 0.1.0b
+----------
+
+Release Date 25th January 2024
+HyVR has been left untouched for 4 years. This is a fork from the original package.
+The idea is to keep a minimal implementation which is built from standard scientific packages with easy installation and
+good stability. They are numpy, scipy and numba.
+
+The implementation is tested and works fine. but bugs and unexpected behaviour may be found.
+The original workflow has been simplified. Only functions that create the geobodies and assign values to grid are implemented.
+On the other hand, the user must know a bit more python and how to generate object based sedimentological simulations.
+
+
 HyVR 1.1.0
 ----------
 

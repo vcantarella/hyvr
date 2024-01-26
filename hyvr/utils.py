@@ -1,432 +1,339 @@
-# -*- coding: utf-8 -*-
-"""Some utility functions for HFM modelling
-
-    :Authors: Jeremy P. Bennett, with help from Alessandro Comunian and Samuel Scherrer
-
-    :Notes:
-
-
-
-"""
-
-import sys
 import numpy as np
-import time
-import linecache
-import os
-import errno
-
-
-# def mf6_vtr(fhead, mg, fout):
-#     """
-#     Convert a MODFLOW 6 Binary head file into vtr suitable for visualisation in ParaView
-
-#     Parameters
-#     ----------
-
-
-
-#     """
-#     try:
-#         import flopy
-#     except ImportError:
-#         print('mf output not possible: Flopy not installed.')
-#         return
-#     hfile = flopy.utils.binaryfile.HeadFile(fhead)          #
-#     hdata = hfile.get_alldata()                             # Create numpy array with all data
-#     head_dict = dict()                                      # Initialise dict with the data
-#     for i in range(0, hdata.shape[0]):
-#         hf_i = np.squeeze(hdata[i, :, :, :])                # Get heads at individual time steps
-#         hf_i = np.transpose(hf_i, (2, 1, 0))                # Permute to be consistent with HyVR grids
-#         head_dict['head_timestep{}'.format(i)] = hf_i
-
-#     to_vtr(head_dict, fout, mg, points=True)
-
-
-# def dem_load(fn):
-#     """
-#     Load data from ESRI-style ASCII-file.
-
-#     Parameters:
-#         fn (str): 				Directory and file name for save
-
-#     Returns:
-#         - data *(numpy array)* - Data from ERSI-style ASCII-file
-#         - meta *(dict)* - Dict with grid metadata
-
-#     """
-
-#     # Extract header using linecache
-#     meta = {}
-#     meta['ncols'] = int(linecache.getline(fn, 1).split()[1])
-#     meta['nrows'] = int(linecache.getline(fn, 2).split()[1])
-#     meta['ox'] = linecache.getline(fn, 3).split()[1]
-#     meta['oy'] = linecache.getline(fn, 4).split()[1]
-#     meta['cell_size'] = linecache.getline(fn, 5).split()[1]
-#     meta['no_Data'] = linecache.getline(fn, 6).split()[1]
-
-#     # Extract data using pandas
-#     df = pd.read_csv(fn, header=None, delimiter=' ', skiprows=6, dtype=np.float)
-#     data = df.as_matrix()
-
-#     return data, meta
-
-
-# def dem_save(fn, data, gro):
-#     """
-#     Save DEM data to ESRI-style ASCII-file
-
-#     Parameters:
-#         fn (str):               Directory and file name for save
-#         data (numpy array):     DEM data
-#         gr (object class):      grid.Grid() object class
-
-#     Returns:
-#         Save DEM data to ESRI-style ASCII-file
-
-#     """
-
-#     header = ("ncols            {0.nx}\n"
-#               "nrows            {0.ny}\n"
-#               "xllcorner        {0.ox}\n"
-#               "yllcorner        {0.oy}\n"
-#               "cellsize         {0.cs2}\n"
-#               "NOODATA_value    -9999"
-#               ).format(gro)
-
-#     with open(fn, mode='wb') as out_file:
-#         np.savetxt(out_file,
-#                    data,
-#                    header=header,
-#                    fmt='%.4f',
-#                    comments='')
-
-
-
-# def load_gslib(fn):
-#     """
-#     Load .gslib files. This has been appropriated from the HPGL library
-#     https://github.com/hpgl/hpgl/blob/master/src/geo_bsd/routines.py
-#     commit b980e15ad9b1f7107fd4fa56ab117f45553be3aa
-
-#     Parameters:
-#         fn (str): 			.gslib file path and name
-
-#     Returns:
-#         gslib_dict *(dict)* - properties
-
-#     """
-#     gslib_dict = {}
-#     list_prop = []
-#     points = []
-
-#     f = open(fn)
-#     head = f.readline().split('\t')
-#     num_p = int(f.readline())
-#     #print num_p
-
-#     lx, ly, lz = [int(x) for x in head[0].split(' ')]
-#     nx, ny, nz = [float(x) for x in head[1].split(' ')]
-#     ox, oy, oz = [float(x) for x in head[2].split(' ')]
-
-#     for i in range(num_p):
-#         list_prop.append(str(f.readline().strip()))
-#     #print list_prop
-
-#     for i in range(len(list_prop)):
-#         gslib_dict[list_prop[i]] = np.zeros((lx * ly * lz))
-
-#     index = np.zeros(len(list_prop))
-
-#     for line in f:
-#         points = line.split()
-#         for j in range(len(points)):
-#             gslib_dict[list_prop[j]][index[j]] = float(points[j])
-#             index[j] += 1
-
-#     for dkey in gslib_dict.keys():
-#         gslib_dict[dkey] = gslib_dict[dkey].reshape((ly, lx, lz))
-
-#     f.close()
-
-#     return gslib_dict
-
-
-''' HYVR-specific utilities'''
-
-
-# def read_lu(sq_fp):
-#     """
-#     Load user-defined strata (architectural element lookup table),
-#     split the data based on a delimiter and return it as a new list
-
-#     Parameters:
-#         sq_fp:			Load user-defined strata (architectural element lookup table)
-
-#     Returns:
-#         ssm_lu *(list)*: -Values of architectural element lookup table
-
-#     """
-#     # Load user-defined systems / architectural element lookup table
-#     print(time.strftime("%d-%m %H:%M:%S", time.localtime(time.time())) + ': Reading strata data from ' + sq_fp)
-#     with open(sq_fp) as f:
-#         lines = f.read().splitlines()
-
-#     ssm_lu = []
-#     for li in lines[1:]:
-#         temp = li.split(',')
-#         ssm_lu.append([int(temp[0]), float(temp[1]), float(temp[2]), str(temp[3]), int(temp[4])])
-
-#     return ssm_lu
-
-
-
-# def virtual_boreholes(data_dict, d, l, file_out=None, vals=[], opts=[]):
-#     """ Perform 'virtual' borehole sampling of parameter field
-
-#     Arguments:
-#         data_dict (dict):
-#             Data to sample
-#         d (list):
-#             3-tuple of model grid cell dimensions
-#         l (list):
-#             3-tuple of total model dimensions/lengths
-#         file_out (list: basefile path, list of file types):
-#             Output filename and path
-#         vals (list):
-#             Parameter fields to include
-#         opts (dict):
-#             Sampling options
-#             opts['noBH'] (int):             Random sampling
-#             opts['grid_spacing']:           float, or list of floats [x spacing, y spacing] Grid sample spacing
-#             opts['grid_n']:                 int, or list of ints [n in x, n in y] Number of grid nodes per x,y dimensions
-#             opt['lnK'] (bool):              Natural logarithm of isotropic hydraulic conductivity
-
-#     Returns:
-#         bh_df : Pandas DataFrame class
-
-#     """
-
-#     nx, ny, nz = np.shape(data_dict['fac'])
-
-#     # Set up column names
-#     cols = ['x', 'y', 'z']
-#     if len(vals) == 0:
-#         vals = data_dict.keys()
-#     cols.extend(vals)
-
-#     # Create dataframe
-#     bh_df = pd.DataFrame(columns=cols)
-
-#     # Sampling of grid
-#     xy_grid = []
-#     xv = np.arange(0.5 * d[0], l[0], d[0])
-#     yv = np.arange(0.5 * d[1], l[1], d[1])
-#     zv = np.arange(0.5 * d[2], l[2], d[2])
-
-#     if 'grid_spacing' in opts.keys():
-#         """ Uniform grid with set spacing """
-
-#         # Get cartesian coordinates in 2D (x,y)
-#         if len(opts['grid_spacing']) == 2:
-#             range_x = np.arange((opts['grid_spacing'][0] * 0.5), l[0], opts['grid_spacing'][0])
-#             range_y = np.arange((opts['grid_spacing'][1] * 0.5), l[1], opts['grid_spacing'][1])
-#         else:
-#             range_x = np.arange((opts['grid_spacing'] * 0.5), l[0], opts['grid_spacing'])
-#             range_y = np.arange((opts['grid_spacing'] * 0.5), l[1], opts['grid_spacing'])
-
-#         x_locs, y_locs = np.meshgrid(range_x, range_y)
-
-#         # Convert to array indices
-#         x_locs = np.floor(x_locs.flatten()/d[0]).astype(int)
-#         y_locs = np.floor(y_locs.flatten()/d[1]).astype(int)
-
-#     elif 'grid_n' in opts.keys():
-#         """ Sample over uniform grid """
-#         # Get cartesian coordinates in 2D (x,y)
-#         range_x = np.linspace(0, l[0]/d[0] - 1, opts['grid_n'][0])
-#         range_y = np.linspace(0, l[1]/d[1] - 1, opts['grid_n'][1]+2)[1:-1]
-#         x_locs, y_locs = np.meshgrid(range_x, range_y)
-
-#         # Convert to array indices
-#         x_locs = np.floor(x_locs.flatten()).astype(int)
-#         y_locs = np.floor(y_locs.flatten()).astype(int)
-
-#     elif 'noBH' in opts.keys():
-#         """ Randomly sample the xy plane """
-#         x_locs = np.random.choice(range(0, nx), opts['noBH'])    # Borehole location indices
-#         y_locs = np.random.choice(range(0, ny), opts['noBH'])    # Borehole location indices
-
-#     # Put data into dataframe
-#     for idx in range(len(x_locs)):
-#         # Get indices of location
-#         i = x_locs[idx]
-#         j = y_locs[idx]
-
-#         # Get vectors of Cartesian coordinates
-#         ibh = np.zeros((nz, 3 + len(vals)))
-#         ibh[:, 0] = np.ones((nz,)) * xv[i]          # x coordinates
-#         ibh[:, 1] = np.ones((nz,)) * yv[j]          # y coordinates
-#         ibh[:, 2] = zv                              # z coordinates
-
-#         for iv, v in enumerate(vals):
-#             # Append to list to be appended to dataframe
-#             ibh[:, iv+3] = data_dict[v][i, j, 0:nz]
-#         bh_df = bh_df.append(pd.DataFrame(ibh, columns=cols), ignore_index=True)
-
-#     if 'lnK' in opts and opts['lnK'] is True:
-#         vals.extend(['lnK'])
-#         bh_df['lnK'] = pd.Series(np.log(bh_df['k_iso']), index=bh_df.index)
-
-#     # Save borehole data
-#     fmtd = {'k_iso': '%.5e',
-#             'lnK': '%.5f',
-#             'poros': '%.5f',
-#             'fac': '%u',
-#             'dip': '%.2f',
-#             'azim': '%.2f'}
-#     if file_out is not None:
-#         if 'csv' in file_out[1]:
-#             bh_df.to_csv(file_out[0]+'.csv', index=False)
-#         if 'gslib' in file_out[1]:
-#             n_conddata = bh_df.shape[0]
-#             colsout = ['x', 'y', 'z']
-#             colsout.extend(vals)
-#             to_write = bh_df.as_matrix(columns=colsout)
-#             header = [str(n_conddata), str(3 + len(vals)), 'x', 'y', 'z']
-#             header.extend(vals)
-#             header = '\n'.join(header)
-
-#             fmts = '%.3f %.3f %.3f {}'.format(' '.join([fmtd[i] for i in vals]))
-#             np.savetxt(file_out[0] + '.gslib', to_write, delimiter=' ', header=header, comments='', fmt=fmts)
-
-#     return bh_df
-
-
-def print_to_stdout(*args):
+import numpy.typing as npt
+import numba
+import scipy
+
+@numba.njit()
+def normal_plane_from_dip_dip_dir(dip: float, dip_dir: float) -> npt.ArrayLike:
     """
-    Prints a message to stdout with timestamp.
+    Calculates the normal plane from dip/dip_dir information
+    saves the coordinates (X,Y,Z) of the normal vector in a numpy-array.
+    Parameters
+    ----------
+    dip : float
+        dip
+    dip_dir : float
+        dip direction
+    Returns
+    -------
+    normal vector of the plane (x,y,z): ndarray
     """
-    print(time.strftime("%d-%m %H:%M:%S", time.localtime(time.time())) + ':', *args)
+    dip = np.deg2rad(dip)
+    dip_dir = np.deg2rad(dip_dir + 90)
+    normal_vec = np.zeros(3)
+    normal_vec[0] = -np.sin(dip) * np.cos(dip_dir)
+    normal_vec[1] = np.sin(dip) * np.sin(dip_dir)
+    normal_vec[2] = np.cos(dip)
+    return normal_vec
 
+@numba.njit()
+def rotation_matrix_x(alpha):
+    arr = np.array([[1.,0.,0.],
+                     [0., np.cos(alpha), -np.sin(alpha)],
+                     [0., np.sin(alpha), np.cos(alpha)],
+                     ])
+    return arr
 
-####################################################################################################################
-# Some utilities for generating shapes
-####################################################################################################################
+@numba.njit()
+def rotation_matrix_z(alpha):
+    arr = np.array([[np.cos(alpha),-np.sin(alpha),0.],
+                     [np.sin(alpha), np.cos(alpha), 0.],
+                     [0., 0., 1.],
+                     ])
+    return arr
 
-# def planepoint(dip_norm, x_dip, y_dip, znow, xtemp, ytemp, ztemp, select=[]):
-#     """
-#     Compute number of planes
-
-#     Parameters:
-#         dip_norm:
-#         x_dip:			X coordinates of points on dip planes
-#         y_dip:			Y coordinates of points on dip planes
-#         znow:			Current coordinates of Z, needed to compute Z coordinates of points on dip planes
-#         xtemp:			X dimension of model grid nodes
-#         ytemp:			Y dimension of model grid nodes
-#         ztemp:			Z dimension of model grid nodes
-#         select:         Model grid nodes to consider
-
-#     Returns:
-#         set_no - Number of planes with selected model grid nodes
-
-#     """
-#     # Get closest plane to points
-#     n_sets = dip_norm.shape[1]                   # Number of planes
-#     nx, ny, nz = xtemp.shape                       # Get number of model cells
-#     set_no = np.zeros((nx, ny, nz), dtype=np.int)  # Initialise set number array
-#     z_dip = np.ones(x_dip.shape) * znow
-
-#     if len(select) > 0:
-#         select_idx = np.where(select)                                               # Get indices of selected model nodes
-#     else:
-#         select = np.ones_like(xtemp, dtype=bool)
-#         select_idx = np.where(select)
-
-#     points = np.array((xtemp[select].flatten(), ytemp[select].flatten(), ztemp[select].flatten()))      # Cartesian coordinates of model grid nodes
-#     plp = np.array((x_dip, y_dip, z_dip)).T                                     # Cartesian coordinates of points on dip planes
-#     pd = plp[:, None] - points.T                                                # subtract grid nodes from plane points
-
-#     # Loop over set planes
-#     for iset in range(n_sets-1):
-#         if iset > 1:
-#             pd_1 = pd_2
-#         else:
-#             abc_1 = dip_norm[:, iset]                                                           # Plane normal equation
-#             pd_1 = abc_1.dot(pd[iset, :, :].squeeze().T) / np.sqrt(sum(abc_1 * abc_1))          # Distance to plane
-#         pd1_c1 = pd_1 <= 0                                                                  # pd_1 meeting condition 1
-#         pd1_c1_idx = np.where(pd1_c1)
-
-#         if iset == 0:
-#             set_no[select_idx[0][pd1_c1_idx], select_idx[1][pd1_c1_idx], select_idx[2][pd1_c1_idx]] = iset+1
-#         # elif iset == n_sets: # this never happens
-#         #     pd1_c2_idx = np.where(pd_1 > 0)                     # index of pd_2 meeting condition 1
-#         #     set_no[select_idx[0][pd1_c2_idx], select_idx[1][pd1_c2_idx], select_idx[2][pd1_c2_idx]] = iset+1
-#         else:
-#             abc_2 = dip_norm[:, iset+1]
-#             # Points on plane
-#             pd_2 = abc_2.dot(pd[iset+1, :, :].squeeze().T) / np.sqrt(sum(abc_2 * abc_2))  # Distance to plane
-#             inset = np.logical_and(pd_1 <= 0, pd_2 > 0)                                   # grid cell between planes
-#             set_no[select_idx[0][inset], select_idx[1][inset], select_idx[2][inset]] = iset+1
-
-#     return set_no
-
-# def angle(v1, v2):
-#     """
-#     Return angle between two vectors in [°] between 0° and 180°
-
-#     Parameters:
-#         v1:	Vector 1
-#         v2:	Vector 2
-
-#     Returns:
-#         angle value *(float)* - Angle between v1 and v2
-#     """
-#     cos = np.dot(v1, v2) / np.sqrt(np.dot(v1, v1) * np.dot(v2, v2))
-#     angle = np.arccos(cos)/np.pi*180
-#     return angle
-
-def get_alternating_facies(num_facies, type_params):
+@numba.njit()
+def is_point_inside_ellipsoid(x: np.ndarray, y: np.ndarray, z: np.ndarray,
+                              x_center: float,
+                              y_center: float,
+                              z_center: float,
+                              a: float,
+                              b: float,
+                              c: float,
+                              alpha: float) -> np.ndarray:
     """
-    Returns a vector of alternating facies numbers based on the 'altfacies'
-    setting in the inifile.
+    Return boolean array with true indices corresponding to points inside the ellipsoid
+    Parameters
+    ----------
+    x,y,z: point coordinates array
+    x_center,y_center,z_center: ellipsoid center
+    a,b,c: major, minor and vertical axis of the ellipsoid
+    alpha: azimuth in counterclockwise from east and in radians
     """
-    facies = np.zeros(num_facies, dtype=np.int32)
-    facies[0] = np.random.choice(type_params['facies'])
-    # The facies are changing according to the given 'altfacies'
-    if type_params['altfacies'] is not None:
-        for i in range(1, num_facies):
-            fac_idx = type_params['facies'].index(facies[i-1])
-            facies[i] = np.random.choice(type_params['altfacies'][fac_idx])
+    matrix = rotation_matrix_z(alpha)
+    x = np.ravel(x)
+    y = np.ravel(y)
+    z = np.ravel(z)
+    dx = x - x_center
+    dy = y - y_center
+    dz = z - z_center
+    rotated_points = matrix @ np.vstack((dx, dy, dz))
+    distance_vector = rotated_points[0, :] ** 2 / a ** 2 + \
+                      rotated_points[1, :] ** 2 / b ** 2 + \
+                      rotated_points[2, :] ** 2 / c ** 2
+    logic = np.where(distance_vector <= 1, True, False)
+    logic = np.reshape(logic, x.shape)
+    return logic
+
+
+@numba.njit()
+def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
+                        x_center: float,
+                        y_center: float,
+                        z_center: float,
+                        a: float,
+                        b: float,
+                        c: float,
+                        alpha: float,
+                        dip: float) -> np.ndarray:
+    """
+    Return dip and dip_direction_arrays of the points inside ellipsoid according to the bulb method
+    Parameters
+    ----------
+    x,y,z: point coordinates array
+    x_center,y_center,z_center: ellipsoid center
+    a,b,c: major, minor and vertical axis of the ellipsoid
+    alpha: azimuth in counterclockwise from east and in radians
+    """
+    # Since ellipsoids are isosurfaces of quadratic functions, we can
+    # get the normal vector by taking the gradient of the quadratic
+    # function that has our ellipsoid as iso-surface.
+    # This function can be written as:
+    #
+    # f(d(x)) = (x*cos+y*sin)**2/a**2 + (-x*sin+y*cos)**2/b** + z**2/c**2
+    #
+    # The gradient is (up to a scalar)
+    #
+    #             /  nx*cos/a + ny*sin/b  \
+    # grad f(x) = | -nx*sin/a + ny*cos/b  |
+    #             \          nz/c         /
+    #
+    # where nx, ny, nz are the normalized distances.
+    # The gradient points outwards.
+    # The length of the vector is
+    #
+    # |grad f(x)| = (nx/a)**2 + (ny/b)**2 + (nz/c)**2
+    #
+    # The dip angle is the the angle between the normal
+    # vector and the unit z-vector.
+    # The azimuth is the angle between the projection of the normal
+    # vector onto the x-y-plane and the unit x-vector.
+    dx = x - x_center
+    dx = np.ravel(dx)
+    dy = y - y_center
+    dy = np.ravel(dy)
+    dz = z - z_center
+    dz = np.ravel(dz)
+    cos_alpha = np.cos(alpha)
+    sin_alpha = np.sin(alpha)
+    normalized_dx = (dx * cos_alpha + dy * sin_alpha) / a
+    normalized_dy = (-dx * sin_alpha + dy * cos_alpha) / b
+    normalized_dz = dz / c
+    aaa = normalized_dx / a
+    bbb = normalized_dy / b
+    ccc = normalized_dz / c
+    len_normvec = np.sqrt(aaa ** 2 + bbb ** 2 + ccc ** 2)
+    normvec_x = (aaa * cos_alpha
+                    + bbb * sin_alpha) / len_normvec
+    normvec_y = (-aaa * sin_alpha
+                    + bbb * cos_alpha) / len_normvec
+    normvec_z = ccc / len_normvec
+
+    len_normvec_xy = np.sqrt(normvec_x ** 2 + normvec_y ** 2)
+    norm_distance = np.sqrt(normalized_dx ** 2 + normalized_dy ** 2 + normalized_dz ** 2)
+
+    # The dip angle can be found as acos of the normalized
+    # scalar product of unit z-vector and normal vector
+    # It should be negative, if the gradient points in positive
+    # x direction and in positive z direction, or if it points
+    # in negative x and z direction.
+    # direction.
+    dip_bulb = -np.arccos(np.abs(normvec_z)) \
+            * np.sign(normvec_x * normvec_z) / np.pi * 180
+
+    # The azimuth angle should also be between -90 and 90. It is
+    # the angle between the projection of the normal vector into
+    # the xy-plane and the x unit vector.
+    # It can be calculated as negative atan of the y component
+    # over the x component. To make sure the angle is between
+    # -90 and 90, we change the sign of both components, if the
+    # x component is negative. This means the x component is
+    # always positive, and the y component is multiplied by the
+    # sign of the x component
+    dip_dir_counterclockwise = -np.arctan2(np.sign(normvec_x) * normvec_y, np.abs(normvec_x)) \
+                                / np.pi * 180
+    dip_dir_bulb = (-dip_dir_counterclockwise + 90) % 360
+
+    # if len_normvec != 0:
+    # the point is exactly at the center of the trough, this means
+    # there is no azim and dip
+    dip_dir_output = np.where(len_normvec < 1e-12, 0., dip_dir_bulb)
+    dip_output = np.where(len_normvec < 1e-10, 0., dip_bulb)
+
+    # normal vector points in z-direction -> dip = 0, azim = 0
+    dip_dir_output = np.where(len_normvec_xy < 1e-12, 0., dip_dir_output)
+    dip_output = np.where(len_normvec_xy < 1e-12, 0., dip_output)
+
+    # cap dip in bulb or bulbsets: use dip as maximum dip
+    dip_output = np.where(dip_output > dip, dip, dip_output)
+    dip_output = np.where(dip_output < - dip, -dip, dip_output)
+    return dip_output, dip_dir_output, norm_distance
+        
+
+@numba.njit()
+def get_alternating_facies(facies, n_layers, facies_ordering) -> np.ndarray:
+    """
+    Returns a vector of alternating facies numbers 
+    """
+    if facies_ordering:
+        facies_array = alternating_facies(facies, n_layers) 
     else:
-        for i in range(1, num_facies):
-            facies[i] = np.random.choice(type_params['facies'])
-    return facies
+        facies_array = np.random.choice(facies, n_layers)
+    return facies_array
+@numba.njit()
+def alternating_facies(facies, n_layers):
+    initial_size = np.int32(facies.size)
+    reps = np.int32(np.ceil(n_layers / facies.size))
+    facies_array = np.repeat(facies, reps)
+    facies_array = np.reshape(facies_array, (initial_size,reps))
+    final_array = facies_array.transpose().copy()
+    final_array = np.reshape(final_array, final_array.size)
+    final_array = final_array[:n_layers]
+    return final_array
 
-# def norm(v):
-#     return np.sqrt(np.dot(v,v))
+@numba.njit()
+def coterminal_angle(angle):
+    "from chatgpt"
+    # Ensure the angle is in the range [0, 360) degrees
+    normalized_angle = angle % 360
+    # Ensure the angle is in the range [0, 2π) radians
+    normalized_angle_radians = np.deg2rad(normalized_angle)
+    return normalized_angle_radians
 
+@numba.njit()
+def azimuth_to_counter_clockwise(azimuth: npt.ArrayLike) -> npt.ArrayLike:
+    h = 450 - azimuth
+    degree = np.where(h >= 360, h - 360, h)
+    return degree
 
-def specsim(grid, var, corl, selection_mask=None, two_dim=False, covmod='gaussian'):
+@numba.njit()
+def sign(x: float):
+    return (x >= 0) - (x < 0)
+
+@numba.jit(nopython=True,parallel=True)
+def min_distance(x,y, P):
+    """
+    Compute minimum/a distance/s between
+    a point P[x0,y0] and a curve (x,y)
+    
+    ARGS:
+        x, y      (array of values in the curve)
+        P         (array of points to sample)
+        
+    Returns min indexes and distances array.
+    """
+    distance = lambda X, x, y: np.sqrt((X[0] - x)**2 + (X[1] - y)**2)
+    # compute distance
+    d_matrix = np.zeros((P.shape[0],x.size))
+    d_array = np.zeros((P.shape[0]))
+    glob_min_idx = np.zeros((P.shape[0]))
+    for i in numba.prange(P.shape[0]):
+        d_line = distance(P[i],x,y)
+        d_matrix[i] = d_line
+        d_array[i] = np.min(d_line)
+        glob_min_idx[i] = np.argmin(d_line)
+    return d_array, glob_min_idx
+
+def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
+    """
+    Implementation of  (Ferguson, 1976, Eq.9).
+    The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
+    http://onlinelibrary.wiley.com/doi/10.1002/esp.3290010403/full
+
+    Parameters:
+        s_max: 	max length of channel
+        k:		Wavenumber
+        h:		Height
+        eps_factor:	Random background noise (normal variance)
+
+    Returns:
+        theta : angle array
+        s : channel distance array
+
+    """
+
+    # Correlated variance calculation => Gaussian function
+    s_range = np.arange(0,s_max, (s_max/1000))
+    dist_arr = scipy.spatial.distance.pdist(np.expand_dims(s_range, axis = 1), 'sqeuclidean')
+    variance = eps_factor
+    cov = variance * np.exp(-(1/2)*dist_arr)
+
+    cov = scipy.spatial.distance.squareform(cov)
+    cov[np.diag_indices_from(cov)] = variance
+    u = np.random.multivariate_normal(np.zeros_like(s_range), np.eye((s_range).shape[0]))
+    L = scipy.linalg.cholesky(cov)
+    e_s = L @ u
+
+    def rhs(t, y, k, h):
+        eps_t = np.interp(np.array([t]), s_range, e_s)
+        eps_t = eps_t[0] #from array to float
+        d_tau_ds = (eps_t - y[1] - 2*h/k*y[0])*(k**2)
+        d_theta_ds = y[0]
+        dx_ds = np.cos(y[1])
+        dy_ds = np.sin(y[1])
+        return np.array([d_tau_ds, d_theta_ds, dx_ds, dy_ds])
+    
+    def jac(t, y, k, h):
+        return np.array([[-2*h*k, -k**2,0,0],
+                         [1,0,0,0],
+                         [0,-np.sin(y[1]),0,0],
+                         [0,np.cos(y[1]),0,0]])
+    
+    y0 = np.array([omega*k, 0., 0., 0.])
+    
+    solution = scipy.integrate.solve_ivp(rhs, (0, s_max), y0, method='BDF', args=(k, h), first_step=0.01,
+                                         jac=jac, atol=1e-8, rtol=1e-8)
+    
+    y = solution.y
+    
+    s = solution.t
+    
+    theta = y[1, :]
+    x = y[2, :]
+    y = y[3, :]
+    
+    return theta, s, x, y
+
+#so far this function is not jitted. I plan to adapt a gaussian random function generator
+#using linear algebra, instead of fft.The linalg module is accessible in numba.
+#still buggy!!
+def specsim(x:np.array,
+            y:np.array,
+            z=np.array([0.]),
+            mean=0.,
+            var=1.,
+            corl = np.array([1.,1.]),
+            z_axis=0,
+            mask=None,
+            covmod='gaussian'):
     """
     Generate random variables with stationary covariance function using spectral
     techniques of Dietrich & Newsam (1993)
 
     Parameters
     ----------
-    grid : Grid instance
+    x,y,z : 3D np.ndarray with x,y,z, coordinates of the grid.
+    mean: mean surface z (or 3d variable)
     var : float
-        Variance
+        variance of the gaussian value.
     corl : tuple of floats
         Tuple of correlation lengths. 2-tuple for 2-d (x and y), and 3-tuple
         for 3-d (x, y, z).
-    selection_mask : boolean numpy array
-        This array should have the same size as the model grid and can be used to only generate
-        random variables for a subset of the model grid. If ``two_dim=True``, it should have
-        dimensions ``(nx, ny)``, otherwise ``(nx, ny, nz)``.
-    two_dim : bool, optional (default: False)
-        Whether to return a two-dimensional or a 3 dimensional field
+    z_axis: int
+        location of the z_axis in the numpy grid.
+        The refernce value is axis 0 (the first), as in the MODFLOW convention.
+    mask: np.array optional:
+        adds a mask to calculate the gaussian random field in a subset of the grid: x[mask]
     covmod : str, optional (default: "gaussian")
         Which covariance model to use ("gaussian" or "exp").
 
@@ -437,90 +344,44 @@ def specsim(grid, var, corl, selection_mask=None, two_dim=False, covmod='gaussia
         array, depending on ``two_dim`` and of the size of the model grid.
         If a selection_mask was given, this is a flat array of values.
     """
-
-    # THINK: If this is called multiple times in a row with the same parameters (i.e. same var,
-    # corl, covmod), then it is not necessary to recalculate syy, and we even get two fields out.
-    # Is there a way to use this?
-    mask_given = selection_mask is not None
-    if mask_given:
-        # This method only works for rectangular grids, this means we have to find the smallest
-        # rectangular selection that contains all selected cells
-        if two_dim:
-            x_idx, y_idx = np.where(selection_mask)
-            min_x_idx = np.min(x_idx)
-            max_x_idx = np.max(x_idx)
-            min_y_idx = np.min(y_idx)
-            max_y_idx = np.max(y_idx)
-            rectangular_mask = np.zeros_like(selection_mask)
-            rectangular_mask[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1] = True
-            selected_X = grid.X[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1,0]
-            selected_Y = grid.Y[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1,0]
-            selected_X_centered = selected_X - (np.min(selected_X) + np.max(selected_X))/2
-            selected_Y_centered = selected_Y - (np.min(selected_Y) + np.max(selected_Y))/2
-            selection_mask_small = selection_mask[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1]
-
-            h_square = (selected_X_centered/corl[0])**2 \
-                    + (selected_Y_centered/corl[1])**2
-
-        else:
-            x_idx, y_idx, z_idx = np.where(selection_mask)
-            try:
-                min_x_idx = min(x_idx)
-            except:
-                import pdb; pdb.set_trace()
-            max_x_idx = np.max(x_idx)
-            min_y_idx = np.min(y_idx)
-            max_y_idx = np.max(y_idx)
-            max_z_idx = np.max(z_idx)
-            min_z_idx = np.min(z_idx)
-            rectangular_mask = np.zeros_like(selection_mask)
-            rectangular_mask[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1,min_z_idx:max_z_idx+1] = True
-            selected_X = grid.X[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1,min_z_idx:max_z_idx+1]
-            selected_Y = grid.Y[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1,min_z_idx:max_z_idx+1]
-            selected_Z = grid.Z[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1,min_z_idx:max_z_idx+1]
-            selected_X_centered = selected_X - (np.min(selected_X) + np.max(selected_X))/2
-            selected_Y_centered = selected_Y - (np.min(selected_Y) + np.max(selected_Y))/2
-            selected_Z_centered = selected_Z - (np.min(selected_Z) + np.max(selected_Z))/2
-            selection_mask_small = selection_mask[min_x_idx:max_x_idx+1,min_y_idx:max_y_idx+1,min_z_idx:max_z_idx+1]
-
-            h_square = (selected_X_centered/corl[0])**2 \
-                     + (selected_Y_centered/corl[1])**2 \
-                     + (selected_Z_centered/corl[2])**2
-
+    if covmod not in ["gaussian", "exp"]:
+        raise ValueError("covariance model must be 'gaussian' or 'exp'")
+    if mask is None:
+        x_calc = x
+        y_calc = y
     else:
-        # full grid
-        if two_dim:
-            h_square = (np.asarray(grid.X_centered[:,:,0])/corl[0])**2 \
-                    + (np.asarray(grid.Y_centered[:,:,0])/corl[1])**2
+        x_calc = np.where(mask,x,np.nan)
+        y_calc = np.where(mask,y,np.nan)
+    two_dim = len(corl)<3 #boolean weather calculations should be done in two or 3D
+    if two_dim:
+        Y = np.empty(x.shape)
+        h_square = (x_calc/corl[0])**2 \
+                + (y_calc/corl[1])**2
+    else:
+        if mask is None:
+            z_calc = z
         else:
-            h_square = (np.asarray(grid.X_centered)/corl[0])**2 \
-                     + (np.asarray(grid.Y_centered)/corl[1])**2 \
-                     + (np.asarray(grid.Z_centered)/corl[2])**2
-
+            z_calc = np.where(mask, z, z_calc)
+        Y = np.empty(z.shape)
+        h_square = (x_calc/corl[0])**2 \
+                    + (y_calc/corl[1])**2 \
+                    + (z_calc/corl[2])**2
     ntot = h_square.size
-
     # Covariance matrix of variables
     if covmod == 'gaussian':
         # Gaussian covariance model
         ryy = np.exp(-h_square) * var
-    elif covmod == 'exp':
+    else:# covmod == 'exp':
         # Exponential covariance model
         ryy = np.exp(-np.sqrt(h_square)) * var
-    else:
-        raise ValueError('Invalid covariance model')
-
     # Power spectrum of variable
     syy = np.fft.fftn(np.fft.fftshift(ryy)) / ntot
     syy = np.abs(syy)       # Remove imaginary artifacts
     syy[0] = 0
-
     real = np.random.randn(*syy.shape)
     imag = np.random.randn(*syy.shape)
     epsilon = real + 1j*imag
     rand = epsilon * np.sqrt(syy)
     Y = np.real(np.fft.ifftn(rand * ntot))
-
-    if mask_given:
-        return Y[selection_mask_small]
-
+    Y = Y + mean
     return Y

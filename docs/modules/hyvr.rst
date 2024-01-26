@@ -11,36 +11,10 @@ Subpackages
 
 .. toctree::
 
-   hyvr.geo
-   hyvr.input
-   hyvr.postprocess
+   hyvr.objects
 
 Submodules
 ----------
-
-hyvr.assign\_points module
---------------------------
-
-.. automodule:: hyvr.assign_points
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-hyvr.optimized module
----------------------
-
-.. automodule:: hyvr.optimized
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-hyvr.sim module
----------------
-
-.. automodule:: hyvr.sim
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 hyvr.utils module
 -----------------
@@ -50,3 +24,10 @@ hyvr.utils module
    :undoc-members:
    :show-inheritance:
 
+hyvr.tools module
+-----------------
+
+.. automodule:: hyvr.tools
+   :members:
+   :undoc-members:
+   :show-inheritance:

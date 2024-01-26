@@ -1,23 +1,15 @@
 ==========================================================
-HyVR Computational methods
+Computational methods
 ==========================================================
 
-The first step in the HyVR algorithm is to load the model parameters, as defined
-in the ``*.ini`` initialisation file. These model parameters govern how the
-model will look like. A detailed documentation of all the options can be found
-:ref:`here <inout>`. Major strata contact surfaces are generated first.
-Architectural elements are then generated inside each stratum according to given
-probabilities. Finally, geometrical objects/hydrofacies assemblages like
-troughs, sheets, or channels are generated inside the architectural element.
+Contrary to the original work, the user should build his/her model from a python script file.
+A detailed documentation of all the options can be found
+:ref:`here <inout>`. Ideally, major strata contact surfaces are generated first. Then 
+architectural elements, and their internal heterogeneity are then generated inside the stratum accoding to some probability rule.
+Model building and grid assignment (facies, dip, dip direction) are done at the same time.
 
-After the model has been generated output values like facies, azimuth and dip
-are assigned to all grid points depending on which stratum/architectural
-element/object they belong to.
-
-Based on these values (facies, azimuth, dip) and the settings in the
-``[hydraulics]`` section, the hydralic parameters (porosity, isotropic hydraulic
-conductivity, full hydraulic conductivity tensor) are assigned, and potentially
-heterogeneity in these parameters on the given level.
+Based on these values (facies, dip, dip direction), the user can create the hydralic parameters (porosity, isotropic hydraulic
+conductivity, full hydraulic conductivity tensor), and potentially heterogeneity in these parameters on the given level.
 
 .. _hfm:
 .. figure:: 	img/hfm.png
@@ -38,8 +30,7 @@ top contact surface is then generated and all model cells between the upper
 and lower contact surface (which is the top of the next stratum) are assigned
 to the stratum.
 
-Contact surfaces can either be flat or random. Multi-Gaussian random contact
-surfaces are generated using the spectral methods outlined by
+Random contact surfaces are generated using Multi-Gaussian spectral methods outlined by
 :cite:`Dietrich1993`. These methods require structural statistical parameters
 (i.e. mean and variance) for the quantity of interest, and a geostatistical
 covariance model. We used a Gaussian covariance model in the present study to
@@ -52,40 +43,30 @@ where :math:`s` is the random quantity of interest, :math:`\sigma^2_s` is the
 variance of :math:`s` (here elevation), :math:`\Delta x` is the distance between
 the two points, and :math:`\lambda` is the correlation length.
 
-Once a bottom and top surface for a stratum is generated, architectural elements
-are created inside the stratum.
+Unlike the original HyVR, the user must be able to select the grid cells and evaluate wether
+the cells are above or below the contact surface. This is easily done with numpy and 
+can be seen in the examples.
 
-The architectural elements will be simulated based on input parameters defined
-for each stratum. This starts with the random choice of an architectural element
-from those defined; the probability of each architectural element being chosen
-is also defined in the input parameter file. The thickness of the architectural
-element is then drawn from a random normal distribution that is defined for each
-stratum in the input parameter file. To account for the erosive nature of many
-sedimentary environments the algorithm may erode the underlying units: here the
-'avulsion' thickness :math:`th_{avulsion}` is subtracted from the bottom and top
-of the architectural element :math:`z^{bot}_{AE}, z^{top}_{AE}`. Once the
-architectural element has been defined, contact surfaces are generated using the
-same procedure as used for strata contact surfaces. When the architectural
-element have been generated, the algorithm begins to simulate external
-hydrofacies assemblage geometries and hydrofacies.
+The user must also create rules (normally with probabilities) to assign architectural elements
+to a particular stratum. Usually, this starts with the random choice of an architectural element
+from those defined, given the probability of each architectural element being chosen. The thickness of the architectural
+element can be, for example, drawn from a random normal distribution. To account for the erosive nature of many
+sedimentary environments the algorithm may erode the underlying units (This is done by assigning an oject that intersect cells previously assigned to a previous unit).
+Thus the object creating order matters.
 
 ----------------------------------------------------------------------
 Simulation of hydrofacies assemblages and hydrofacies geometries
 ----------------------------------------------------------------------
 
-The generation of hydrofacies assemblages and internal hydrofacies occurs
-stratum- and architectural-element-wise, beginning with the top-most
-architectural element in the top stratum. The simulation of individual
-hydrofacies assemblages is object-based, with random placement of features
-within the architectural element. Object-based methods have been implemented
+The simulation of individual hydrofacies assemblages is object-based. The user controls where to place the objects,
+for example one might use random placement of features within an architectural element. Object-based methods have been implemented
 widely in subsurface simulation :cite:`Jussel1994,Bennett2017` as they are
 generally computationally efficient and relatively easy to parameterize. The
 HyVR program approximates hydrofacies assemblages with simple geometric shapes.
 Currently, three shapes_ are supported: troughs (truncated ellipsoids), channels (extruded
-parabolas), and sheets. Truncated ellipsoids and extruded parabolas are
-'erosive' hydrofacies assemblages: this means that within the HyVR algorithm
-they are able to erode underlying units, and therefore the architectural element
-(and strata) boundaries may be altered during the course of the simulation.
+parabolas), and sheets. All feastures are
+'erosive' hydrofacies assemblages, this means that they do not keep track of the previously assigned facies, the user must that themselves (see example).
+And therefore the architectural element (and strata) boundaries may be altered during the course of the simulation.
 
 .. _shapes:
 .. figure:: 	img/hyvr_geometries.png
@@ -94,14 +75,10 @@ they are able to erode underlying units, and therefore the architectural element
 	
 	*Geometries implemented in HyVR.*
 
-Four properties are assigned to each model grid cell during this simulation
-step: *ae*, *ha_arr*, *hat_arr*, *facies*, *azimuth*, and *dip*. The *ae*
-property denotes which architectural element (from ``strata.ae``) has been
-assigned to a model grid cell. The *ha_arr* property is the unique identifier
-for each individual hydrofacies assemblage generated. *hat_arr* denotes the type
-of hydrofacies assemblage within the model grid cell is located. The *facies*
-property denotes which hydrofacies has been assigned to a model grid cell. The
-*azimuth* :math:`\kappa` and *dip* :math:`\psi` properties are associated with
+Fo each object, different properties must be assigned, such as the placement and dimensions. 
+One unique property is the facies code, which will be assigned by the function
+according to the facies assignment rules.
+*dip direction* :math:`\kappa` and *dip* :math:`\psi` may be created properties are associated with
 the bedding structure at each model grid cell and denote the angle of the
 bedding plane from the mean direction of flow and horizontal, respectively.
 
@@ -111,15 +88,9 @@ bedding plane from the mean direction of flow and horizontal, respectively.
 Truncated ellipsoids
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Truncated ellipsoids are generated as a proxy for trough-like features. The
+Truncated ellipsoids are generated as a proxy for trough-like or lenses features. The
 method for generating the boundaries of these features has been described
-previously in :cite:`Bennett2017`. Generation starts at :math:`z^{bot}_{AE unit}
-+AE_{depth}\cdot\beta` where :math:`AE_{depth}` is the depth of the truncated
-ellipsoid geometry, and :math:`\beta` is a buffer term that allows the user to
-control how much of the underlying unit is eroded. The centre of the truncated
-ellipsoid (:math:`x,y` coordinates) and the paleoflow angle :math:`\alpha` (i.e.
-major ellipsoid axis orientation) are drawn from a random uniform distribution
-and the boundary of the truncated ellipsoid is simulated. The `internal
+previously in :cite:`Bennett2017`. The `internal
 structure`_ of truncated ellipsoids can be defined in the following ways:
 	
 * trough-wise homogeneous, with constant azimuth and dip; 
@@ -137,11 +108,6 @@ structure`_ of truncated ellipsoids can be defined in the following ways:
 	:width:		100%
 	
 	*Internal structure of truncated ellipsoid hydrofacies assemblages.*
-	
-Once a truncated ellipsoid has been generated, an aggradation thickness
-(``trunc_ellip.agg``) is added to the current simulation elevation
-:math:`z_{sim}` and the next assemblage is simulated. This occurs until
-:math:`z_{sim} = z^{top}_{AE}`.
 
 .. only:: html
 	
@@ -168,7 +134,7 @@ Bulb sets
 Nested-bulb-like layers are simulated by subdividing the depth of the truncated
 ellipsoid into a series with a set thickness ``trunc_ellip.bulbset_d``.
 Truncated ellipsoids are simulated consecutively with the same center point and
-paleoflow :math:`\alpha` value, starting with the deepest assemblage. With each
+paleoflow :math:`\layer_dist` value, starting with the deepest assemblage. With each
 simulation, a scaling factor is calculated by dividing the new depth with the
 total depth of the assemblage. This scaling factor is applied to the length and
 width parameters of the truncated ellipsoid. Each newly generated ellipsoid
@@ -188,32 +154,20 @@ Extruded parabolas
 ^^^^^^^^^^^^^^^^^^^^^^
 
 Parabolas extruded along arbitrary curves with variable sinuosity are useful to
-represent channels. Extruded parabola centrelines in HyVR are parameterized
-using the disturbed periodic model implemented by :cite:`Ferguson1976`:
+represent channels. 
+The user may specify a centerline. As optional, the centerlines from the extruded parabola in HyVR can be generated with 
+the disturbed periodic model implemented by :cite:`Ferguson1976`:
 
 .. math::
   \theta + \frac{2h}{k} \frac{d\theta}{ds} + \frac{1}{k^2} \frac{d^2\theta}{ds^2}  = \epsilon(s)
 
 with curve direction :math:`\theta`, damping factor :math:`h \in [0,1]`,
 :math:`k = 2\pi/\lambda` is the wavenumber with :math:`\lambda` the frequency of
-the undamped sine wave, and :math:`s` is the distance along the curve. This
-model can be approximated using the following second-order autoregressive model
-described in Equation 15 of :cite:`Ferguson1976`:
+the undamped sine wave, and :math:`s` is the distance along the curve. Instead the original implementation
+we frame this problem as an ordinary differential equation and solve it with scipy's ode solver. 
+This ensures us that we have a minimal number of points to define the curve due to the adaptative time stepping implemented.
 
-.. math::
-  \theta_i - b_1 \theta_{i-1} - b_2\theta{i-2} = \epsilon_i
-
-with:
-
-.. math::
-  b_1 = 2 e^{-kh}\cos(k\arcsin(h))
-
-.. math::
-  b_2 = -e^{-2kh}
-
-This method was also used by :cite:`Pyrcz2009` for the simulation of alluvial
-depositional features. Model grid cells are assigned to the extruded parabola if
-the following conditions are met:
+The assignment of points to the channel is done with the following equation:
 
 .. math::
   D^2 \leq \frac{w_{ch}^2}{4} + \frac{w_{ch}^2 (z_{cell} - z_{ch})}{4 d_{ch}}\quad\text{and }\quad z_{cell} \leq z_{ch}
@@ -223,6 +177,7 @@ the extruded parabola centerline, :math:`w_{ch}` and :math:`d_{ch}` are the
 extruded parabola width and depth respectively, :math:`z_{ch}` and
 :math:`z_{cell}` are the elevations of the extruded parabola top and node
 respectively.
+
 Two-dimensional 'channel velocities' :math:`\vec{v}` are evaluated at the
 centerline and then interpolated to grid cells using an
 inverse-distance-weighted interpolation. Azimuth values are calculated by taking
@@ -231,23 +186,6 @@ values of grid cells within the extruded parabola are assigned based on input
 parameters. If alternating hydrofacies are to be simulated they are constructed
 by creating planes that are evenly spaced along the extruded parabola
 centerline.
-
-The HyVR algorithm generates extruded parabolas starting from :math:`z^{bot}_{AE
-unit} +AE_{depth}\cdot\beta`, as for truncated ellipsoids. However, to account
-for the multiple extruded parabolas that are often concurrently present in many
-river systems, multiple extruded parabolas can be generated at each simulation
-depth (``ext_par.channel_no``). The starting :math:`x,y` coordinates for the
-centerlines are drawn from a random uniform distribution such that
-:math:`x\in[-50,0]` and :math:`y\in[0,Y]`. Extruded parabola geometries are then
-assigned sequentially to the model grid cells; note that in HyVR there is no
-interaction of extruded parabolas, and subsequent extruded parabolas will
-supersede (or 'erode') those previously generated. Once the predefined number of
-extruded parabolas stipulated by ``ext_par.channel_no`` has been simulated a
-three-dimensional migration vector ``ext_par.mig`` is added to the extruded
-parabola centerlines and the extruded parabola assignment to model grid cells
-begins again. The reuse of the extruded parabola centerline trajectories is more
-efficient than re-simulating these values at each :math:`z_{sim}`. This
-continues until :math:`z_{sim} = z^{top}_{seq}`.
 
 .. only:: html
 	

@@ -9,11 +9,13 @@ Contents
    methods
    inout
    example
+   modules/modules
+   modules/objects
    more
-   troubleshooting
+   faq
    changelog
    references
-   modules/modules
+
 
 
 

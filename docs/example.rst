@@ -2,21 +2,19 @@
 HyVR Example
 ===================
 
-Two examples are provided with the HyVR simulation module: the MADE site example
-(``made.ini``), mimicking the MADE site in Columbus, Mississippi, and a test case
-with user-defined architectural element mean contact surface elevations
-(``test_lu.ini``).
+We provide a list of examples of how HyVR can generate realistic examples of sedimentary subsurface models.
+The original work by Bennet et al. (2018) included the MADE site. More details about it 
+are described in their article (*Groundwater*: Bennett, J. P., Haslauer, C. P., Ross, M., & Cirpka, O. A. (2018). An open)
+and in the original repository.
 
-The MADE site example is described in more deatil in the following article in *Groundwater*: Bennett, J. P., Haslauer, C. P., Ross, M., & Cirpka, O. A. (2018). An open, object-based framework for generating anisotropy in sedimentary subsurface models. *Groundwater*. DOI:`10.1111/gwat.12803 <https://onlinelibrary.wiley.com/doi/abs/10.1111/gwat.12803>`_. A preprint version of the article is available `here <https://github.com/driftingtides/hyvr/blob/master/docs/Bennett_GW_2018.pdf>`_.
-
-.. _MADE:
-.. figure:: img/MADEsmall_lowres.jpg
+.. _Ammer:
+.. figure:: img/ammer_general.png
 	:align: 	center
 	:width:		95%
 	
-	*Example field mimicking the MADE site, generated using HyVR.*
+	*Example field mimicking the Ammer site, Germany, generated using HyVR.*
 	
-The **parameter file** can be found on `github
-<https://github.com/driftingtides/hyvr/blob/master/tests/full_testcases/made.ini>`_.
+The **script file** can be found on `github
+<https://github.com/vcantarella/hyvr/blob/master/examples/ammer/ammer_v0901.py.>`_.
 
 
