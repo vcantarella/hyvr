@@ -1,0 +1,68 @@
+[build-system]
+# Minimum requirements for the build system to execute
+requires = ["setuptools>64"]
+build_backend = "setuptools.build_meta"
+
+[project]
+name = "HyVR-fork"
+dynamic = ["version"]
+description = "sedimentary structures virtual reality generator"
+license = { file = "LICENSE" }
+readme = "README.rst"
+authors = [{ name = "Jeremy Bennet" }]
+maintainers = [
+    { name = "Vitor Cantarella"}
+]
+requires-python = ">= 3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "numba",
+]
+
+keywords = ["hydrogeology", "sediment", "simulator"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Opeating System:: POSIX :: Linux",
+    "Programming Language :: Python 3",
+]
+
+[project.urls]
+homepage = "https://github.com/vcantarella/hyvr"
+repository = "https://github.com/vcantarella/hyvr"
+documentation = "in construction"
+
+[project.optional-dependencies]
+ci = [
+    "pytest>=4.6",
+    "coverage",
+    "flake8",
+]
+docs = [
+    "hyvr[ci]",
+    "sphinx",
+    "sphinx-design",
+    "pydata-sphinx-theme",
+    "numpydoc",
+    "myst_nb",
+]
+
+#[tool.setuptools]
+#packages = ["hyvr"]
+
+#[tool.setuptools.packages.find]
+#where = ["hyvr"]  # list of folders that contain the packages (["."] by default)
+#include = ["*"]  # package names should match these glob patterns (["*"] by default)
+
+[tool.setuptools.dynamic]
+version = { attr = "hyvr.__version__" }
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+src_paths = ["hyvr"]
+line_length = 88
