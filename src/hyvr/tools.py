@@ -1,5 +1,5 @@
 import numpy as np
-from utils import ferguson_theta_ode,specsim
+from .utils import ferguson_theta_ode,specsim
 
 def ferguson_curve(h, k, eps_factor, flow_angle, s_max, xstart, ystart):
     """
