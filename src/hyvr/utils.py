@@ -1,6 +1,6 @@
+import numba
 import numpy as np
 import numpy.typing as npt
-import numba
 import scipy
 
 
@@ -30,31 +30,41 @@ def normal_plane_from_dip_dip_dir(dip: float, dip_dir: float) -> npt.ArrayLike:
 
 @numba.njit()
 def rotation_matrix_x(alpha):
-    arr = np.array([[1., 0., 0.],
-                    [0., np.cos(alpha), -np.sin(alpha)],
-                    [0., np.sin(alpha), np.cos(alpha)],
-                    ])
+    arr = np.array(
+        [
+            [1.0, 0.0, 0.0],
+            [0.0, np.cos(alpha), -np.sin(alpha)],
+            [0.0, np.sin(alpha), np.cos(alpha)],
+        ]
+    )
     return arr
 
 
 @numba.njit()
 def rotation_matrix_z(alpha):
-    arr = np.array([[np.cos(alpha), -np.sin(alpha), 0.],
-                    [np.sin(alpha), np.cos(alpha), 0.],
-                    [0., 0., 1.],
-                    ])
+    arr = np.array(
+        [
+            [np.cos(alpha), -np.sin(alpha), 0.0],
+            [np.sin(alpha), np.cos(alpha), 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
     return arr
 
 
 @numba.njit()
-def is_point_inside_ellipsoid(x: np.ndarray, y: np.ndarray, z: np.ndarray,
-                              x_center: float,
-                              y_center: float,
-                              z_center: float,
-                              a: float,
-                              b: float,
-                              c: float,
-                              alpha: float) -> np.ndarray:
+def is_point_inside_ellipsoid(
+    x: np.ndarray,
+    y: np.ndarray,
+    z: np.ndarray,
+    x_center: float,
+    y_center: float,
+    z_center: float,
+    a: float,
+    b: float,
+    c: float,
+    alpha: float,
+) -> np.ndarray:
     """
     Return boolean array with true indices corresponding to points inside the ellipsoid
     Parameters
@@ -72,24 +82,30 @@ def is_point_inside_ellipsoid(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     dy = y - y_center
     dz = z - z_center
     rotated_points = matrix @ np.vstack((dx, dy, dz))
-    distance_vector = rotated_points[0, :] ** 2 / a ** 2 + \
-                      rotated_points[1, :] ** 2 / b ** 2 + \
-                      rotated_points[2, :] ** 2 / c ** 2
+    distance_vector = (
+        rotated_points[0, :] ** 2 / a**2
+        + rotated_points[1, :] ** 2 / b**2
+        + rotated_points[2, :] ** 2 / c**2
+    )
     logic = np.where(distance_vector <= 1, True, False)
     logic = np.reshape(logic, x.shape)
     return logic
 
 
 @numba.njit()
-def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
-                        x_center: float,
-                        y_center: float,
-                        z_center: float,
-                        a: float,
-                        b: float,
-                        c: float,
-                        alpha: float,
-                        dip: float) -> np.ndarray:
+def dip_dip_dir_bulbset(
+    x: np.ndarray,
+    y: np.ndarray,
+    z: np.ndarray,
+    x_center: float,
+    y_center: float,
+    z_center: float,
+    a: float,
+    b: float,
+    c: float,
+    alpha: float,
+    dip: float,
+) -> np.ndarray:
     """
     Return dip and dip_direction_arrays of the points inside ellipsoid according to the bulb method
     Parameters
@@ -136,15 +152,13 @@ def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     aaa = normalized_dx / a
     bbb = normalized_dy / b
     ccc = normalized_dz / c
-    len_normvec = np.sqrt(aaa ** 2 + bbb ** 2 + ccc ** 2)
-    normvec_x = (aaa * cos_alpha
-                 + bbb * sin_alpha) / len_normvec
-    normvec_y = (-aaa * sin_alpha
-                 + bbb * cos_alpha) / len_normvec
+    len_normvec = np.sqrt(aaa**2 + bbb**2 + ccc**2)
+    normvec_x = (aaa * cos_alpha + bbb * sin_alpha) / len_normvec
+    normvec_y = (-aaa * sin_alpha + bbb * cos_alpha) / len_normvec
     normvec_z = ccc / len_normvec
 
-    len_normvec_xy = np.sqrt(normvec_x ** 2 + normvec_y ** 2)
-    norm_distance = np.sqrt(normalized_dx ** 2 + normalized_dy ** 2 + normalized_dz ** 2)
+    len_normvec_xy = np.sqrt(normvec_x**2 + normvec_y**2)
+    norm_distance = np.sqrt(normalized_dx**2 + normalized_dy**2 + normalized_dz**2)
 
     # The dip angle can be found as acos of the normalized
     # scalar product of unit z-vector and normal vector
@@ -152,8 +166,9 @@ def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     # x direction and in positive z direction, or if it points
     # in negative x and z direction.
     # direction.
-    dip_bulb = -np.arccos(np.abs(normvec_z)) \
-               * np.sign(normvec_x * normvec_z) / np.pi * 180
+    dip_bulb = (
+        -np.arccos(np.abs(normvec_z)) * np.sign(normvec_x * normvec_z) / np.pi * 180
+    )
 
     # The azimuth angle should also be between -90 and 90. It is
     # the angle between the projection of the normal vector into
@@ -164,30 +179,38 @@ def dip_dip_dir_bulbset(x: np.ndarray, y: np.ndarray, z: np.ndarray,
     # x component is negative. This means the x component is
     # always positive, and the y component is multiplied by the
     # sign of the x component
-    dip_dir_counterclockwise = -np.arctan2(np.sign(normvec_x) * normvec_y, np.abs(normvec_x)) \
-                               / np.pi * 180
+    dip_dir_counterclockwise = (
+        -np.arctan2(np.sign(normvec_x) * normvec_y, np.abs(normvec_x)) / np.pi * 180
+    )
     dip_dir_bulb = (-dip_dir_counterclockwise + 90) % 360
 
     # if len_normvec != 0:
     # the point is exactly at the center of the trough, this means
     # there is no azim and dip
-    dip_dir_output = np.where(len_normvec < 1e-12, 0., dip_dir_bulb)
-    dip_output = np.where(len_normvec < 1e-10, 0., dip_bulb)
+    dip_dir_output = np.where(len_normvec < 1e-12, 0.0, dip_dir_bulb)
+    dip_output = np.where(len_normvec < 1e-10, 0.0, dip_bulb)
 
     # normal vector points in z-direction -> dip = 0, azim = 0
-    dip_dir_output = np.where(len_normvec_xy < 1e-12, 0., dip_dir_output)
-    dip_output = np.where(len_normvec_xy < 1e-12, 0., dip_output)
+    dip_dir_output = np.where(len_normvec_xy < 1e-12, 0.0, dip_dir_output)
+    dip_output = np.where(len_normvec_xy < 1e-12, 0.0, dip_output)
 
+    # for geological applications, a negative dip does not make sense:
+    dip_dir_output = np.where(
+        dip_output < 0,
+        np.where(dip_dir_output < 180, dip_dir_output + 180, dip_dir_output - 180),
+        dip_dir_output,
+    )
+    dip_output = np.abs(dip_output)
     # cap dip in bulb or bulbsets: use dip as maximum dip
     dip_output = np.where(dip_output > dip, dip, dip_output)
-    dip_output = np.where(dip_output < - dip, -dip, dip_output)
+
     return dip_output, dip_dir_output, norm_distance
 
 
 @numba.njit()
 def get_alternating_facies(facies, n_layers, facies_ordering) -> np.ndarray:
     """
-    Returns a vector of alternating facies numbers 
+    Returns a vector of alternating facies numbers
     """
     if facies_ordering:
         facies_array = alternating_facies(facies, n_layers)
@@ -235,11 +258,11 @@ def min_distance(x, y, P):
     """
     Compute minimum/a distance/s between
     a point P[x0,y0] and a curve (x,y)
-    
+
     ARGS:
         x, y      (array of values in the curve)
         P         (array of points to sample)
-        
+
     Returns min indexes and distances array.
     """
     distance = lambda X, x, y: np.sqrt((X[0] - x) ** 2 + (X[1] - y) ** 2)
@@ -274,35 +297,52 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
 
     # Correlated variance calculation => Gaussian function
     s_range = np.arange(0, s_max, (s_max / 1000))
-    dist_arr = scipy.spatial.distance.pdist(np.expand_dims(s_range, axis=1), 'sqeuclidean')
+    dist_arr = scipy.spatial.distance.pdist(
+        np.expand_dims(s_range, axis=1), "sqeuclidean"
+    )
     variance = eps_factor
     cov = variance * np.exp(-(1 / 2) * dist_arr)
 
     cov = scipy.spatial.distance.squareform(cov)
     cov[np.diag_indices_from(cov)] = variance
-    u = np.random.multivariate_normal(np.zeros_like(s_range), np.eye((s_range).shape[0]))
+    u = np.random.multivariate_normal(
+        np.zeros_like(s_range), np.eye((s_range).shape[0])
+    )
     L = scipy.linalg.cholesky(cov)
     e_s = L @ u
 
     def rhs(t, y, k, h):
         eps_t = np.interp(np.array([t]), s_range, e_s)
         eps_t = eps_t[0]  # from array to float
-        d_tau_ds = (eps_t - y[1] - 2 * h / k * y[0]) * (k ** 2)
+        d_tau_ds = (eps_t - y[1] - 2 * h / k * y[0]) * (k**2)
         d_theta_ds = y[0]
         dx_ds = np.cos(y[1])
         dy_ds = np.sin(y[1])
         return np.array([d_tau_ds, d_theta_ds, dx_ds, dy_ds])
 
     def jac(t, y, k, h):
-        return np.array([[-2 * h * k, -k ** 2, 0, 0],
-                         [1, 0, 0, 0],
-                         [0, -np.sin(y[1]), 0, 0],
-                         [0, np.cos(y[1]), 0, 0]])
+        return np.array(
+            [
+                [-2 * h * k, -(k**2), 0, 0],
+                [1, 0, 0, 0],
+                [0, -np.sin(y[1]), 0, 0],
+                [0, np.cos(y[1]), 0, 0],
+            ]
+        )
 
-    y0 = np.array([omega * k, 0., 0., 0.])
+    y0 = np.array([omega * k, 0.0, 0.0, 0.0])
 
-    solution = scipy.integrate.solve_ivp(rhs, (0, s_max), y0, method='BDF', args=(k, h), first_step=0.01,
-                                         jac=jac, atol=1e-8, rtol=1e-8)
+    solution = scipy.integrate.solve_ivp(
+        rhs,
+        (0, s_max),
+        y0,
+        method="BDF",
+        args=(k, h),
+        first_step=0.01,
+        jac=jac,
+        atol=1e-8,
+        rtol=1e-8,
+    )
 
     y = solution.y
 
@@ -318,15 +358,17 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
 # so far this function is not jitted. I plan to adapt a gaussian random function generator
 # using linear algebra, instead of fft.The linalg module is accessible in numba.
 # still buggy!!
-def specsim(x: np.array,
-            y: np.array,
-            z=np.array([0.]),
-            mean=0.,
-            var=1.,
-            corl=np.array([1., 1.]),
-            z_axis=0,
-            mask=None,
-            covmod='gaussian'):
+def specsim(
+    x: np.array,
+    y: np.array,
+    z=np.array([0.0]),
+    mean=0.0,
+    var=1.0,
+    corl=np.array([1.0, 1.0]),
+    z_axis=0,
+    mask=None,
+    covmod="gaussian",
+):
     """
     Generate random variables with stationary covariance function using spectral
     techniques of Dietrich & Newsam (1993)
@@ -366,20 +408,19 @@ def specsim(x: np.array,
     two_dim = len(corl) < 3  # boolean weather calculations should be done in two or 3D
     if two_dim:
         Y = np.empty(x.shape)
-        h_square = (x_calc / corl[0]) ** 2 \
-                   + (y_calc / corl[1]) ** 2
+        h_square = (x_calc / corl[0]) ** 2 + (y_calc / corl[1]) ** 2
     else:
         if mask is None:
             z_calc = z
         else:
             z_calc = np.where(mask, z, z_calc)
         Y = np.empty(z.shape)
-        h_square = (x_calc / corl[0]) ** 2 \
-                   + (y_calc / corl[1]) ** 2 \
-                   + (z_calc / corl[2]) ** 2
+        h_square = (
+            (x_calc / corl[0]) ** 2 + (y_calc / corl[1]) ** 2 + (z_calc / corl[2]) ** 2
+        )
     ntot = h_square.size
     # Covariance matrix of variables
-    if covmod == 'gaussian':
+    if covmod == "gaussian":
         # Gaussian covariance model
         ryy = np.exp(-h_square) * var
     else:  # covmod == 'exp':

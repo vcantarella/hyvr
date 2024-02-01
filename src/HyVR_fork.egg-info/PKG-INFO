@@ -80,9 +80,9 @@ Installing HyVR
 The package should work whether you are using anaconda or another virtual environment.
 Your working environment should have updated installations of the following libraries:
 
--numpy
--numba
--scipy
+- numpy
+- numba
+- scipy
 
 Once you have activated your virtual environment, you can install HyVR
 using ``pip``. First git clone the repository,
