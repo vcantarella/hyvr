@@ -38,6 +38,7 @@ jobs:
     - name: Test with pytest
       run: |
         conda install pytest
+        pip install pytest-html
         pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html
     - name: Coverage tests
       run: |
