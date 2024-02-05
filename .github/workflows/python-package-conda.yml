@@ -45,8 +45,8 @@ jobs:
         pip install coverage
         NUMBA_DISABLE_JIT=1 coverage run -m pytest
         coverage report -m
-        coverage xml -d reports/coverage
-        coverage html -d reports/coverage
+        coverage xml -o reports/coverage/coverage.xml
+        coverage html -d reports/coverage/html
     - name: Generate badges
       run: |
         genbadge coverage
