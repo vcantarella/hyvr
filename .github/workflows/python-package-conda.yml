@@ -34,7 +34,7 @@ jobs:
         pip install .
     - name: Install genbadge
       run: |
-        pip install genbadge
+        pip install genbadge[all]
     - name: Test with pytest
       run: |
         conda install pytest
