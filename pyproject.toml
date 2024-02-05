@@ -36,7 +36,7 @@ documentation = "in construction"
 
 [project.optional-dependencies]
 ci = [
-    "pytest>=4.6",
+    "pytest",
     "coverage",
     "flake8",
 ]

@@ -1,6 +1,7 @@
 # %%
 import numpy as np
-from hyvr.objects.trough import trough
+from hyvr import trough
+from hyvr.tools import ferguson_curve
 
 
 # %%
@@ -33,3 +34,22 @@ def test_trough_angles():
 
     assert np.nanmax(dip) == 30.0
     assert np.nanmin(dip) >= 0.0
+
+
+def test_curve():
+    np.random.seed(37)
+    channel_curve_1 = ferguson_curve(
+        h=0.1,
+        k=np.pi / 200,
+        eps_factor=(np.pi / 1.5) ** 2,
+        flow_angle=0.0,
+        s_max=400,
+        xstart=40.0,
+        ystart=25.0,
+    )
+    curve = np.column_stack([channel_curve_1[0], channel_curve_1[1]])
+    assert curve[0, 0] == 40.0
+    assert curve[0, 1] == 25.0
+    s = channel_curve_1[4]
+    print(s)
+    assert s[-1] <= 400.0
