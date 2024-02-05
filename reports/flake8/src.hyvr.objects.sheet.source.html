@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>src/hyvr/objects/sheet.py - flake8 annotated source</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <h1>
+            <a href="src.hyvr.objects.sheet.report.html">
+               <img src="back.svg" alt="&#x2B05;">
+               src/hyvr/objects/sheet.py source
+            </a>
+         </h1>
+
+         <div id="doc">
+            <div id="l1"
+               class="code sev- "><tt><i>1</i> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span></tt>
+            </div>
+            <div id="l2"
+               class="code sev-1  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-1">
+                        F401
+                     </span>
+                     'numpy.typing as npt' imported but unused</li>
+               
+               </ul><tt><i>2</i> <span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span></tt>
+            </div>
+            <div id="l3"
+               class="code sev- "><tt><i>3</i> <span class="kn">import</span> <span class="nn">numba</span></tt>
+            </div>
+            <div id="l4"
+               class="code sev- "><tt><i>4</i> <span class="kn">from</span> <span class="nn">hyvr.utils</span> <span class="kn">import</span> <span class="n">normal_plane_from_dip_dip_dir</span></tt>
+            </div>
+            <div id="l5"
+               class="code sev- "><tt><i>5</i> <span class="kn">from</span> <span class="nn">hyvr.utils</span> <span class="kn">import</span> <span class="n">coterminal_angle</span></tt>
+            </div>
+            <div id="l6"
+               class="code sev- "><tt><i>6</i> <span class="kn">from</span> <span class="nn">hyvr.utils</span> <span class="kn">import</span> <span class="n">get_alternating_facies</span></tt>
+            </div>
+            <div id="l7"
+               class="code sev- "><tt><i>7</i> &nbsp;</tt>
+            </div>
+            <div id="l8"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E302
+                     </span>
+                     Expected 2 blank lines, found 1</li>
+               
+               </ul><tt><i>8</i> <span class="nd">@numba</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></tt>
+            </div>
+            <div id="l9"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 2 places)</li>
+               
+               </ul><tt><i>9</i> <span class="k">def</span> <span class="nf">sheet</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span></tt>
+            </div>
+            <div id="l10"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ','</li>
+               
+               </ul><tt><i>10</i>           <span class="n">xmin</span><span class="p">,</span><span class="n">xmax</span><span class="p">,</span></tt>
+            </div>
+            <div id="l11"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ','</li>
+               
+               </ul><tt><i>11</i>           <span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span><span class="p">,</span></tt>
+            </div>
+            <div id="l12"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ','</li>
+               
+               </ul><tt><i>12</i>           <span class="n">bottom_surface</span><span class="p">,</span><span class="n">top_surface</span><span class="p">,</span></tt>
+            </div>
+            <div id="l13"
+               class="code sev- "><tt><i>13</i>           <span class="n">facies</span><span class="p">,</span></tt>
+            </div>
+            <div id="l14"
+               class="code sev- "><tt><i>14</i>           <span class="n">internal_layering</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alternating_facies</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span></tt>
+            </div>
+            <div id="l15"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 2 places)</li>
+               
+               </ul><tt><i>15</i>           <span class="n">dip</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">dip_dir</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">layer_dist</span><span class="o">=</span><span class="mf">0.</span></tt>
+            </div>
+            <div id="l16"
+               class="code sev- "><tt><i>16</i>           <span class="p">):</span></tt>
+            </div>
+            <div id="l17"
+               class="code sev- "><tt><i>17</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l18"
+               class="code sev- "><tt><i>18</i> <span class="sd">    Assigns a sheet to the grid points x,y,z.</span></tt>
+            </div>
+            <div id="l19"
+               class="code sev- "><tt><i>19</i> <span class="sd">    The sheet is a layer is defined by bounding x and y coordinates and top and bottom contacts.</span></tt>
+            </div>
+            <div id="l20"
+               class="code sev- "><tt><i>20</i> <span class="sd">    It may have internal layering (inclined or planar)</span></tt>
+            </div>
+            <div id="l21"
+               class="code sev- "><tt><i>21</i> <span class="sd">    params:</span></tt>
+            </div>
+            <div id="l22"
+               class="code sev- "><tt><i>22</i> <span class="sd">    ---</span></tt>
+            </div>
+            <div id="l23"
+               class="code sev- "><tt><i>23</i> <span class="sd">    x,y,z: grid coordinates where the element will search for connection.</span></tt>
+            </div>
+            <div id="l24"
+               class="code sev- "><tt><i>24</i> <span class="sd">    xmin,xmax: bounding coordinates in the x direction, (normally a sheet should cover the whole domain)</span></tt>
+            </div>
+            <div id="l25"
+               class="code sev- "><tt><i>25</i> <span class="sd">    ymin,ymax: bounding coordinates in the y direction,</span></tt>
+            </div>
+            <div id="l26"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E501
+                     </span>
+                     Line too long (195 > 127 characters)</li>
+               
+               </ul><tt><i>26</i> <span class="sd">    bottom_surface:(float or ndarray): bottom surface of the sheet. It can be a float (planar), or a surface 2D array. In case it is a surface, x,y,z dimensions must match the surface dimensions.</span></tt>
+            </div>
+            <div id="l27"
+               class="code sev- "><tt><i>27</i> <span class="sd">    top_surface (float or ndarray): top surface of the sheet. Defined the same as a bottom_surface.</span></tt>
+            </div>
+            <div id="l28"
+               class="code sev- "><tt><i>28</i> <span class="sd">    internal_layering: True if internal layering</span></tt>
+            </div>
+            <div id="l29"
+               class="code sev- "><tt><i>29</i> <span class="sd">    alternating_facies: True if the facies alternate according to the order in the argument facies</span></tt>
+            </div>
+            <div id="l30"
+               class="code sev- "><tt><i>30</i> <span class="sd">    dip: dip of the internal dipping layers. Leave the default value for massive structure.</span></tt>
+            </div>
+            <div id="l31"
+               class="code sev- "><tt><i>31</i> <span class="sd">    layer_dist: perpendicular to dip distance between layers</span></tt>
+            </div>
+            <div id="l32"
+               class="code sev- "><tt><i>32</i> <span class="sd">    facies: np.array(int32) with the facies code (1 in case no layering or more in case of layering)</span></tt>
+            </div>
+            <div id="l33"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        W293
+                     </span>
+                     Blank line contains whitespace</li>
+               
+               </ul><tt><i>33</i> <span class="sd">    </span></tt>
+            </div>
+            <div id="l34"
+               class="code sev- "><tt><i>34</i> <span class="sd">    Returns:</span></tt>
+            </div>
+            <div id="l35"
+               class="code sev- "><tt><i>35</i> <span class="sd">    ---</span></tt>
+            </div>
+            <div id="l36"
+               class="code sev- "><tt><i>36</i> <span class="sd">    facies: ndarray(int32) of the facies values at the coordinates (x,y,z)</span></tt>
+            </div>
+            <div id="l37"
+               class="code sev- "><tt><i>37</i> <span class="sd">    dip: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)</span></tt>
+            </div>
+            <div id="l38"
+               class="code sev- "><tt><i>38</i> <span class="sd">    dip_direction: ndarray(float32) of the dip-direction of the internal structure</span></tt>
+            </div>
+            <div id="l39"
+               class="code sev- "><tt><i>39</i> <span class="sd">    &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l40"
+               class="code sev- "><tt><i>40</i>     <span class="n">true_array_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">xmax</span><span class="p">)</span></tt>
+            </div>
+            <div id="l41"
+               class="code sev- "><tt><i>41</i>     <span class="nb">print</span><span class="p">(</span><span class="n">true_array_x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></tt>
+            </div>
+            <div id="l42"
+               class="code sev- "><tt><i>42</i>     <span class="n">true_array_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="n">ymax</span><span class="p">)</span></tt>
+            </div>
+            <div id="l43"
+               class="code sev- "><tt><i>43</i>     <span class="c1"># if len(bottom_surface.shape) != len(z.shape):</span></tt>
+            </div>
+            <div id="l44"
+               class="code sev- "><tt><i>44</i>     <span class="c1">#     bottom_surface = np.broadcast_to(bottom_surface, z.shape)</span></tt>
+            </div>
+            <div id="l45"
+               class="code sev- "><tt><i>45</i>     <span class="c1"># if len(top_surface.shape) != len(z.shape):</span></tt>
+            </div>
+            <div id="l46"
+               class="code sev- "><tt><i>46</i>     <span class="c1">#     top_surface = np.broadcast_to(top_surface, z.shape)</span></tt>
+            </div>
+            <div id="l47"
+               class="code sev- "><tt><i>47</i> &nbsp;</tt>
+            </div>
+            <div id="l48"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 2 places)</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E225
+                     </span>
+                     Missing whitespace around operator</li>
+               
+               </ul><tt><i>48</i>     <span class="n">true_array_z</span> <span class="o">=</span> <span class="p">(</span><span class="n">z</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">bottom_surface</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">z</span><span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">top_surface</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span></tt>
+            </div>
+            <div id="l49"
+               class="code sev- "><tt><i>49</i>     <span class="nb">print</span><span class="p">(</span><span class="n">true_array_z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></tt>
+            </div>
+            <div id="l50"
+               class="code sev- "><tt><i>50</i>     <span class="n">true_array</span> <span class="o">=</span> <span class="n">true_array_z</span> <span class="o">&amp;</span> <span class="n">true_array_y</span> <span class="o">&amp;</span> <span class="n">true_array_x</span></tt>
+            </div>
+            <div id="l51"
+               class="code sev- "><tt><i>51</i>     <span class="n">true_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">true_array</span><span class="p">)</span></tt>
+            </div>
+            <div id="l52"
+               class="code sev- "><tt><i>52</i>     <span class="nb">print</span><span class="p">(</span><span class="n">true_array</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></tt>
+            </div>
+            <div id="l53"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E251
+                     </span>
+                     Unexpected spaces around keyword / parameter equals (in 2 places)</li>
+               
+               </ul><tt><i>53</i>     <span class="n">facies_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></tt>
+            </div>
+            <div id="l54"
+               class="code sev- "><tt><i>54</i>     <span class="k">if</span> <span class="n">internal_layering</span><span class="p">:</span></tt>
+            </div>
+            <div id="l55"
+               class="code sev- "><tt><i>55</i>         <span class="n">normal_vector</span> <span class="o">=</span> <span class="n">normal_plane_from_dip_dip_dir</span><span class="p">(</span><span class="n">dip</span><span class="p">,</span> <span class="n">dip_dir</span><span class="p">)</span></tt>
+            </div>
+            <div id="l56"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E225
+                     </span>
+                     Missing whitespace around operator</li>
+               
+               </ul><tt><i>56</i>         <span class="n">xcenter</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span><span class="n">xmin</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span></tt>
+            </div>
+            <div id="l57"
+               class="code sev- "><tt><i>57</i>         <span class="n">ycenter</span> <span class="o">=</span> <span class="n">ymin</span> <span class="o">+</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span></tt>
+            </div>
+            <div id="l58"
+               class="code sev- "><tt><i>58</i>         <span class="n">zmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">top_surface</span><span class="p">)</span></tt>
+            </div>
+            <div id="l59"
+               class="code sev- "><tt><i>59</i>         <span class="n">shift</span> <span class="o">=</span> <span class="n">normal_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">xcenter</span> <span class="o">+</span> <span class="n">normal_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ycenter</span> <span class="o">+</span> <span class="n">normal_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">zmax</span></tt>
+            </div>
+            <div id="l60"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E501
+                     </span>
+                     Line too long (146 > 127 characters)</li>
+               
+               </ul><tt><i>60</i>         <span class="n">d</span> <span class="o">=</span> <span class="n">normal_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">true_array</span><span class="p">]</span> <span class="o">+</span> <span class="n">normal_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">true_array</span><span class="p">]</span> <span class="o">+</span> <span class="n">normal_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">z</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">true_array</span><span class="p">]</span> <span class="o">-</span> <span class="n">shift</span></tt>
+            </div>
+            <div id="l61"
+               class="code sev- "><tt><i>61</i>         <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></tt>
+            </div>
+            <div id="l62"
+               class="code sev- "><tt><i>62</i>         <span class="n">class_distances</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">d</span><span class="o">/</span><span class="n">layer_dist</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span></tt>
+            </div>
+            <div id="l63"
+               class="code sev- "><tt><i>63</i>         <span class="n">min_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">class_distances</span><span class="p">)</span></tt>
+            </div>
+            <div id="l64"
+               class="code sev- "><tt><i>64</i>         <span class="n">facies_indices</span> <span class="o">=</span> <span class="n">class_distances</span> <span class="o">-</span> <span class="n">min_value</span></tt>
+            </div>
+            <div id="l65"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        W291
+                     </span>
+                     Trailing whitespace</li>
+               
+               </ul><tt><i>65</i>         <span class="n">n_layers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">facies_indices</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>  </tt>
+            </div>
+            <div id="l66"
+               class="code sev- "><tt><i>66</i>         <span class="nb">print</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)</span></tt>
+            </div>
+            <div id="l67"
+               class="code sev- "><tt><i>67</i>         <span class="n">facies_array</span> <span class="o">=</span> <span class="n">get_alternating_facies</span><span class="p">(</span><span class="n">facies</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">,</span> <span class="n">alternating_facies</span><span class="p">)</span></tt>
+            </div>
+            <div id="l68"
+               class="code sev- "><tt><i>68</i>         <span class="n">facies_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">facies_array</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">facies_indices</span><span class="p">])</span></tt>
+            </div>
+            <div id="l69"
+               class="code sev- "><tt><i>69</i>         <span class="n">facies_output</span><span class="p">[</span><span class="n">true_array</span><span class="p">]</span> <span class="o">=</span> <span class="n">facies_</span></tt>
+            </div>
+            <div id="l70"
+               class="code sev- "><tt><i>70</i>     <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l71"
+               class="code sev- "><tt><i>71</i>         <span class="n">facies_output</span><span class="p">[</span><span class="n">true_array</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">facies</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">true_array</span><span class="p">))</span></tt>
+            </div>
+            <div id="l72"
+               class="code sev- "><tt><i>72</i>     <span class="n">dip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">dip</span><span class="p">)</span></tt>
+            </div>
+            <div id="l73"
+               class="code sev- "><tt><i>73</i>     <span class="n">dip_dir</span> <span class="o">=</span> <span class="n">coterminal_angle</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">dip_dir</span><span class="p">))</span></tt>
+            </div>
+            <div id="l74"
+               class="code sev- "><tt><i>74</i>     <span class="n">dip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">dip</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span></tt>
+            </div>
+            <div id="l75"
+               class="code sev- "><tt><i>75</i>     <span class="n">dip_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">dip_dir</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span></tt>
+            </div>
+            <div id="l76"
+               class="code sev- "><tt><i>76</i>     <span class="n">facies_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">facies_output</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></tt>
+            </div>
+            <div id="l77"
+               class="code sev- "><tt><i>77</i>     <span class="n">dip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dip</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></tt>
+            </div>
+            <div id="l78"
+               class="code sev- "><tt><i>78</i>     <span class="n">dip_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dip_direction</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></tt>
+            </div>
+            <div id="l79"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        W292
+                     </span>
+                     No newline at end of file</li>
+               
+               </ul><tt><i>79</i>     <span class="k">return</span> <span class="n">facies_output</span><span class="p">,</span> <span class="n">dip</span><span class="p">,</span> <span class="n">dip_direction</span></tt>
+            </div>
+            
+         </div>
+      </div>
+   </body>
+</html>

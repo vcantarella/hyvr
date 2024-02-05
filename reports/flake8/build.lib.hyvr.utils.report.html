@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: build/lib/hyvr/utils.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="build.lib.hyvr.utils.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               build/lib/hyvr/utils.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E127">
+               <span class="count sev-2">
+                  7
+               </span>
+               <strong>E127:</strong> continuation line over-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l76">
+                  <tt><i>76</i>                       <span class="n">rotated_points</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">b</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> \</tt>
+               </a>
+            </li><li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l77">
+                  <tt><i>77</i>                       <span class="n">rotated_points</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">c</span> <span class="o">**</span> <span class="mi">2</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l156">
+                  <tt><i>156</i>                <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">normvec_x</span> <span class="o">*</span> <span class="n">normvec_z</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">180</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l168">
+                  <tt><i>168</i>                                <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">180</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l370">
+                  <tt><i>370</i>                    <span class="o">+</span> <span class="p">(</span><span class="n">y_calc</span> <span class="o">/</span> <span class="n">corl</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l378">
+                  <tt><i>378</i>                    <span class="o">+</span> <span class="p">(</span><span class="n">y_calc</span> <span class="o">/</span> <span class="n">corl</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> \</tt>
+               </a>
+            </li><li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l379">
+                  <tt><i>379</i>                    <span class="o">+</span> <span class="p">(</span><span class="n">z_calc</span> <span class="o">/</span> <span class="n">corl</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W293">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>W293:</strong> blank line contains whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l238">
+                  <tt><i>238</i> <span class="sd">    </span></tt>
+               </a>
+            </li><li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l242">
+                  <tt><i>242</i> <span class="sd">        </span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E731">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E731:</strong> do not assign a lambda expression, use a def
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l245">
+                  <tt><i>245</i>     <span class="n">distance</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W291">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W291:</strong> trailing whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="build.lib.hyvr.utils.source.html#l190">
+                  <tt><i>190</i> <span class="sd">    Returns a vector of alternating facies numbers </span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

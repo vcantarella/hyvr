@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>build/lib/postprocess/plotting.py - flake8 annotated source</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <h1>
+            <a href="build.lib.postprocess.plotting.report.html">
+               <img src="back.svg" alt="&#x2B05;">
+               build/lib/postprocess/plotting.py source
+            </a>
+         </h1>
+
+         <div id="doc">
+            <div id="l1"
+               class="code sev- "><tt><i>1</i> <span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l2"
+               class="code sev- "><tt><i>2</i> <span class="sd">Some functions to plot hyvr output. This module is for testing purposes only.</span></tt>
+            </div>
+            <div id="l3"
+               class="code sev- "><tt><i>3</i> <span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l4"
+               class="code sev- "><tt><i>4</i> &nbsp;</tt>
+            </div>
+            <div id="l5"
+               class="code sev- "><tt><i>5</i> <span class="kn">import</span> <span class="nn">sys</span></tt>
+            </div>
+            <div id="l6"
+               class="code sev- "><tt><i>6</i> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span></tt>
+            </div>
+            <div id="l7"
+               class="code sev- "><tt><i>7</i> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span></tt>
+            </div>
+            <div id="l8"
+               class="code sev- "><tt><i>8</i> &nbsp;</tt>
+            </div>
+            <div id="l9"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        C901
+                     </span>
+                     'cross_section_pcolor' is too complex (13)</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E302
+                     </span>
+                     Expected 2 blank lines, found 1</li>
+               
+               </ul><tt><i>9</i> <span class="k">def</span> <span class="nf">cross_section_pcolor</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xlim_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylim_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span></tt>
+            </div>
+            <div id="l10"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E128
+                     </span>
+                     Continuation line under-indented for visual indent</li>
+               
+               </ul><tt><i>10</i>         <span class="n">xlim_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylim_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span></tt>
+            </div>
+            <div id="l11"
+               class="code sev- "><tt><i>11</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l12"
+               class="code sev- "><tt><i>12</i> <span class="sd">    Create a pcolor plot of a cross section of the specified field.</span></tt>
+            </div>
+            <div id="l13"
+               class="code sev- "><tt><i>13</i> &nbsp;</tt>
+            </div>
+            <div id="l14"
+               class="code sev- "><tt><i>14</i> <span class="sd">    Parameters</span></tt>
+            </div>
+            <div id="l15"
+               class="code sev- "><tt><i>15</i> <span class="sd">    ----------</span></tt>
+            </div>
+            <div id="l16"
+               class="code sev- "><tt><i>16</i> <span class="sd">    model : Model object</span></tt>
+            </div>
+            <div id="l17"
+               class="code sev- "><tt><i>17</i> <span class="sd">    field : str</span></tt>
+            </div>
+            <div id="l18"
+               class="code sev- "><tt><i>18</i> <span class="sd">        The field to be shown, e.g. &#39;ae&#39;, &#39;fac&#39;, &#39;hat&#39;, &#39;k_iso&#39;, etc.</span></tt>
+            </div>
+            <div id="l19"
+               class="code sev- "><tt><i>19</i> <span class="sd">    y : sequence of values or None, optional (default: None)</span></tt>
+            </div>
+            <div id="l20"
+               class="code sev- "><tt><i>20</i> <span class="sd">        If a sequence of values or a single value is given, cross section at this y-value will be</span></tt>
+            </div>
+            <div id="l21"
+               class="code sev- "><tt><i>21</i> <span class="sd">        plotted.</span></tt>
+            </div>
+            <div id="l22"
+               class="code sev- "><tt><i>22</i> <span class="sd">        If it is None, a y-cross section through the center of the model domain will be plotted.</span></tt>
+            </div>
+            <div id="l23"
+               class="code sev- "><tt><i>23</i> <span class="sd">        If it is an empty list, no y-cross section will be plotted.</span></tt>
+            </div>
+            <div id="l24"
+               class="code sev- "><tt><i>24</i> <span class="sd">    x : sequence of values or None, optional (default: None)</span></tt>
+            </div>
+            <div id="l25"
+               class="code sev- "><tt><i>25</i> <span class="sd">        If a sequence of values or a single value is given, cross section at this x-value will be</span></tt>
+            </div>
+            <div id="l26"
+               class="code sev- "><tt><i>26</i> <span class="sd">        plotted.</span></tt>
+            </div>
+            <div id="l27"
+               class="code sev- "><tt><i>27</i> <span class="sd">        If it is None, a x-cross section through the center of the model domain will be plotted.</span></tt>
+            </div>
+            <div id="l28"
+               class="code sev- "><tt><i>28</i> <span class="sd">        If it is an empty list, no x-cross section will be plotted.</span></tt>
+            </div>
+            <div id="l29"
+               class="code sev- "><tt><i>29</i> <span class="sd">    log : bool, optional (default: False)</span></tt>
+            </div>
+            <div id="l30"
+               class="code sev- "><tt><i>30</i> <span class="sd">        Whether to plot the logarithm of the field.</span></tt>
+            </div>
+            <div id="l31"
+               class="code sev- "><tt><i>31</i> <span class="sd">    xlim_y, ylim_y : lists/tuples, optional (default: None)</span></tt>
+            </div>
+            <div id="l32"
+               class="code sev- "><tt><i>32</i> <span class="sd">        Axis limits for the y-cross-sections</span></tt>
+            </div>
+            <div id="l33"
+               class="code sev- "><tt><i>33</i> <span class="sd">    xlim_x, ylim_x : lists/tuples, optional (default: None)</span></tt>
+            </div>
+            <div id="l34"
+               class="code sev- "><tt><i>34</i> <span class="sd">        Axis limits for the x-cross-sections</span></tt>
+            </div>
+            <div id="l35"
+               class="code sev- "><tt><i>35</i> <span class="sd">    cmap : matplotlib colormap, optional (default: None)</span></tt>
+            </div>
+            <div id="l36"
+               class="code sev- "><tt><i>36</i> <span class="sd">        Colormap to use for the plot, e.g. &#39;prism&#39;.</span></tt>
+            </div>
+            <div id="l37"
+               class="code sev- "><tt><i>37</i> <span class="sd">    &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l38"
+               class="code sev- "><tt><i>38</i>     <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span></tt>
+            </div>
+            <div id="l39"
+               class="code sev- "><tt><i>39</i>         <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y0</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ly</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span></tt>
+            </div>
+            <div id="l40"
+               class="code sev- "><tt><i>40</i>     <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span></tt>
+            </div>
+            <div id="l41"
+               class="code sev- "><tt><i>41</i>         <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x0</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">lx</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span></tt>
+            </div>
+            <div id="l42"
+               class="code sev- "><tt><i>42</i>     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">y</span><span class="p">):</span></tt>
+            </div>
+            <div id="l43"
+               class="code sev- "><tt><i>43</i>         <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span></tt>
+            </div>
+            <div id="l44"
+               class="code sev- "><tt><i>44</i>     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">x</span><span class="p">):</span></tt>
+            </div>
+            <div id="l45"
+               class="code sev- "><tt><i>45</i>         <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span></tt>
+            </div>
+            <div id="l46"
+               class="code sev- "><tt><i>46</i> &nbsp;</tt>
+            </div>
+            <div id="l47"
+               class="code sev- "><tt><i>47</i>     <span class="k">for</span> <span class="n">yi</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span></tt>
+            </div>
+            <div id="l48"
+               class="code sev- "><tt><i>48</i>         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span></tt>
+            </div>
+            <div id="l49"
+               class="code sev- "><tt><i>49</i>         <span class="n">y_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">yi</span><span class="o">-</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">y0</span><span class="o">+</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dy</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dy</span><span class="p">)))</span></tt>
+            </div>
+            <div id="l50"
+               class="code sev- "><tt><i>50</i>         <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y_index</span> <span class="ow">and</span> <span class="n">y_index</span> <span class="o">&lt;</span> <span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">ny</span><span class="p">:</span></tt>
+            </div>
+            <div id="l51"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 4 places)</li>
+               
+               </ul><tt><i>51</i>             <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">X</span><span class="p">[:,</span><span class="n">y_index</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">Z</span><span class="p">[:,</span><span class="n">y_index</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span></tt>
+            </div>
+            <div id="l52"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E128
+                     </span>
+                     Continuation line under-indented for visual indent</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 2 places)</li>
+               
+               </ul><tt><i>52</i>                     <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">][:,</span><span class="n">y_index</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span></tt>
+            </div>
+            <div id="l53"
+               class="code sev- "><tt><i>53</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s1">&#39;, y = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yi</span><span class="p">))</span></tt>
+            </div>
+            <div id="l54"
+               class="code sev- "><tt><i>54</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l55"
+               class="code sev- "><tt><i>55</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l56"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E701
+                     </span>
+                     Multiple statements on one line (colon)</li>
+               
+               </ul><tt><i>56</i>             <span class="k">if</span> <span class="n">xlim_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim_y</span><span class="p">)</span></tt>
+            </div>
+            <div id="l57"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E701
+                     </span>
+                     Multiple statements on one line (colon)</li>
+               
+               </ul><tt><i>57</i>             <span class="k">if</span> <span class="n">ylim_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim_y</span><span class="p">)</span></tt>
+            </div>
+            <div id="l58"
+               class="code sev- "><tt><i>58</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l59"
+               class="code sev- "><tt><i>59</i>             <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span></tt>
+            </div>
+            <div id="l60"
+               class="code sev- "><tt><i>60</i>             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></tt>
+            </div>
+            <div id="l61"
+               class="code sev- "><tt><i>61</i>         <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l62"
+               class="code sev- "><tt><i>62</i>             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: y = </span><span class="si">{:.2f}</span><span class="s2"> not in model domain&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">yi</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span></tt>
+            </div>
+            <div id="l63"
+               class="code sev- "><tt><i>63</i> &nbsp;</tt>
+            </div>
+            <div id="l64"
+               class="code sev- "><tt><i>64</i>     <span class="k">for</span> <span class="n">xi</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span></tt>
+            </div>
+            <div id="l65"
+               class="code sev- "><tt><i>65</i>         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span></tt>
+            </div>
+            <div id="l66"
+               class="code sev- "><tt><i>66</i>         <span class="n">x_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">xi</span><span class="o">-</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">x0</span><span class="o">+</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">dx</span><span class="p">)))</span></tt>
+            </div>
+            <div id="l67"
+               class="code sev- "><tt><i>67</i>         <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x_index</span> <span class="ow">and</span> <span class="n">x_index</span> <span class="o">&lt;</span> <span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">nx</span><span class="p">:</span></tt>
+            </div>
+            <div id="l68"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 4 places)</li>
+               
+               </ul><tt><i>68</i>             <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="n">x_index</span><span class="p">,:,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">x_index</span><span class="p">,:,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span></tt>
+            </div>
+            <div id="l69"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E128
+                     </span>
+                     Continuation line under-indented for visual indent</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 2 places)</li>
+               
+               </ul><tt><i>69</i>                     <span class="n">model</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="n">x_index</span><span class="p">,:,:]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span></tt>
+            </div>
+            <div id="l70"
+               class="code sev- "><tt><i>70</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s1">&#39;, x = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xi</span><span class="p">))</span></tt>
+            </div>
+            <div id="l71"
+               class="code sev- "><tt><i>71</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l72"
+               class="code sev- "><tt><i>72</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l73"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E701
+                     </span>
+                     Multiple statements on one line (colon)</li>
+               
+               </ul><tt><i>73</i>             <span class="k">if</span> <span class="n">xlim_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim_x</span><span class="p">)</span></tt>
+            </div>
+            <div id="l74"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E701
+                     </span>
+                     Multiple statements on one line (colon)</li>
+               
+               </ul><tt><i>74</i>             <span class="k">if</span> <span class="n">ylim_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim_x</span><span class="p">)</span></tt>
+            </div>
+            <div id="l75"
+               class="code sev- "><tt><i>75</i>             <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span></tt>
+            </div>
+            <div id="l76"
+               class="code sev- "><tt><i>76</i>             <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span></tt>
+            </div>
+            <div id="l77"
+               class="code sev- "><tt><i>77</i>             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span></tt>
+            </div>
+            <div id="l78"
+               class="code sev- "><tt><i>78</i>         <span class="k">else</span><span class="p">:</span></tt>
+            </div>
+            <div id="l79"
+               class="code sev- "><tt><i>79</i>             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: x = </span><span class="si">{:.2f}</span><span class="s2"> not in model domain&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span></tt>
+            </div>
+            
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: examples/ammer/borehole_plot.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="examples.ammer.borehole_plot.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               examples/ammer/borehole_plot.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E231">
+               <span class="count sev-2">
+                  70
+               </span>
+               <strong>E231:</strong> missing whitespace after ','
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l12">
+                  <tt><i>12</i> <span class="n">rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">facii</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l15">
+                  <tt><i>15</i> <span class="n">samples</span> <span class="o">=</span> <span class="n">facii</span><span class="p">[:,</span><span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l16">
+                  <tt><i>16</i> <span class="n">z_samples</span> <span class="o">=</span> <span class="n">Z</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 7 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l19">
+                  <tt><i>19</i> <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;#FCF2A8&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;#cec47f&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;#c9c186&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;#7e7954&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;#b0b468&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;#c8b23d&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;#323021&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;#b7b7b7&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ':' (in 8 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l19">
+                  <tt><i>19</i> <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;#FCF2A8&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;#cec47f&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;#c9c186&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;#7e7954&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;#b0b468&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;#c8b23d&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;#323021&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;#b7b7b7&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 7 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l20">
+                  <tt><i>20</i> <span class="n">hatches</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;o&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;oo&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ':' (in 8 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l20">
+                  <tt><i>20</i> <span class="n">hatches</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;o&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;.&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;oo&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 7 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l21">
+                  <tt><i>21</i> <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;T1&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;T2+T3&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;T4&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;T5&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;T6&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;T7&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;T8+T9&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;T11&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ':' (in 8 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l21">
+                  <tt><i>21</i> <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;T1&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;T2+T3&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;T4&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;T5&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;T6&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;T7&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;T8+T9&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;T11&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l23">
+                  <tt><i>23</i> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l24">
+                  <tt><i>24</i> <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l25">
+                  <tt><i>25</i> <span class="n">legend_elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l26">
+                  <tt><i>26</i>                             <span class="n">fc</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">hatch</span><span class="o">=</span><span class="n">hatches</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">colors</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l27">
+                  <tt><i>27</i> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend_elements</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">markerscale</span> <span class="o">=</span> <span class="mf">10.</span><span class="p">,)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l32">
+                  <tt><i>32</i> <span class="k">for</span> <span class="n">row</span><span class="p">,</span><span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 4 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l33">
+                  <tt><i>33</i>     <span class="n">fig</span><span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l40">
+                  <tt><i>40</i>         <span class="n">facies</span> <span class="o">=</span> <span class="n">facii</span><span class="p">[</span><span class="n">zind</span><span class="p">,</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l43">
+                  <tt><i>43</i>         <span class="n">rec</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="n">z_samples</span><span class="p">[</span><span class="n">zind</span><span class="p">]</span><span class="o">-</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l44">
+                  <tt><i>44</i>                             <span class="n">fc</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">hatch</span><span class="o">=</span><span class="n">hatch</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span> </tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l49">
+                  <tt><i>49</i>     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l52">
+                  <tt><i>52</i>     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;examples/ammer/borehole_v3_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">400</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E251">
+               <span class="count sev-2">
+                  10
+               </span>
+               <strong>E251:</strong> unexpected spaces around keyword / parameter equals
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l25">
+                  <tt><i>25</i> <span class="n">legend_elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l26">
+                  <tt><i>26</i>                             <span class="n">fc</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">hatch</span><span class="o">=</span><span class="n">hatches</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">colors</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l27">
+                  <tt><i>27</i> <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend_elements</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">markerscale</span> <span class="o">=</span> <span class="mf">10.</span><span class="p">,)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l43">
+                  <tt><i>43</i>         <span class="n">rec</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="n">z_samples</span><span class="p">[</span><span class="n">zind</span><span class="p">]</span><span class="o">-</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l52">
+                  <tt><i>52</i>     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;examples/ammer/borehole_v3_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span><span class="n">dpi</span> <span class="o">=</span> <span class="mi">400</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E265">
+               <span class="count sev-2">
+                  6
+               </span>
+               <strong>E265:</strong> block comment should start with '# '
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l5">
+                  <tt><i>5</i> <span class="c1">#facies</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l11">
+                  <tt><i>11</i> <span class="c1">#randomly sample columns:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l22">
+                  <tt><i>22</i> <span class="c1">#legend</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l30">
+                  <tt><i>30</i> <span class="c1">#plot samples:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l35">
+                  <tt><i>35</i>     <span class="c1">#row = rows[0]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l36">
+                  <tt><i>36</i>     <span class="c1">#col = cols[0]</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E225">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E225:</strong> missing whitespace around operator
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l31">
+                  <tt><i>31</i> <span class="n">i</span><span class="o">=</span> <span class="mi">0</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l53">
+                  <tt><i>53</i>     <span class="n">i</span><span class="o">+=</span><span class="mi">1</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E303">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E303:</strong> too many blank lines (2)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l39">
+                  <tt><i>39</i>     <span class="k">for</span> <span class="n">zind</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">z_samples</span><span class="o">.</span><span class="n">size</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l49">
+                  <tt><i>49</i>     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E128">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E128:</strong> continuation line under-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l26">
+                  <tt><i>26</i>                             <span class="n">fc</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">hatch</span><span class="o">=</span><span class="n">hatches</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">colors</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W291">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W291:</strong> trailing whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l44">
+                  <tt><i>44</i>                             <span class="n">fc</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">hatch</span><span class="o">=</span><span class="n">hatch</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span> </tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W293">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W293:</strong> blank line contains whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.borehole_plot.source.html#l37">
+                  <tt><i>37</i>     </tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

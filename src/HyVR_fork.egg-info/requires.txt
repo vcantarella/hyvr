@@ -3,7 +3,7 @@ scipy
 numba
 
 [ci]
-pytest>=4.6
+pytest
 coverage
 flake8
 

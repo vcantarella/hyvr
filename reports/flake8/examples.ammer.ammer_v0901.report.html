@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: examples/ammer/ammer_v0901.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="examples.ammer.ammer_v0901.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               examples/ammer/ammer_v0901.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="E231">
+               <span class="count sev-2">
+                  149
+               </span>
+               <strong>E231:</strong> missing whitespace after ','
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l49">
+                  <tt><i>49</i>     <span class="n">botm</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">H</span><span class="o">-</span><span class="n">delz</span><span class="p">,</span><span class="mi">0</span><span class="o">-</span><span class="n">delz</span><span class="p">,</span><span class="o">-</span><span class="n">delz</span><span class="p">),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l93">
+                  <tt><i>93</i>     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l108">
+                  <tt><i>108</i> <span class="n">mu_tufa</span><span class="p">,</span> <span class="n">sigma_tufa</span> <span class="o">=</span> <span class="n">solve_for_log_normal_parameters</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l109">
+                  <tt><i>109</i> <span class="n">mu_moss</span><span class="p">,</span> <span class="n">sigma_moss</span> <span class="o">=</span> <span class="n">solve_for_log_normal_parameters</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span><span class="mf">0.7</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l111">
+                  <tt><i>111</i> <span class="n">mu_gr</span><span class="p">,</span> <span class="n">sigma_gr</span> <span class="o">=</span> <span class="n">solve_for_log_normal_parameters</span><span class="p">(</span><span class="mf">5e-4</span><span class="p">,</span><span class="mf">0.4</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 7 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l123">
+                  <tt><i>123</i> <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;#FCF2A8&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;#cec47f&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;#c9c186&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;#7e7954&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;#b0b468&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;#c8b23d&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;#323021&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;#b7b7b7&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ':' (in 8 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l123">
+                  <tt><i>123</i> <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="s2">&quot;#FCF2A8&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s2">&quot;#cec47f&quot;</span><span class="p">,</span><span class="mi">4</span><span class="p">:</span><span class="s2">&quot;#c9c186&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">:</span><span class="s2">&quot;#7e7954&quot;</span><span class="p">,</span><span class="mi">6</span><span class="p">:</span><span class="s2">&quot;#b0b468&quot;</span><span class="p">,</span><span class="mi">7</span><span class="p">:</span><span class="s2">&quot;#c8b23d&quot;</span><span class="p">,</span><span class="mi">8</span><span class="p">:</span><span class="s2">&quot;#323021&quot;</span><span class="p">,</span><span class="mi">11</span><span class="p">:</span><span class="s2">&quot;#b7b7b7&quot;</span><span class="p">}</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 3 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l125">
+                  <tt><i>125</i> <span class="n">facies_tufa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l126">
+                  <tt><i>126</i> <span class="n">facies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l132">
+                  <tt><i>132</i>         <span class="n">x_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l133">
+                  <tt><i>133</i>         <span class="n">y_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">600</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l134">
+                  <tt><i>134</i>         <span class="n">z_c</span> <span class="o">=</span> <span class="n">z_0</span><span class="o">+</span><span class="n">thick</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l135">
+                  <tt><i>135</i>         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l136">
+                  <tt><i>136</i>         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l138">
+                  <tt><i>138</i>         <span class="n">azim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">110</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 5 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l139">
+                  <tt><i>139</i>         <span class="n">facies_trough</span><span class="p">,</span> <span class="n">dip_dir_trough</span><span class="p">,</span> <span class="n">dip_trough</span> <span class="o">=</span> <span class="n">trough</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">center_coords</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_c</span><span class="p">,</span><span class="n">y_c</span><span class="p">,</span><span class="n">z_c</span><span class="p">]),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l140">
+                  <tt><i>140</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l142">
+                  <tt><i>142</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_tufa</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_tufa</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l147">
+                  <tt><i>147</i>         <span class="n">x_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l148">
+                  <tt><i>148</i>         <span class="n">y_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">600</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l149">
+                  <tt><i>149</i>         <span class="n">z_c</span> <span class="o">=</span> <span class="n">z_0</span><span class="o">+</span><span class="n">thick</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l150">
+                  <tt><i>150</i>         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l151">
+                  <tt><i>151</i>         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l153">
+                  <tt><i>153</i>         <span class="n">azim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">110</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 5 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l154">
+                  <tt><i>154</i>         <span class="n">facies_trough</span><span class="p">,</span> <span class="n">dip_dir_trough</span><span class="p">,</span> <span class="n">dip_trough</span> <span class="o">=</span> <span class="n">trough</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">center_coords</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_c</span><span class="p">,</span><span class="n">y_c</span><span class="p">,</span><span class="n">z_c</span><span class="p">]),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l155">
+                  <tt><i>155</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l157">
+                  <tt><i>157</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_tufa</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_tufa</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l162">
+                  <tt><i>162</i>         <span class="n">x_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l163">
+                  <tt><i>163</i>         <span class="n">y_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">600</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l164">
+                  <tt><i>164</i>         <span class="n">z_c</span> <span class="o">=</span> <span class="n">z_0</span><span class="o">+</span><span class="n">thick</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l165">
+                  <tt><i>165</i>         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l166">
+                  <tt><i>166</i>         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l168">
+                  <tt><i>168</i>         <span class="n">azim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">110</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 5 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l169">
+                  <tt><i>169</i>         <span class="n">facies_trough</span><span class="p">,</span> <span class="n">dip_dir_trough</span><span class="p">,</span> <span class="n">dip_trough</span> <span class="o">=</span> <span class="n">trough</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">center_coords</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_c</span><span class="p">,</span><span class="n">y_c</span><span class="p">,</span><span class="n">z_c</span><span class="p">]),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l170">
+                  <tt><i>170</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l172">
+                  <tt><i>172</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_moss</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_moss</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l177">
+                  <tt><i>177</i>         <span class="n">x_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l178">
+                  <tt><i>178</i>         <span class="n">y_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">600</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l179">
+                  <tt><i>179</i>         <span class="n">z_c</span> <span class="o">=</span> <span class="n">z_0</span><span class="o">+</span><span class="n">thick</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l180">
+                  <tt><i>180</i>         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l181">
+                  <tt><i>181</i>         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l183">
+                  <tt><i>183</i>         <span class="n">azim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">110</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 5 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l184">
+                  <tt><i>184</i>         <span class="n">facies_trough</span><span class="p">,</span> <span class="n">dip_dir_trough</span><span class="p">,</span> <span class="n">dip_trough</span> <span class="o">=</span> <span class="n">trough</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">center_coords</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_c</span><span class="p">,</span><span class="n">y_c</span><span class="p">,</span><span class="n">z_c</span><span class="p">]),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l185">
+                  <tt><i>185</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l187">
+                  <tt><i>187</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_moss</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_moss</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l192">
+                  <tt><i>192</i>         <span class="n">x_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l193">
+                  <tt><i>193</i>         <span class="n">y_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">600</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l194">
+                  <tt><i>194</i>         <span class="n">z_c</span> <span class="o">=</span> <span class="n">z_0</span><span class="o">+</span><span class="n">thick</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l195">
+                  <tt><i>195</i>         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l196">
+                  <tt><i>196</i>         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l198">
+                  <tt><i>198</i>         <span class="n">azim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">110</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 5 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l199">
+                  <tt><i>199</i>         <span class="n">facies_trough</span><span class="p">,</span> <span class="n">dip_dir_trough</span><span class="p">,</span> <span class="n">dip_trough</span> <span class="o">=</span> <span class="n">trough</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">center_coords</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_c</span><span class="p">,</span><span class="n">y_c</span><span class="p">,</span><span class="n">z_c</span><span class="p">]),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l200">
+                  <tt><i>200</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l202">
+                  <tt><i>202</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_moss</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_moss</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l211">
+                  <tt><i>211</i>         <span class="n">x_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l212">
+                  <tt><i>212</i>         <span class="n">y_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">600</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l213">
+                  <tt><i>213</i>         <span class="n">z_c</span> <span class="o">=</span> <span class="n">z_0</span><span class="o">+</span><span class="n">thick</span><span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l214">
+                  <tt><i>214</i>         <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l215">
+                  <tt><i>215</i>         <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l216">
+                  <tt><i>216</i>         <span class="n">azim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="mi">120</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 5 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l223">
+                  <tt><i>223</i>         <span class="n">facies_trough</span><span class="p">,</span> <span class="n">dip_dir_trough</span><span class="p">,</span> <span class="n">dip_trough</span> <span class="o">=</span> <span class="n">trough</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">center_coords</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x_c</span><span class="p">,</span><span class="n">y_c</span><span class="p">,</span><span class="n">z_c</span><span class="p">]),</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l224">
+                  <tt><i>224</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l226">
+                  <tt><i>226</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_peat</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_peat</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 3 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l231">
+                  <tt><i>231</i>     <span class="n">channel_curve_1</span> <span class="o">=</span> <span class="n">ferguson_curve</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">200</span><span class="p">,</span><span class="n">eps_factor</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">1.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">flow_angle</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l232">
+                  <tt><i>232</i>                                 <span class="n">s_max</span><span class="o">=</span> <span class="mi">4000</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ystart</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l233">
+                  <tt><i>233</i>     <span class="n">y_shift_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l234">
+                  <tt><i>234</i>     <span class="n">channel_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">channel_curve_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">channel_curve_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">y_shift_1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 3 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l239">
+                  <tt><i>239</i>     <span class="n">channel_f</span><span class="p">,</span> <span class="n">channel_dip_dir</span><span class="p">,</span> <span class="n">channel_dip</span> <span class="o">=</span> <span class="n">channel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">z_top</span><span class="o">=</span><span class="n">z_0</span><span class="o">+</span><span class="n">thick</span><span class="p">,</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">channel_1</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l240">
+                  <tt><i>240</i>                                                     <span class="n">parabola_pars</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="n">depth</span><span class="p">]),</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l242">
+                  <tt><i>242</i>     <span class="n">k</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_gr</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_gr</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 3 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l243">
+                  <tt><i>243</i>     <span class="n">channel_curve_2</span> <span class="o">=</span> <span class="n">ferguson_curve</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">200</span><span class="p">,</span><span class="n">eps_factor</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">1.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">flow_angle</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l244">
+                  <tt><i>244</i>                                 <span class="n">s_max</span><span class="o">=</span> <span class="mi">4000</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ystart</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l245">
+                  <tt><i>245</i>     <span class="n">y_shift_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">150</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l246">
+                  <tt><i>246</i>     <span class="n">channel_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">channel_curve_2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">channel_curve_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">y_shift_2</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 3 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l247">
+                  <tt><i>247</i>     <span class="n">channel_f</span><span class="p">,</span> <span class="n">channel_dip_dir</span><span class="p">,</span> <span class="n">channel_dip</span> <span class="o">=</span> <span class="n">channel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">z_top</span><span class="o">=</span><span class="n">z_0</span><span class="o">+</span><span class="n">thick</span><span class="p">,</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">channel_2</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',' (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l248">
+                  <tt><i>248</i>                                                     <span class="n">parabola_pars</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="n">depth</span><span class="p">]),</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l250">
+                  <tt><i>250</i>     <span class="n">k</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_gr</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_gr</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l270">
+                  <tt><i>270</i> <span class="n">vtk</span><span class="o">.</span><span class="n">add_array</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="s2">&quot;K[m/s]&quot;</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l274">
+                  <tt><i>274</i> <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;facies_ammer_v3.npy&quot;</span><span class="p">,</span><span class="n">facies</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l275">
+                  <tt><i>275</i> <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;facies_Z_v3.npy&quot;</span><span class="p">,</span><span class="n">Z</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace after ',':</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l276">
+                  <tt><i>276</i> <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;k_ammer_v3.npy&quot;</span><span class="p">,</span><span class="n">k</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E251">
+               <span class="count sev-2">
+                  32
+               </span>
+               <strong>E251:</strong> unexpected spaces around keyword / parameter equals
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l94">
+                  <tt><i>94</i>     <span class="n">sol</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">root</span><span class="p">(</span><span class="n">F_</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span><span class="p">,))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l140">
+                  <tt><i>140</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l155">
+                  <tt><i>155</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l170">
+                  <tt><i>170</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l185">
+                  <tt><i>185</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l200">
+                  <tt><i>200</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 4 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l224">
+                  <tt><i>224</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l232">
+                  <tt><i>232</i>                                 <span class="n">s_max</span><span class="o">=</span> <span class="mi">4000</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ystart</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l239">
+                  <tt><i>239</i>     <span class="n">channel_f</span><span class="p">,</span> <span class="n">channel_dip_dir</span><span class="p">,</span> <span class="n">channel_dip</span> <span class="o">=</span> <span class="n">channel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">z_top</span><span class="o">=</span><span class="n">z_0</span><span class="o">+</span><span class="n">thick</span><span class="p">,</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">channel_1</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l244">
+                  <tt><i>244</i>                                 <span class="n">s_max</span><span class="o">=</span> <span class="mi">4000</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ystart</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Unexpected spaces around keyword / parameter equals (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l247">
+                  <tt><i>247</i>     <span class="n">channel_f</span><span class="p">,</span> <span class="n">channel_dip_dir</span><span class="p">,</span> <span class="n">channel_dip</span> <span class="o">=</span> <span class="n">channel</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">z_top</span><span class="o">=</span><span class="n">z_0</span><span class="o">+</span><span class="n">thick</span><span class="p">,</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">channel_2</span><span class="p">,</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E225">
+               <span class="count sev-2">
+                  26
+               </span>
+               <strong>E225:</strong> missing whitespace around operator
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l141">
+                  <tt><i>141</i>         <span class="n">facies</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">facies_trough</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l142">
+                  <tt><i>142</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_tufa</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_tufa</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l156">
+                  <tt><i>156</i>         <span class="n">facies</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">facies_trough</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l157">
+                  <tt><i>157</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_tufa</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_tufa</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l171">
+                  <tt><i>171</i>         <span class="n">facies</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">facies_trough</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l172">
+                  <tt><i>172</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_moss</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_moss</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l186">
+                  <tt><i>186</i>         <span class="n">facies</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">facies_trough</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l187">
+                  <tt><i>187</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_moss</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_moss</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l201">
+                  <tt><i>201</i>         <span class="n">facies</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">facies_trough</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l202">
+                  <tt><i>202</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_moss</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_moss</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l213">
+                  <tt><i>213</i>         <span class="n">z_c</span> <span class="o">=</span> <span class="n">z_0</span><span class="o">+</span><span class="n">thick</span><span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l225">
+                  <tt><i>225</i>         <span class="n">facies</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">facies_trough</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l226">
+                  <tt><i>226</i>         <span class="n">k</span><span class="p">[</span><span class="n">facies_trough</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_peat</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_peat</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l241">
+                  <tt><i>241</i>     <span class="n">facies</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">channel_f</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l242">
+                  <tt><i>242</i>     <span class="n">k</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_gr</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_gr</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator (in 2 places):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l249">
+                  <tt><i>249</i>     <span class="n">facies</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">channel_f</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l250">
+                  <tt><i>250</i>     <span class="n">k</span><span class="p">[</span><span class="n">channel_f</span><span class="o">!=-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">lognormal</span><span class="p">(</span><span class="n">mu_gr</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="n">sigma_gr</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Missing whitespace around operator:</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l260">
+                  <tt><i>260</i> <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">facies</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">facies</span><span class="o">.</span><span class="n">size</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E265">
+               <span class="count sev-2">
+                  17
+               </span>
+               <strong>E265:</strong> block comment should start with '# '
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l64">
+                  <tt><i>64</i> <span class="c1">#boundary conditions:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l113">
+                  <tt><i>113</i> <span class="c1">#We are simulating the facies:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l114">
+                  <tt><i>114</i> <span class="c1">##TUFA: </span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l115">
+                  <tt><i>115</i>     <span class="c1">#T1: upper layer (first 40 cm): white tufa with fossils</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l116">
+                  <tt><i>116</i>     <span class="c1">#T2+T3: tufa with organics + plant remains</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l117">
+                  <tt><i>117</i>     <span class="c1">#T4: white no fossil</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l118">
+                  <tt><i>118</i>     <span class="c1">#T5: brown tufa + organic matter and plant remains (darker and wetter than T2,T3)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l119">
+                  <tt><i>119</i>     <span class="c1">#T6: moss</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l120">
+                  <tt><i>120</i>     <span class="c1">#T7: sticks + organics</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l121">
+                  <tt><i>121</i>     <span class="c1">#T8+T9: PEAT</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l122">
+                  <tt><i>122</i>     <span class="c1">#T11: gravel</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l207">
+                  <tt><i>207</i>     <span class="c1">#peat lenses:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l209">
+                  <tt><i>209</i>     <span class="c1">#peat lenses</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l230">
+                  <tt><i>230</i>     <span class="c1">#channels</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l251">
+                  <tt><i>251</i>     <span class="c1">#resetting z_0:</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l254">
+                  <tt><i>254</i> <span class="c1">#final_layer!</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l257">
+                  <tt><i>257</i> <span class="c1">#Why this doenst work in the script??</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E261">
+               <span class="count sev-2">
+                  13
+               </span>
+               <strong>E261:</strong> at least two spaces before inline comment
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l28">
+                  <tt><i>28</i> <span class="n">Lx</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1">#problem lenght [m]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l29">
+                  <tt><i>29</i> <span class="n">Ly</span> <span class="o">=</span> <span class="mi">600</span> <span class="c1">#problem width [m]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l31">
+                  <tt><i>31</i> <span class="n">delx</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="c1">#block size x direction</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l32">
+                  <tt><i>32</i> <span class="n">dely</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="c1">#block size y direction</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l33">
+                  <tt><i>33</i> <span class="n">delz</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1">#block size z direction</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l35">
+                  <tt><i>35</i> <span class="n">ncol</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Lx</span><span class="o">/</span><span class="n">delx</span><span class="p">)</span> <span class="c1"># number of columns</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l36">
+                  <tt><i>36</i> <span class="n">nrow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Ly</span><span class="o">/</span><span class="n">dely</span><span class="p">)</span> <span class="c1"># number of layers</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l58">
+                  <tt><i>58</i> <span class="n">k</span> <span class="o">=</span> <span class="mf">1e-5</span> <span class="c1"># Model conductivity in m/s</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l61">
+                  <tt><i>61</i>     <span class="n">icelltype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="c1">#This we define the model as convertible (water table aquifer)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l167">
+                  <tt><i>167</i>         <span class="n">c</span> <span class="o">=</span> <span class="n">thick</span> <span class="c1">#thickness until the original base (more or less)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l182">
+                  <tt><i>182</i>         <span class="n">c</span> <span class="o">=</span> <span class="n">thick</span> <span class="c1">#thickness until the original base (more or less)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l197">
+                  <tt><i>197</i>         <span class="n">c</span> <span class="o">=</span> <span class="n">thick</span> <span class="c1">#thickness until the original base (more or less)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l255">
+                  <tt><i>255</i> <span class="n">facies</span><span class="p">[</span><span class="n">Z</span> <span class="o">&gt;</span> <span class="n">simulated_thickness</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#T1 facies</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E262">
+               <span class="count sev-2">
+                  11
+               </span>
+               <strong>E262:</strong> inline comment should start with '# '
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l28">
+                  <tt><i>28</i> <span class="n">Lx</span> <span class="o">=</span> <span class="mi">2000</span> <span class="c1">#problem lenght [m]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l29">
+                  <tt><i>29</i> <span class="n">Ly</span> <span class="o">=</span> <span class="mi">600</span> <span class="c1">#problem width [m]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l30">
+                  <tt><i>30</i> <span class="n">H</span> <span class="o">=</span> <span class="mi">7</span>  <span class="c1">#aquifer height [m]</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l31">
+                  <tt><i>31</i> <span class="n">delx</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="c1">#block size x direction</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l32">
+                  <tt><i>32</i> <span class="n">dely</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="c1">#block size y direction</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l33">
+                  <tt><i>33</i> <span class="n">delz</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1">#block size z direction</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l61">
+                  <tt><i>61</i>     <span class="n">icelltype</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="c1">#This we define the model as convertible (water table aquifer)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l167">
+                  <tt><i>167</i>         <span class="n">c</span> <span class="o">=</span> <span class="n">thick</span> <span class="c1">#thickness until the original base (more or less)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l182">
+                  <tt><i>182</i>         <span class="n">c</span> <span class="o">=</span> <span class="n">thick</span> <span class="c1">#thickness until the original base (more or less)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l197">
+                  <tt><i>197</i>         <span class="n">c</span> <span class="o">=</span> <span class="n">thick</span> <span class="c1">#thickness until the original base (more or less)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l255">
+                  <tt><i>255</i> <span class="n">facies</span><span class="p">[</span><span class="n">Z</span> <span class="o">&gt;</span> <span class="n">simulated_thickness</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#T1 facies</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E128">
+               <span class="count sev-2">
+                  10
+               </span>
+               <strong>E128:</strong> continuation line under-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l140">
+                  <tt><i>140</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l155">
+                  <tt><i>155</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l170">
+                  <tt><i>170</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l185">
+                  <tt><i>185</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l200">
+                  <tt><i>200</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l224">
+                  <tt><i>224</i>                                                         <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">]),</span><span class="n">azim</span> <span class="o">=</span> <span class="n">azim</span><span class="p">,</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">8</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l232">
+                  <tt><i>232</i>                                 <span class="n">s_max</span><span class="o">=</span> <span class="mi">4000</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ystart</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l240">
+                  <tt><i>240</i>                                                     <span class="n">parabola_pars</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="n">depth</span><span class="p">]),</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">]))</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l244">
+                  <tt><i>244</i>                                 <span class="n">s_max</span><span class="o">=</span> <span class="mi">4000</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ystart</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l248">
+                  <tt><i>248</i>                                                     <span class="n">parabola_pars</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="n">depth</span><span class="p">]),</span><span class="n">facies</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">]))</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E116">
+               <span class="count sev-2">
+                  8
+               </span>
+               <strong>E116:</strong> unexpected indentation (comment)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l115">
+                  <tt><i>115</i>     <span class="c1">#T1: upper layer (first 40 cm): white tufa with fossils</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l116">
+                  <tt><i>116</i>     <span class="c1">#T2+T3: tufa with organics + plant remains</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l117">
+                  <tt><i>117</i>     <span class="c1">#T4: white no fossil</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l118">
+                  <tt><i>118</i>     <span class="c1">#T5: brown tufa + organic matter and plant remains (darker and wetter than T2,T3)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l119">
+                  <tt><i>119</i>     <span class="c1">#T6: moss</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l120">
+                  <tt><i>120</i>     <span class="c1">#T7: sticks + organics</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l121">
+                  <tt><i>121</i>     <span class="c1">#T8+T9: PEAT</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l122">
+                  <tt><i>122</i>     <span class="c1">#T11: gravel</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E303">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E303:</strong> too many blank lines (3)
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Too many blank lines (3):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l78">
+                  <tt><i>78</i> <span class="c1"># print(channel_curve_1)</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l207">
+                  <tt><i>207</i>     <span class="c1">#peat lenses:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E731">
+               <span class="count sev-2">
+                  2
+               </span>
+               <strong>E731:</strong> do not assign a lambda expression, use a def
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l88">
+                  <tt><i>88</i> <span class="n">F</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="mi">1</span><span class="o">-</span><span class="p">((</span><span class="n">simulated_thickness</span><span class="o">-</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="n">simulated_thickness</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l89">
+                  <tt><i>89</i> <span class="n">F_</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">F</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="n">p</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E266">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E266:</strong> too many leading '#' for block comment
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l129">
+                  <tt><i>129</i>     <span class="c1">## initial tufa sheets: they are modelled as very elongated ellipsoids representing discontinuous layers</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E302">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E302:</strong> expected 2 blank lines, found 0
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l104">
+                  <tt><i>104</i> <span class="k">def</span> <span class="nf">solve_for_log_normal_parameters</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">variance</span><span class="p">):</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E305">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E305:</strong> expected 2 blank lines after class or function definition, found 0
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l108">
+                  <tt><i>108</i> <span class="n">mu_tufa</span><span class="p">,</span> <span class="n">sigma_tufa</span> <span class="o">=</span> <span class="n">solve_for_log_normal_parameters</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span><span class="mf">0.7</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E501">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E501:</strong> line too long (155 > 127 characters)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l84">
+                  <tt><i>84</i> <span class="c1"># according to answer in : https://math.stackexchange.com/questions/291174/probability-distribution-of-the-subinterval-lengths-from-a-random-interval-divis</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W291">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W291:</strong> trailing whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l114">
+                  <tt><i>114</i> <span class="c1">##TUFA: </span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W293">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W293:</strong> blank line contains whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l205">
+                  <tt><i>205</i>     </tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W391">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W391:</strong> blank line at end of file
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="examples.ammer.ammer_v0901.source.html#l277">
+                  <tt><i>277</i> &nbsp;</tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>

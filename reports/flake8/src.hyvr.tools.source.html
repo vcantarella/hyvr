@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>src/hyvr/tools.py - flake8 annotated source</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+      <div id="masthead" class="sev-2"></div>
+      <div id="page">
+         <h1>
+            <a href="src.hyvr.tools.report.html">
+               <img src="back.svg" alt="&#x2B05;">
+               src/hyvr/tools.py source
+            </a>
+         </h1>
+
+         <div id="doc">
+            <div id="l1"
+               class="code sev- "><tt><i>1</i> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span></tt>
+            </div>
+            <div id="l2"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ','</li>
+               
+               </ul><tt><i>2</i> <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">ferguson_theta_ode</span><span class="p">,</span><span class="n">specsim</span></tt>
+            </div>
+            <div id="l3"
+               class="code sev- "><tt><i>3</i> &nbsp;</tt>
+            </div>
+            <div id="l4"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E302
+                     </span>
+                     Expected 2 blank lines, found 1</li>
+               
+               </ul><tt><i>4</i> <span class="k">def</span> <span class="nf">ferguson_curve</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">eps_factor</span><span class="p">,</span> <span class="n">flow_angle</span><span class="p">,</span> <span class="n">s_max</span><span class="p">,</span> <span class="n">xstart</span><span class="p">,</span> <span class="n">ystart</span><span class="p">):</span></tt>
+            </div>
+            <div id="l5"
+               class="code sev- "><tt><i>5</i> <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l6"
+               class="code sev- "><tt><i>6</i> <span class="sd">    Simulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model</span></tt>
+            </div>
+            <div id="l7"
+               class="code sev- "><tt><i>7</i> <span class="sd">    Implementation of AR2 autoregressive model</span></tt>
+            </div>
+            <div id="l8"
+               class="code sev- "><tt><i>8</i> <span class="sd">    http://onlinelibrary.wiley.com/doi/10.1002/esp.3290010403/full</span></tt>
+            </div>
+            <div id="l9"
+               class="code sev- "><tt><i>9</i> &nbsp;</tt>
+            </div>
+            <div id="l10"
+               class="code sev- "><tt><i>10</i> <span class="sd">    Parameters</span></tt>
+            </div>
+            <div id="l11"
+               class="code sev- "><tt><i>11</i> <span class="sd">    ----------</span></tt>
+            </div>
+            <div id="l12"
+               class="code sev- "><tt><i>12</i> <span class="sd">    h : float</span></tt>
+            </div>
+            <div id="l13"
+               class="code sev- "><tt><i>13</i> <span class="sd">        Height (Ferguson model parameter)</span></tt>
+            </div>
+            <div id="l14"
+               class="code sev- "><tt><i>14</i> <span class="sd">    k : float</span></tt>
+            </div>
+            <div id="l15"
+               class="code sev- "><tt><i>15</i> <span class="sd">        Wave number (Ferguson model parameter)</span></tt>
+            </div>
+            <div id="l16"
+               class="code sev- "><tt><i>16</i> <span class="sd">    eps_factor : float</span></tt>
+            </div>
+            <div id="l17"
+               class="code sev- "><tt><i>17</i> <span class="sd">        Random background noise (Ferguson model parameter)</span></tt>
+            </div>
+            <div id="l18"
+               class="code sev- "><tt><i>18</i> <span class="sd">    flow_angle : float</span></tt>
+            </div>
+            <div id="l19"
+               class="code sev- "><tt><i>19</i> <span class="sd">        Angle of mean flow direction, in radians</span></tt>
+            </div>
+            <div id="l20"
+               class="code sev- "><tt><i>20</i> <span class="sd">    s_max : float</span></tt>
+            </div>
+            <div id="l21"
+               class="code sev- "><tt><i>21</i> <span class="sd">        Length of the domain in mean flow direction</span></tt>
+            </div>
+            <div id="l22"
+               class="code sev- "><tt><i>22</i> <span class="sd">    xstart, ystart : float</span></tt>
+            </div>
+            <div id="l23"
+               class="code sev- "><tt><i>23</i> <span class="sd">        Starting coordinates of the channel centerline</span></tt>
+            </div>
+            <div id="l24"
+               class="code sev- "><tt><i>24</i> &nbsp;</tt>
+            </div>
+            <div id="l25"
+               class="code sev- "><tt><i>25</i> <span class="sd">    Returns</span></tt>
+            </div>
+            <div id="l26"
+               class="code sev- "><tt><i>26</i> <span class="sd">    -------</span></tt>
+            </div>
+            <div id="l27"
+               class="code sev- "><tt><i>27</i> <span class="sd">    outputs : float matrix</span></tt>
+            </div>
+            <div id="l28"
+               class="code sev- "><tt><i>28</i> <span class="sd">        Simulated extruded parabola centerlines: storage array containing values for x coordinate, y</span></tt>
+            </div>
+            <div id="l29"
+               class="code sev- "><tt><i>29</i> <span class="sd">        coordinate, vx and vy</span></tt>
+            </div>
+            <div id="l30"
+               class="code sev- "><tt><i>30</i> <span class="sd">    &quot;&quot;&quot;</span></tt>
+            </div>
+            <div id="l31"
+               class="code sev- "><tt><i>31</i>     <span class="c1"># Parameters</span></tt>
+            </div>
+            <div id="l32"
+               class="code sev- "><tt><i>32</i>     <span class="c1"># Calculate curve directions</span></tt>
+            </div>
+            <div id="l33"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E261
+                     </span>
+                     At least two spaces before inline comment</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E262
+                     </span>
+                     Inline comment should start with '# '</li>
+               
+               </ul><tt><i>33</i>     <span class="n">theta</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">xp</span><span class="p">,</span> <span class="n">yp</span> <span class="o">=</span> <span class="n">ferguson_theta_ode</span><span class="p">(</span><span class="n">s_max</span><span class="p">,</span> <span class="n">eps_factor</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span><span class="c1">#np.pi / 2)</span></tt>
+            </div>
+            <div id="l34"
+               class="code sev- "><tt><i>34</i> &nbsp;</tt>
+            </div>
+            <div id="l35"
+               class="code sev- "><tt><i>35</i>     <span class="c1"># Interpolate curve direction over interval of interest</span></tt>
+            </div>
+            <div id="l36"
+               class="code sev- "><tt><i>36</i>     <span class="c1"># s_interp, th_interp = curve_interp(s, theta, 10)</span></tt>
+            </div>
+            <div id="l37"
+               class="code sev- "><tt><i>37</i> &nbsp;</tt>
+            </div>
+            <div id="l38"
+               class="code sev- "><tt><i>38</i>     <span class="c1"># s_diff = np.diff(s)</span></tt>
+            </div>
+            <div id="l39"
+               class="code sev- "><tt><i>39</i>     <span class="c1"># s_diff = np.concatenate([np.array([0.]), s_diff])</span></tt>
+            </div>
+            <div id="l40"
+               class="code sev- "><tt><i>40</i>     <span class="n">vx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span></tt>
+            </div>
+            <div id="l41"
+               class="code sev- "><tt><i>41</i>     <span class="n">vy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span></tt>
+            </div>
+            <div id="l42"
+               class="code sev- "><tt><i>42</i>     <span class="c1"># vx = ds*np.cos(th_interp)</span></tt>
+            </div>
+            <div id="l43"
+               class="code sev- "><tt><i>43</i>     <span class="c1"># vy = ds*np.sin(th_interp)</span></tt>
+            </div>
+            <div id="l44"
+               class="code sev- "><tt><i>44</i>     <span class="c1"># xp = np.cumsum(vx)</span></tt>
+            </div>
+            <div id="l45"
+               class="code sev- "><tt><i>45</i>     <span class="c1"># yp = np.cumsum(vy)</span></tt>
+            </div>
+            <div id="l46"
+               class="code sev- "><tt><i>46</i> &nbsp;</tt>
+            </div>
+            <div id="l47"
+               class="code sev- "><tt><i>47</i>     <span class="c1"># Storage array</span></tt>
+            </div>
+            <div id="l48"
+               class="code sev- "><tt><i>48</i>     <span class="n">outputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="mi">5</span><span class="p">))</span></tt>
+            </div>
+            <div id="l49"
+               class="code sev- "><tt><i>49</i> &nbsp;</tt>
+            </div>
+            <div id="l50"
+               class="code sev- "><tt><i>50</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">xp</span>  <span class="c1"># x coordinate</span></tt>
+            </div>
+            <div id="l51"
+               class="code sev- "><tt><i>51</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">yp</span>  <span class="c1"># y coordinate</span></tt>
+            </div>
+            <div id="l52"
+               class="code sev- "><tt><i>52</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">vx</span>  <span class="c1"># vx</span></tt>
+            </div>
+            <div id="l53"
+               class="code sev- "><tt><i>53</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">vy</span>  <span class="c1"># vy</span></tt>
+            </div>
+            <div id="l54"
+               class="code sev- "><tt><i>54</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span></tt>
+            </div>
+            <div id="l55"
+               class="code sev- "><tt><i>55</i> &nbsp;</tt>
+            </div>
+            <div id="l56"
+               class="code sev- "><tt><i>56</i>     <span class="c1"># Rotate meanders into mean flow direction</span></tt>
+            </div>
+            <div id="l57"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E261
+                     </span>
+                     At least two spaces before inline comment</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E262
+                     </span>
+                     Inline comment should start with '# '</li>
+               
+               </ul><tt><i>57</i>     <span class="n">rot_angle</span> <span class="o">=</span> <span class="n">flow_angle</span> <span class="c1">#-np.mean(theta)</span></tt>
+            </div>
+            <div id="l58"
+               class="code sev- "><tt><i>58</i>     <span class="n">rotMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)],</span></tt>
+            </div>
+            <div id="l59"
+               class="code sev- "><tt><i>59</i>                           <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot_angle</span><span class="p">)]])</span></tt>
+            </div>
+            <div id="l60"
+               class="code sev- "><tt><i>60</i>     <span class="n">roro</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rotMatrix</span><span class="p">,</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span></tt>
+            </div>
+            <div id="l61"
+               class="code sev- "><tt><i>61</i> &nbsp;</tt>
+            </div>
+            <div id="l62"
+               class="code sev- "><tt><i>62</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rotMatrix</span><span class="p">,</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span></tt>
+            </div>
+            <div id="l63"
+               class="code sev- "><tt><i>63</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">roro</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span></tt>
+            </div>
+            <div id="l64"
+               class="code sev- "><tt><i>64</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">roro</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span></tt>
+            </div>
+            <div id="l65"
+               class="code sev- "><tt><i>65</i> &nbsp;</tt>
+            </div>
+            <div id="l66"
+               class="code sev- "><tt><i>66</i>     <span class="c1"># move to channel start</span></tt>
+            </div>
+            <div id="l67"
+               class="code sev- "><tt><i>67</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">xstart</span></tt>
+            </div>
+            <div id="l68"
+               class="code sev- "><tt><i>68</i>     <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ystart</span></tt>
+            </div>
+            <div id="l69"
+               class="code sev- "><tt><i>69</i> &nbsp;</tt>
+            </div>
+            <div id="l70"
+               class="code sev- "><tt><i>70</i>     <span class="k">return</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">outputs</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span></tt>
+            </div>
+            <div id="l71"
+               class="code sev- "><tt><i>71</i> &nbsp;</tt>
+            </div>
+            <div id="l72"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E302
+                     </span>
+                     Expected 2 blank lines, found 1</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ':' (in 2 places)</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ','</li>
+               
+               </ul><tt><i>72</i> <span class="k">def</span> <span class="nf">contact_surface</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span><span class="n">y</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span></tt>
+            </div>
+            <div id="l73"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ':' (in 2 places)</li>
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ','</li>
+               
+               </ul><tt><i>73</i>                     <span class="n">mean</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span><span class="n">var</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span></tt>
+            </div>
+            <div id="l74"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ':'</li>
+               
+               </ul><tt><i>74</i>                     <span class="n">corl</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span></tt>
+            </div>
+            <div id="l75"
+               class="code sev- "><tt><i>75</i>                     <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span></tt>
+            </div>
+            <div id="l76"
+               class="code sev- "><tt><i>76</i> <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span></tt>
+            </div>
+            <div id="l77"
+               class="code sev- "><tt><i>77</i> <span class="sd">    Creates gaussian random contact surface with mean value and variance input</span></tt>
+            </div>
+            <div id="l78"
+               class="code sev- "><tt><i>78</i> <span class="sd">    with the spectral method from  Dietrich &amp; Newsam (1993).</span></tt>
+            </div>
+            <div id="l79"
+               class="code sev- "><tt><i>79</i> <span class="sd">    Input:</span></tt>
+            </div>
+            <div id="l80"
+               class="code sev- "><tt><i>80</i> <span class="sd">    -------------</span></tt>
+            </div>
+            <div id="l81"
+               class="code sev- "><tt><i>81</i> <span class="sd">    x,y: 2D grid of x and y points</span></tt>
+            </div>
+            <div id="l82"
+               class="code sev- "><tt><i>82</i> <span class="sd">    mean: mean value</span></tt>
+            </div>
+            <div id="l83"
+               class="code sev- "><tt><i>83</i> <span class="sd">    var: variance</span></tt>
+            </div>
+            <div id="l84"
+               class="code sev- "><tt><i>84</i> <span class="sd">    corl: correlation lenghts (same unit as x and y) in x and y directions</span></tt>
+            </div>
+            <div id="l85"
+               class="code sev- "><tt><i>85</i> <span class="sd">    mask: mask array (same dimensions as x and y)</span></tt>
+            </div>
+            <div id="l86"
+               class="code sev- "><tt><i>86</i> <span class="sd">    Returns:</span></tt>
+            </div>
+            <div id="l87"
+               class="code sev- "><tt><i>87</i> <span class="sd">    Z: output np.array with same dimensions as x and y and with Z values corrensponding to the surface</span></tt>
+            </div>
+            <div id="l88"
+               class="code sev- "><tt><i>88</i> <span class="sd">    &#39;&#39;&#39;</span></tt>
+            </div>
+            <div id="l89"
+               class="code sev-2  le">
+               <ul class="violations">
+               
+                  <li>
+                     <span class="count sev-2">
+                        E231
+                     </span>
+                     Missing whitespace after ',' (in 5 places)</li>
+               
+               </ul><tt><i>89</i>     <span class="n">Z</span> <span class="o">=</span> <span class="n">specsim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">mean</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span><span class="n">corl</span><span class="o">=</span><span class="n">corl</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span></tt>
+            </div>
+            <div id="l90"
+               class="code sev- "><tt><i>90</i>     <span class="k">return</span> <span class="n">Z</span></tt>
+            </div>
+            
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,5 +1,5 @@
 LICENCE
-README.rst
+README.md
 pyproject.toml
 src/HyVR_fork.egg-info/PKG-INFO
 src/HyVR_fork.egg-info/SOURCES.txt
