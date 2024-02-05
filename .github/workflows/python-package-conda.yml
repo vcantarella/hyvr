@@ -27,16 +27,26 @@ jobs:
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --format=html --htmldir ./reports/flake8 --statistics --tee --output-file flake8stats.txt
     - name: Install HyVR-fork
       run: |
         pip install .
+    - name: Install genbadge
+      run: |
+        pip install genbadge
     - name: Test with pytest
       run: |
         conda install pytest
-        pytest
+        pytest --junitxml=reports/junit/junit.xml --html=reports/junit/report.html
     - name: Coverage tests
       run: |
         pip install coverage
         NUMBA_DISABLE_JIT=1 coverage run -m pytest
-        coverage html
+        coverage report -m
+        coverage xml -d reports/coverage
+        coverage html -d reports/coverage
+    - name: Generate badges
+      run: |
+        genbadge coverage
+        genbadge flake8
+        genbadge pytest
