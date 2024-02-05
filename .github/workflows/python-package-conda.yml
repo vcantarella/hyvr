@@ -51,4 +51,4 @@ jobs:
       run: |
         genbadge coverage
         genbadge flake8
-        genbadge pytest
+        genbadge tests
