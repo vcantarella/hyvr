@@ -50,7 +50,7 @@ def trough(
         & (z >= zmin)
         & (z <= zmax)
     )
-    print(np.sum(gross_limit_logic))
+
     # copy for later
     original_shape = x.shape
     # modifying the reference so we calculate on less points:
@@ -58,8 +58,7 @@ def trough(
     x = x.ravel()[gross_limit_logic]
     y = y.ravel()[gross_limit_logic]
     z = z.ravel()[gross_limit_logic]
-    print(x.shape)
-    print(original_shape)
+
     # gross_limit_logic = np.ravel(gross_limit_logic)
     # # To decide whether the point is inside, we can just use the normalized
     # # distance. Therefore, we first calculate the normalized distance vector
@@ -72,8 +71,8 @@ def trough(
     logic = logic & (np.ravel(dz) <= 0)
 
     # print(np.sum(logic))
-    # if np.sum(logic) == 0:# return empty dataset:
-    #    #(np.sum(logic))
+    if np.sum(logic) == 0:  # return empty dataset:
+        print("No points inside the ellipsoid")
     #    return np.ones(original_shape,dtype=np.int64)*-1, np.empty(original_shape,dtype=np.float64), np.empty(original_shape,dtype=np.float64)
     # At this point we know that the point is in the domain, so we have to
     # assign values

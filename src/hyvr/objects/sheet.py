@@ -1,19 +1,31 @@
-import numpy as np
-import numpy.typing as npt
 import numba
-from hyvr.utils import normal_plane_from_dip_dip_dir
-from hyvr.utils import coterminal_angle
-from hyvr.utils import get_alternating_facies
+import numpy as np
+
+from hyvr.utils import (
+    coterminal_angle,
+    get_alternating_facies,
+    normal_plane_from_dip_dip_dir,
+)
+
 
 @numba.jit(nopython=True, parallel=True)
-def sheet(x,y,z,
-          xmin,xmax,
-          ymin,ymax,
-          bottom_surface,top_surface,
-          facies,
-          internal_layering=False, alternating_facies=False,
-          dip=0.,dip_dir=0.,layer_dist=0.
-          ):
+def sheet(
+    x,
+    y,
+    z,
+    xmin,
+    xmax,
+    ymin,
+    ymax,
+    bottom_surface,
+    top_surface,
+    facies,
+    internal_layering=False,
+    alternating_facies=False,
+    dip=0.0,
+    dip_dir=0.0,
+    layer_dist=0.0,
+):
     """
     Assigns a sheet to the grid points x,y,z.
     The sheet is a layer is defined by bounding x and y coordinates and top and bottom contacts.
@@ -30,7 +42,7 @@ def sheet(x,y,z,
     dip: dip of the internal dipping layers. Leave the default value for massive structure.
     layer_dist: perpendicular to dip distance between layers
     facies: np.array(int32) with the facies code (1 in case no layering or more in case of layering)
-    
+
     Returns:
     ---
     facies: ndarray(int32) of the facies values at the coordinates (x,y,z)
@@ -38,32 +50,38 @@ def sheet(x,y,z,
     dip_direction: ndarray(float32) of the dip-direction of the internal structure
     """
     true_array_x = (x >= xmin) & (x <= xmax)
-    print(true_array_x.shape)
     true_array_y = (y >= ymin) & (y <= ymax)
     # if len(bottom_surface.shape) != len(z.shape):
     #     bottom_surface = np.broadcast_to(bottom_surface, z.shape)
     # if len(top_surface.shape) != len(z.shape):
     #     top_surface = np.broadcast_to(top_surface, z.shape)
 
-    true_array_z = (z >= np.broadcast_to(bottom_surface,z.shape)) & (z<= np.broadcast_to(top_surface,z.shape))
-    print(true_array_z.shape)
+    true_array_z = (z >= np.broadcast_to(bottom_surface, z.shape)) & (
+        z <= np.broadcast_to(top_surface, z.shape)
+    )
     true_array = true_array_z & true_array_y & true_array_x
     true_array = np.ravel(true_array)
-    print(true_array.shape)
-    facies_output = np.ones(x.size, dtype = np.int32)*(-1)
+    facies_output = np.ones(x.size, dtype=np.int32) * (-1)
     if internal_layering:
         normal_vector = normal_plane_from_dip_dip_dir(dip, dip_dir)
-        xcenter = xmin + (xmax -xmin)/2
-        ycenter = ymin + (ymax - ymin)/2
+        xcenter = xmin + (xmax - xmin) / 2
+        ycenter = ymin + (ymax - ymin) / 2
         zmax = np.max(top_surface)
-        shift = normal_vector[0] * xcenter + normal_vector[1] * ycenter + normal_vector[2] * zmax
-        d = normal_vector[0] * x.ravel()[true_array] + normal_vector[1] * y.ravel()[true_array] + normal_vector[2] * z.ravel()[true_array] - shift
-        print(d.shape)
-        class_distances = (np.floor(d/layer_dist)).astype(np.int16)
+        shift = (
+            normal_vector[0] * xcenter
+            + normal_vector[1] * ycenter
+            + normal_vector[2] * zmax
+        )
+        d = (
+            normal_vector[0] * x.ravel()[true_array]
+            + normal_vector[1] * y.ravel()[true_array]
+            + normal_vector[2] * z.ravel()[true_array]
+            - shift
+        )
+        class_distances = (np.floor(d / layer_dist)).astype(np.int16)
         min_value = np.min(class_distances)
         facies_indices = class_distances - min_value
-        n_layers = int(np.max(facies_indices)+1)  
-        print(n_layers)
+        n_layers = int(np.max(facies_indices) + 1)
         facies_array = get_alternating_facies(facies, n_layers, alternating_facies)
         facies_ = np.array([facies_array[n] for n in facies_indices])
         facies_output[true_array] = facies_
