@@ -49,6 +49,9 @@ docs = [
     "myst_nb",
 ]
 
+[tools.pytest.ini_options]
+python_path = [".","src/hyvr"]
+
 #[tool.setuptools]
 #packages = ["hyvr"]
 
