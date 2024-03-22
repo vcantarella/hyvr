@@ -50,7 +50,7 @@ docs = [
 ]
 
 [tools.pytest.ini_options]
-python_path = [".","src/hyvr"]
+python_path = [".","src"]
 
 #[tool.setuptools]
 #packages = ["hyvr"]
