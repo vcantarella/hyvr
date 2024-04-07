@@ -276,7 +276,7 @@ def min_distance(x, y, P):
     return d_array, glob_min_idx
 
 
-def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
+def ferguson_theta_ode(s_max, eps_factor, k, h, omega, epsilon=1e-7):
     """
     Implementation of  (Ferguson, 1976, Eq.9).
     The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
@@ -308,6 +308,8 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
     u = np.random.multivariate_normal(
         np.zeros_like(s_range), np.eye((s_range).shape[0])
     )
+    epsilon = 1e-8
+    cov = cov + epsilon * np.eye(cov.shape[0])
     L = scipy.linalg.cholesky(cov)
     e_s = L @ u
 
@@ -348,13 +350,33 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
 
     s = solution.t
 
+    tau = y[0, :]
     theta = y[1, :]
     x = y[2, :]
     y = y[3, :]
 
-    return theta, s, x, y
+    return theta, s, x, y, tau
 
-def howard_knudson_ode(s_max, eps_factor, k, h, omega, W, Cf, F=2.5, ):
+def R_1(s,s_arr,curv_arr,k_1,Cf,W,D,Omega = -1, F = 2.5):
+    # interpolate to find the value of tau at s
+    tau = np.interp(s, s_arr, curv_arr)
+    Ro = k_1 *tau * W
+    s_prime = np.where(s_arr < s, s_arr, 0)
+    s_prime = s_prime[s_prime != 0]
+    curv_prime = curv_arr[:len(s_prime)]
+    sau = s - s_prime
+    G_sau = np.exp(-2* Cf * sau/D)
+    Ro_prime = k_1 * curv_prime * W
+    integration = np.trapz(Ro_prime * G_sau, sau)/np.trapz(G_sau, sau)
+    return Omega * Ro + F * integration
+
+def Rs(s_arr, curv_arr, k_1, W,Cf, D, Omega = -1, F = 2.5):
+    Rs_arr = np.zeros(len(s_arr))
+    for i in range(len(s_arr)):
+        Rs_arr[i] = R_1(s_arr[i], s_arr, curv_arr, k_1, Cf, W, D, Omega, F)
+    return Rs_arr
+
+def howard_knudson_ode(s_max, eps_factor, k, h, omega, k_1, Cf, Omega = -1, F=2.5, ):
     """
     Implementation of  (Ferguson, 1976, Eq.9).
     The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
@@ -388,6 +410,10 @@ def howard_knudson_ode(s_max, eps_factor, k, h, omega, W, Cf, F=2.5, ):
     )
     L = scipy.linalg.cholesky(cov)
     e_s = L @ u
+
+
+
+
 
     def rhs(t, y, k, h):
         eps_t = np.interp(np.array([t]), s_range, e_s)

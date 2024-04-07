@@ -4,7 +4,7 @@ import scipy
 from .utils import ferguson_theta_ode
 from scipy.spatial.distance import pdist, squareform
 
-def ferguson_curve(h, k, eps_factor, flow_angle, s_max, xstart, ystart):
+def ferguson_curve(h, k, eps_factor, flow_angle, s_max, xstart, ystart, epsilon=1e-7):
     """
     Simulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model
     Implementation of AR2 autoregressive model
@@ -33,7 +33,7 @@ def ferguson_curve(h, k, eps_factor, flow_angle, s_max, xstart, ystart):
     """
     # Parameters
     # Calculate curve directions
-    theta, s, xp, yp = ferguson_theta_ode(s_max, eps_factor, k, h, 0.)#np.pi / 2)
+    theta, s, xp, yp, tau = ferguson_theta_ode(s_max, eps_factor, k, h, 0.)#np.pi / 2)
 
     # Interpolate curve direction over interval of interest
     # s_interp, th_interp = curve_interp(s, theta, 10)

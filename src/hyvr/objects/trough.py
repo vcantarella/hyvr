@@ -11,7 +11,7 @@ from hyvr.utils import (
 )
 
 
-@numba.jit(nopython=True, parallel=True)
+@numba.jit(nopython=True, parallel=False)
 def trough(
     x,
     y,
