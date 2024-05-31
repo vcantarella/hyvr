@@ -1,11 +1,14 @@
 import numba
 import numpy as np
 
-from hyvr.utils import get_alternating_facies, min_distance
+from src.hyvr.utils import get_alternating_facies, min_distance
 
 
 @numba.jit(nopython=True, parallel=True)
 def channel(
+    f_array,
+    dip_array,
+    dip_dir_array,
     x,
     y,
     z,
@@ -25,21 +28,24 @@ def channel(
     Besides, it may have internal structure.
     params:
     ---
+    f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
+    dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
+    dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
     x,y,z: np.arrays of the the center grid points which are to be tested to be assigned to the channel feature.
     z_top: top coordinate (flat) of the channel.
     curve: [x,y,(vx,vy)] 2D array where the first and second columns are the x and y posiiton of the points defining the curve.
-    In case the internal layeringp, then the 3rd and 4th columns must be defined, which are the curve gradient (dc/dx and dc/dy) at each point.
-    internal_layering: True if internal layering
+    In case the internal layering, then the 3rd and 4th columns must be defined, which are the curve gradient (dc/dx and dc/dy) at each point.
+    internal_layering: True if internal layering, currently not implemented.
     alternating_facies: True if the facies alternate according to the order in the argument facies
     dip: dip of the internal dipping layers. Leave the default value for massive structure.
     layer_dist: perpendicular to dip distance between layers
     facies: np.array(int32) with the facies code (1 in case no layering or more in case of layering)
 
-    Returns:
+    Modified arrays:
     ---
-    facies: ndarray(int32) of the facies values at the coordinates (x,y,z)
-    dip: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
-    dip_direction: ndarray(float32) of the dip-direction of the internal structure
+    f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
+    dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
+    dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
     """
     # parabola_args:
     width, depth = parabola_pars
@@ -74,12 +80,13 @@ def channel(
     x_curve = curve[:, 0]
     y_curve = curve[:, 1]
     xy_dist[filter_zone], idx_curve[filter_zone] = min_distance(x_curve, y_curve, P)
-    logic_xy = xy_dist**2 <= (
-        width**2 / 4 + width**2 * dz / (4 * depth)
+    logic_xy = np.full(x.size, False)
+    logic_xy[filter_zone] = xy_dist[filter_zone]**2 <= (
+        width**2 / 4 + width**2 * dz[filter_zone] / (4 * depth)
     )  # From the HyVR documentation.
 
-    logic_inside = logic_z & logic_xy
-    facies_output = np.ones_like(logic_inside, dtype=np.int32) * (-1)
+    logic_inside = logic_xy
+    #facies_output = np.ones_like(logic_inside, dtype=np.int32) * (-1)
     if internal_layering:
         # distance between neighbouring points:
         dif = np.diff(np.ascontiguousarray(curve[:, 0:2])) ** 2
@@ -116,14 +123,15 @@ def channel(
         # print(self.object_facies_array.shape)
 
         facies = np.array([facies_array[n] for n in ns_grid])
-        facies_output[logic_inside] = facies
+        f_array.ravel()[logic_inside] = facies
     else:
-        facies_output[logic_inside] = facies[0]
+        f_array.ravel()[logic_inside] = np.repeat(facies[0], np.sum(logic_inside))
+    dip_array.ravel()[logic_inside] = np.repeat(0.0, np.sum(logic_inside))
+    dip_dir_array.ravel()[logic_inside] = np.repeat(0.0, np.sum(logic_inside))
+    #dip_output = np.where(logic_inside, 0.0, np.nan)
+    #dip_direction = np.where(logic_inside, 0.0, np.nan)
+    f_array = np.reshape(f_array, x.shape)
+    dip_array = np.reshape(dip_array, x.shape)
+    dip_dir_array = np.reshape(dip_dir_array, x.shape)
 
-    dip_output = np.where(logic_inside, 0.0, np.nan)
-    dip_direction = np.where(logic_inside, 0.0, np.nan)
-    facies_output = np.reshape(facies_output, x.shape)
-    dip_output = np.reshape(dip_output, x.shape)
-    dip_direction = np.reshape(dip_direction, x.shape)
-
-    return facies_output, dip_output, dip_direction
+    # return facies_output, dip_output, dip_direction

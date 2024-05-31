@@ -1,15 +1,18 @@
 import numba
 import numpy as np
 
-from hyvr.utils import (
+from src.hyvr.utils import (
     coterminal_angle,
     get_alternating_facies,
     normal_plane_from_dip_dip_dir,
 )
 
 
-@numba.jit(nopython=True, parallel=True)
+@numba.jit(nopython=True, parallel=False)
 def sheet(
+    f_array,
+    dip_array,
+    dip_dir_array,
     x,
     y,
     z,
@@ -32,22 +35,27 @@ def sheet(
     It may have internal layering (inclined or planar)
     params:
     ---
-    x,y,z: grid coordinates where the element will search for connection.
+    f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
+    dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
+    dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
+    x,y,z: grid center coordinates where the search if it is in it or not.
     xmin,xmax: bounding coordinates in the x direction, (normally a sheet should cover the whole domain)
     ymin,ymax: bounding coordinates in the y direction,
     bottom_surface:(float or ndarray): bottom surface of the sheet. It can be a float (planar), or a surface 2D array. In case it is a surface, x,y,z dimensions must match the surface dimensions.
     top_surface (float or ndarray): top surface of the sheet. Defined the same as a bottom_surface.
+    facies: np.array(int32) with the facies code (1 in case no layering or more in case of layering)
     internal_layering: True if internal layering
     alternating_facies: True if the facies alternate according to the order in the argument facies
-    dip: dip of the internal dipping layers. Leave the default value for massive structure.
+    dip: dip in degrees of the internal dipping layers. Leave the default value for massive structure.
+    dip_dir: dip direction in degrees of the internal dipping layers. Leave the default value for massive structure.
+    follows the mathematical convention, anticlockwise from east
     layer_dist: perpendicular to dip distance between layers
-    facies: np.array(int32) with the facies code (1 in case no layering or more in case of layering)
-
-    Returns:
+    
+    Modified arrays:
     ---
-    facies: ndarray(int32) of the facies values at the coordinates (x,y,z)
-    dip: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
-    dip_direction: ndarray(float32) of the dip-direction of the internal structure
+    f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
+    dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
+    dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
     """
     true_array_x = (x >= xmin) & (x <= xmax)
     true_array_y = (y >= ymin) & (y <= ymax)
@@ -61,7 +69,7 @@ def sheet(
     )
     true_array = true_array_z & true_array_y & true_array_x
     true_array = np.ravel(true_array)
-    facies_output = np.ones(x.size, dtype=np.int32) * (-1)
+    #facies_output = np.ones(x.size, dtype=np.int32) * (-1)
     if internal_layering:
         normal_vector = normal_plane_from_dip_dip_dir(dip, dip_dir)
         xcenter = xmin + (xmax - xmin) / 2
@@ -84,14 +92,16 @@ def sheet(
         n_layers = int(np.max(facies_indices) + 1)
         facies_array = get_alternating_facies(facies, n_layers, alternating_facies)
         facies_ = np.array([facies_array[n] for n in facies_indices])
-        facies_output[true_array] = facies_
+        f_array.ravel()[true_array] = facies_
     else:
-        facies_output[true_array] = np.repeat(facies[0], np.sum(true_array))
+        f_array.ravel()[true_array] = np.repeat(facies[0], np.sum(true_array))
     dip = np.deg2rad(dip)
-    dip_dir = coterminal_angle(np.deg2rad(dip_dir))
-    dip = np.repeat(dip, x.size)
-    dip_direction = np.repeat(dip_dir, x.size)
-    facies_output = np.reshape(facies_output, x.shape)
-    dip = np.reshape(dip, x.shape)
-    dip_direction = np.reshape(dip_direction, x.shape)
-    return facies_output, dip, dip_direction
+    dip_dir = coterminal_angle(dip_dir)
+    dip_array.ravel()[true_array] = np.repeat(dip, np.sum(true_array))
+    dip_dir_array.ravel()[true_array] = np.repeat(dip_dir, np.sum(true_array))
+    #dip = np.repeat(dip, x.size)
+    #dip_direction = np.repeat(dip_dir, x.size)
+    f_array = np.reshape(f_array, x.shape)
+    dip_array = np.reshape(dip_array, x.shape)
+    dip_dir_array = np.reshape(dip_dir_array, x.shape)
+    # return facies_output, dip, dip_direction

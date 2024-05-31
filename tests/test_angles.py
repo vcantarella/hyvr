@@ -1,7 +1,7 @@
 # %%
 import numpy as np
-from hyvr import trough
-from hyvr.tools import ferguson_curve
+from src.hyvr.objects.trough import half_ellipsoid
+from src.hyvr.tools import ferguson_curve
 
 
 # %%
@@ -18,8 +18,14 @@ def test_trough_angles():
     y = np.flip(y, axis=-1)
     centercoord = np.array([48, 40, 19])
     dims = np.array([38, 20, 10])
+    facies = np.ones_like(x, dtype=np.int32) * (-1)
+    dip_array = np.empty_like(x)
+    dip_dir_array = np.empty_like(x)
     # %%
-    facies, dip, dip_dir = trough(
+    half_ellipsoid(
+        facies,
+        dip_array,
+        dip_dir_array,
         x,
         y,
         z,
@@ -32,8 +38,8 @@ def test_trough_angles():
     )
     # %%
 
-    assert np.nanmax(dip) == 30.0
-    assert np.nanmin(dip) >= 0.0
+    assert np.allclose(np.nanmax(dip_array), np.deg2rad(30.0))
+    assert np.nanmin(dip_array) >= 0.0
 
 
 def test_curve():
@@ -53,3 +59,5 @@ def test_curve():
     s = channel_curve_1[4]
     print(s)
     assert s[-1] <= 400.0
+
+# %%

@@ -1,7 +1,7 @@
 import numba
 import numpy as np
 
-from hyvr.utils import (
+from src.hyvr.utils import (
     azimuth_to_counter_clockwise,
     coterminal_angle,
     dip_dip_dir_bulbset,
@@ -11,8 +11,11 @@ from hyvr.utils import (
 )
 
 
-@numba.jit(nopython=True, parallel=True)
-def trough(
+@numba.jit(nopython=True, parallel=False)
+def half_ellipsoid(
+    f_array,
+    dip_array,
+    dip_dir_array,
     x,
     y,
     z,
@@ -27,6 +30,37 @@ def trough(
     dip_dir=0.0,
     layer_dist=0.0,
 ):
+    """
+    Assigns a half ellipsoid (trough) to the grid points x,y,z.
+    Half ellipsoid is the lower half of an ellipsoid, defined by its center, dimensions and azimuth.
+    It can be used to model discrete lenses, trough structure, scour pool fills, etc.
+
+    params:
+    ---
+    f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
+    dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
+    dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
+    x,y,z: grid center coordinates where the search if it is in it or not.
+    center_coords: tuple with the x,y,z coordinates of the center of the ellipsoid
+    dims: tuple with the dimensions of the ellipsoid (a,b,c)
+    azim: azimuth in degrees of the major axis of the ellipsoid. It is measured from the east axis (x axis).
+     It follows the mathematical convention, anticlockwise from east.
+    facies: np.array(int32) with the facies code (1 in case no layering or more in case of layering)
+    internal_layering: True if internal layering
+    alternating_facies: True if the facies alternate according to the order in the argument facies
+    bulb: True if the ellipsoid is a bulbset. In this case, the internal structure is calculated from the distance to the center.
+    dip: dip in degrees of the internal dipping layers. Leave the default value for massive structure.
+    dip_dir: dip direction in degreesof the internal dipping layers. Leave the default value for massive structure.
+    follows the mathematical convention, anticlockwise from east
+    layer_dist: perpendicular to dip distance between layers
+
+    Modified arrays:
+    ---
+    f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
+    dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
+    dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
+    """
+
     # unpacking values:
     x_c, y_c, z_c = center_coords  # coordinates of the center point
     a, b, c = dims  # ellipsoid dimensions
@@ -34,7 +68,7 @@ def trough(
     zmin = z_c - c
     zmax = z_c
     # alpha is the azimuth in radians measured from the east axis (x axis)
-    alpha = coterminal_angle(azimuth_to_counter_clockwise(azim))
+    alpha = coterminal_angle(azim)
     # it is faster to calculate a gross limit and later refine the calculations:
     sin_alpha = np.sin(alpha)
     cos_alpha = np.cos(alpha)
@@ -128,17 +162,16 @@ def trough(
             facies_output = np.where(logic, facies_output, -1)
         else:
             facies_output = np.where(logic, facies[0], -1)
+        dip = np.deg2rad(dip)
+        dip_dir = coterminal_angle(dip_dir)
         dip_output = np.where(logic, dip, np.nan)
         dip_dir_output = np.where(logic, dip_dir, np.nan)
 
     # reshaping final arrays and assigning values
-    facies_final = np.ones(gross_limit_logic.shape, dtype=np.int32) * (-1)
-    facies_final[gross_limit_logic] = facies_output
-    facies_final = np.reshape(facies_final, original_shape)
-    dip_final = np.empty(gross_limit_logic.shape, dtype=np.float64) * np.nan
-    dip_final[gross_limit_logic] = dip_output
-    dip_final = np.reshape(dip_final, original_shape)
-    dip_dir_final = np.empty(gross_limit_logic.shape, dtype=np.float64) * np.nan
-    dip_dir_final[gross_limit_logic] = dip_dir_output
-    dip_dir_final = np.reshape(dip_dir_final, original_shape)
-    return facies_final, dip_final, dip_dir_final
+    f_array.ravel()[gross_limit_logic] = facies_output
+    f_array.reshape(original_shape)
+    dip_array.ravel()[gross_limit_logic] = dip_output
+    dip_array.reshape(original_shape)
+    dip_dir_array.ravel()[gross_limit_logic] = dip_dir_output
+    dip_dir_array.reshape(original_shape)
+    #return facies_final, dip_final, dip_dir_final

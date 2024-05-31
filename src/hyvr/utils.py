@@ -12,9 +12,9 @@ def normal_plane_from_dip_dip_dir(dip: float, dip_dir: float) -> npt.ArrayLike:
     Parameters
     ----------
     dip : float
-        dip
+        dip: mathematical convention, anticlockwise from east, in degrees
     dip_dir : float
-        dip direction
+        dip direction:  mathematical convention, anticlockwise from east, in degrees
     Returns
     -------
     normal vector of the plane (x,y,z): ndarray
@@ -97,21 +97,21 @@ def dip_dip_dir_bulbset(
     x: np.ndarray,
     y: np.ndarray,
     z: np.ndarray,
-    x_center: float,
-    y_center: float,
-    z_center: float,
+    x_c: float,
+    y_c: float,
+    z_c: float,
     a: float,
     b: float,
     c: float,
     alpha: float,
     dip: float,
-) -> np.ndarray:
+):
     """
     Return dip and dip_direction_arrays of the points inside ellipsoid according to the bulb method
     Parameters
     ----------
     x,y,z: point coordinates array
-    x_center,y_center,z_center: ellipsoid center
+    x_c,y_c,z_c: ellipsoid center
     a,b,c: major, minor and vertical axis of the ellipsoid
     alpha: azimuth in counterclockwise from east and in radians
     """
@@ -138,11 +138,11 @@ def dip_dip_dir_bulbset(
     # vector and the unit z-vector.
     # The azimuth is the angle between the projection of the normal
     # vector onto the x-y-plane and the unit x-vector.
-    dx = x - x_center
+    dx = x - x_c
     dx = np.ravel(dx)
-    dy = y - y_center
+    dy = y - y_c
     dy = np.ravel(dy)
-    dz = z - z_center
+    dz = z - z_c
     dz = np.ravel(dz)
     cos_alpha = np.cos(alpha)
     sin_alpha = np.sin(alpha)
@@ -188,7 +188,7 @@ def dip_dip_dir_bulbset(
     # the point is exactly at the center of the trough, this means
     # there is no azim and dip
     dip_dir_output = np.where(len_normvec < 1e-12, 0.0, dip_dir_bulb)
-    dip_output = np.where(len_normvec < 1e-10, 0.0, dip_bulb)
+    dip_output = np.where(len_normvec < 1e-12, 0.0, dip_bulb)
 
     # normal vector points in z-direction -> dip = 0, azim = 0
     dip_dir_output = np.where(len_normvec_xy < 1e-12, 0.0, dip_dir_output)
@@ -203,6 +203,8 @@ def dip_dip_dir_bulbset(
     dip_output = np.abs(dip_output)
     # cap dip in bulb or bulbsets: use dip as maximum dip
     dip_output = np.where(dip_output > dip, dip, dip_output)
+    dip_dir_output = np.deg2rad(dip_dir_output)
+    dip_output = np.deg2rad(dip_output)
 
     return dip_output, dip_dir_output, norm_distance
 
@@ -276,7 +278,7 @@ def min_distance(x, y, P):
     return d_array, glob_min_idx
 
 
-def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
+def ferguson_theta_ode(s_max, eps_factor, k, h, omega, err:float):
     """
     Implementation of  (Ferguson, 1976, Eq.9).
     The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
@@ -300,7 +302,7 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega):
     dist_arr = scipy.spatial.distance.pdist(
         np.expand_dims(s_range, axis=1), "sqeuclidean"
     )
-    variance = eps_factor
+    variance = eps_factor + err
     cov = variance * np.exp(-(1 / 2) * dist_arr)
 
     cov = scipy.spatial.distance.squareform(cov)
