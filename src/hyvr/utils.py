@@ -310,8 +310,112 @@ def ferguson_theta_ode(s_max, eps_factor, k, h, omega, err:float):
     u = np.random.multivariate_normal(
         np.zeros_like(s_range), np.eye((s_range).shape[0])
     )
+    epsilon = 1e-8
+    cov = cov + epsilon * np.eye(cov.shape[0])
     L = scipy.linalg.cholesky(cov)
     e_s = L @ u
+
+    def rhs(t, y, k, h):
+        eps_t = np.interp(np.array([t]), s_range, e_s)
+        eps_t = eps_t[0]  # from array to float
+        d_tau_ds = (eps_t - y[1] - 2 * h / k * y[0]) * (k**2)
+        d_theta_ds = y[0]
+        dx_ds = np.cos(y[1])
+        dy_ds = np.sin(y[1])
+        return np.array([d_tau_ds, d_theta_ds, dx_ds, dy_ds])
+
+    def jac(t, y, k, h):
+        return np.array(
+            [
+                [-2 * h * k, -(k**2), 0, 0],
+                [1, 0, 0, 0],
+                [0, -np.sin(y[1]), 0, 0],
+                [0, np.cos(y[1]), 0, 0],
+            ]
+        )
+
+    y0 = np.array([omega * k, 0.0, 0.0, 0.0])
+
+    solution = scipy.integrate.solve_ivp(
+        rhs,
+        (0, s_max),
+        y0,
+        method="BDF",
+        args=(k, h),
+        first_step=0.01,
+        jac=jac,
+        atol=1e-8,
+        rtol=1e-8,
+    )
+
+    y = solution.y
+
+    s = solution.t
+
+    tau = y[0, :]
+    theta = y[1, :]
+    x = y[2, :]
+    y = y[3, :]
+
+    return theta, s, x, y, tau
+
+def R_1(s,s_arr,curv_arr,k_1,Cf,W,D,Omega = -1, F = 2.5):
+    # interpolate to find the value of tau at s
+    tau = np.interp(s, s_arr, curv_arr)
+    Ro = k_1 *tau * W
+    s_prime = np.where(s_arr < s, s_arr, 0)
+    s_prime = s_prime[s_prime != 0]
+    curv_prime = curv_arr[:len(s_prime)]
+    sau = s - s_prime
+    G_sau = np.exp(-2* Cf * sau/D)
+    Ro_prime = k_1 * curv_prime * W
+    integration = np.trapz(Ro_prime * G_sau, sau)/np.trapz(G_sau, sau)
+    return Omega * Ro + F * integration
+
+def Rs(s_arr, curv_arr, k_1, W,Cf, D, Omega = -1, F = 2.5):
+    Rs_arr = np.zeros(len(s_arr))
+    for i in range(len(s_arr)):
+        Rs_arr[i] = R_1(s_arr[i], s_arr, curv_arr, k_1, Cf, W, D, Omega, F)
+    return Rs_arr
+
+def howard_knudson_ode(s_max, eps_factor, k, h, omega, k_1, Cf, Omega = -1, F=2.5, ):
+    """
+    Implementation of  (Ferguson, 1976, Eq.9).
+    The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
+    http://onlinelibrary.wiley.com/doi/10.1002/esp.3290010403/full
+
+    Parameters:
+        s_max: 	max length of channel
+        k:		Wavenumber
+        h:		Height
+        eps_factor:	Random background noise (normal variance)
+        omega: initial angle
+
+    Returns:
+        theta : angle array
+        s : channel distance array
+
+    """
+
+    # Correlated variance calculation => Gaussian function
+    s_range = np.arange(0, s_max, (s_max / 1000))
+    dist_arr = scipy.spatial.distance.pdist(
+        np.expand_dims(s_range, axis=1), "sqeuclidean"
+    )
+    variance = eps_factor
+    cov = variance * np.exp(-(1 / 2) * dist_arr)
+
+    cov = scipy.spatial.distance.squareform(cov)
+    cov[np.diag_indices_from(cov)] = variance
+    u = np.random.multivariate_normal(
+        np.zeros_like(s_range), np.eye((s_range).shape[0])
+    )
+    L = scipy.linalg.cholesky(cov)
+    e_s = L @ u
+
+
+
+
 
     def rhs(t, y, k, h):
         eps_t = np.interp(np.array([t]), s_range, e_s)
