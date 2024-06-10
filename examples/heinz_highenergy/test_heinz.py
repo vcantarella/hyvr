@@ -73,14 +73,14 @@ n_troughs = np.floor(total_volume / trough_volume / migration_number).astype(np.
 
 #jitted function to create troughs in parallel
 @numba.jit(nopython=True, parallel=True)
-def create_troughs(facies, dip, dip_dir, n_troughs, top):
+def create_troughs(facies, dip, dip_dir, n_troughs, depth, top):
     for j in numba.prange(n_troughs):
             # create the first trough:
             x_j = np.random.uniform(2, Lx-2)
             y_j = np.random.uniform(2, Lx-2)
             a = np.random.uniform(15, 24)
             b = np.random.uniform(6, 12)
-            c = random_depth
+            c = depth
             center_coords = np.array([x_j, y_j, top])
             model_azimuth = coterminal_angle(azimuth_to_counter_clockwise(np.random.uniform(-10, 10)))
             half_ellipsoid(facies, dip, dip_dir,x,y,z,center_coords=center_coords, dims=np.array([a, b, c]),
@@ -145,7 +145,7 @@ while z_top < H:
     z_top += thick
     if z_top > random_depth + previous_random_depth:
         previous_random_depth += random_depth
-        create_troughs(facies, dip, dip_dir, n_troughs, previous_random_depth)
+        create_troughs(facies, dip, dip_dir, n_troughs, random_depth, previous_random_depth)
         random_depth = np.random.uniform(1, 2)
 
 
