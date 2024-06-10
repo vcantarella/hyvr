@@ -107,6 +107,7 @@ def half_ellipsoid(
     # print(np.sum(logic))
     if np.sum(logic) == 0:  # return empty dataset:
         print("No points inside the ellipsoid")
+        return
     #    return np.ones(original_shape,dtype=np.int64)*-1, np.empty(original_shape,dtype=np.float64), np.empty(original_shape,dtype=np.float64)
     # At this point we know that the point is in the domain, so we have to
     # assign values

@@ -235,7 +235,7 @@ def alternating_facies(facies, n_layers):
 
 @numba.njit()
 def coterminal_angle(angle):
-    "from chatgpt"
+    "Ensure the angle is in the range [0, 360) degrees"
     # Ensure the angle is in the range [0, 360) degrees
     normalized_angle = angle % 360
     # Ensure the angle is in the range [0, 2π) radians
@@ -245,6 +245,7 @@ def coterminal_angle(angle):
 
 @numba.njit()
 def azimuth_to_counter_clockwise(azimuth: npt.ArrayLike) -> npt.ArrayLike:
+    "Converts azimuth angle to counter clockwise angle in degrees"
     h = 450 - azimuth
     degree = np.where(h >= 360, h - 360, h)
     return degree
