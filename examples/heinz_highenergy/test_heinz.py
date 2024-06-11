@@ -1,14 +1,14 @@
 import numpy as np
 import numba
-from src.hyvr.objects.trough import half_ellipsoid
-from src.hyvr.objects.sheet import sheet
-from src.hyvr.utils import azimuth_to_counter_clockwise, coterminal_angle
+from hyvr.objects.trough import half_ellipsoid
+from hyvr.objects.sheet import sheet
+from hyvr.utils import azimuth_to_counter_clockwise, coterminal_angle
 
 rng = np.random.default_rng(seed=42)
 
 # Grid properties:
-Lx = 900 #problem lenght [m]
-Ly = 600 #problem width [m]
+Lx = 200 #problem lenght [m]
+Ly = 80 #problem width [m]
 H = 7  #aquifer height [m]
 delx = 0.5 #block size x direction
 dely = 0.5 #block size y direction
@@ -69,10 +69,26 @@ previous_random_depth = 0.
 trough_volume = 20 * 9 * 1.5
 total_volume = Lx * Ly * H
 migration_number = 3
-n_troughs = np.floor(total_volume / trough_volume / migration_number).astype(np.int32)
+n_troughs = 50
+
+#testing a trough:
+# create the first trough:
+x_j = np.random.uniform(2, Lx-2)
+y_j = np.random.uniform(2, Lx-2)
+a = np.random.uniform(15, 24)
+b = np.random.uniform(6, 12)
+c = random_depth
+center_coords = np.array([x_j, y_j, random_depth])
+model_azimuth = coterminal_angle(azimuth_to_counter_clockwise(np.random.uniform(-10, 10)))
+half_ellipsoid(facies, dip, dip_dir,x,y,z,center_coords=center_coords, dims=np.array([a, b, c]),
+    facies=facies_list, internal_layering=True, alternating_facies=True,
+    azim=model_azimuth,
+    dip= np.random.uniform(3, 12),
+    dip_dir=coterminal_angle(azimuth_to_counter_clockwise(np.random.uniform(-10, 10))),
+    layer_dist=0.2)
 
 #jitted function to create troughs in parallel
-@numba.jit(nopython=True, parallel=True)
+@numba.jit(nopython=True, parallel=False, nogil=True)
 def create_troughs(facies, dip, dip_dir, n_troughs, depth, top):
     for j in numba.prange(n_troughs):
             # create the first trough:
@@ -153,4 +169,5 @@ while z_top < H:
 np.save('heinz_facies.npy', facies)
 np.save('heinz_dip.npy', dip)
 np.save('heinz_dip_dir.npy', dip_dir)
-
+centroids = np.stack((x,y,z))
+np.save('heinz_centroids.npy', centroids)
