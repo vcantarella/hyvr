@@ -279,7 +279,7 @@ def min_distance(x, y, P):
     return d_array, glob_min_idx
 
 
-def ferguson_theta_ode(s_max, eps_factor, k, h, omega, err:float):
+def ferguson_theta_ode(s_max: np.float64, eps_factor: np.float64, k:np.float64, h:np.float64, omega:np.float64, err:np.float64):
     """
     Implementation of  (Ferguson, 1976, Eq.9).
     The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
@@ -515,7 +515,7 @@ def specsim(
     two_dim = len(corl) < 3  # boolean weather calculations should be done in two or 3D
     if two_dim:
         Y = np.empty(x.shape)
-        h_square = (x_calc / corl[0]) ** 2 + (y_calc / corl[1]) ** 2
+        h_square = 0.5*(x_calc / corl[0]) ** 2 + 0.5*(y_calc / corl[1]) ** 2
     else:
         if mask is None:
             z_calc = z
@@ -523,7 +523,7 @@ def specsim(
             z_calc = np.where(mask, z, z_calc)
         Y = np.empty(z.shape)
         h_square = (
-            (x_calc / corl[0]) ** 2 + (y_calc / corl[1]) ** 2 + (z_calc / corl[2]) ** 2
+            0.5 * (x_calc / corl[0]) ** 2 + 0.5* (y_calc / corl[1]) ** 2 + 0.5 * (z_calc / corl[2]) ** 2
         )
     ntot = h_square.size
     # Covariance matrix of variables
