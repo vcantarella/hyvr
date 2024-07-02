@@ -19,8 +19,8 @@ def test_trough_angles():
     centercoord = np.array([48, 40, 19])
     dims = np.array([38, 20, 10])
     facies = np.ones_like(x, dtype=np.int32) * (-1)
-    dip_array = np.empty_like(x)
-    dip_dir_array = np.empty_like(x)
+    dip_array = np.zeros_like(x)
+    dip_dir_array = np.zeros_like(x)
     # %%
     half_ellipsoid(
         facies,

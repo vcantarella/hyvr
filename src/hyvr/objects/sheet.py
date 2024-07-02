@@ -1,7 +1,7 @@
 import numba
 import numpy as np
 
-from src.hyvr.utils import (
+from ..utils import (
     coterminal_angle,
     get_alternating_facies,
     normal_plane_from_dip_dip_dir,

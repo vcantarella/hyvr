@@ -1,8 +1,7 @@
 import numba
 import numpy as np
 
-from src.hyvr.utils import (
-    azimuth_to_counter_clockwise,
+from ..utils import (
     coterminal_angle,
     dip_dip_dir_bulbset,
     get_alternating_facies,
@@ -108,27 +107,25 @@ def half_ellipsoid(
     if np.sum(logic) == 0:  # return empty dataset:
         print("No points inside the ellipsoid")
         return
-    #    return np.ones(original_shape,dtype=np.int64)*-1, np.empty(original_shape,dtype=np.float64), np.empty(original_shape,dtype=np.float64)
-    # At this point we know that the point is in the domain, so we have to
-    # assign values
-    # idx = np.nonzero(gross_limit_logic)[0]
-    # dip_dir[idx[logic]] = dip_dir
-    # dip[idx[logic]] = dip
+    
+    x_e = x[logic]
+    y_e = y[logic]
+    z_e = z[logic]
 
     if bulb:
         dip_output, dip_dir_output, norm_distance = dip_dip_dir_bulbset(
-            x, y, z, x_c, y_c, z_c, a, b, c, alpha, dip
+            x_e, y_e, z_e, x_c, y_c, z_c, a, b, c, alpha, dip
         )
-        dip_output = np.where(logic, dip_output, np.nan)
-        dip_dir_output = np.where(logic, dip_dir_output, np.nan)
+        #dip_output = np.where(logic, dip_output, np.nan)
+        #dip_dir_output = np.where(logic, dip_dir_output, np.nan)
         if internal_layering:
             n_layers = np.int32(np.ceil(np.max(norm_distance) * c / layer_dist))
             ns = (np.floor((norm_distance) * c / layer_dist)).astype(np.int32)
             facies_array = get_alternating_facies(facies, n_layers, alternating_facies)
             facies_output = np.array([facies_array[n] for n in ns])
-            facies_output = np.where(logic, facies_output, -1)
+            
         else:
-            facies_output = np.where(logic, facies[0], -1)
+            facies_output = np.repeat(facies, np.sum(logic))
     else:  # no bulbset
         if internal_layering:
             normal_vector = normal_plane_from_dip_dip_dir(dip, dip_dir)
@@ -138,18 +135,10 @@ def half_ellipsoid(
                 + normal_vector[1] * y_c
                 + normal_vector[2] * z_c
             )
-            # X = xmax - xmin
-            # Y = ymax - ymin
-            # Z = c
-            # n_layers = np.max(np.array([X / (np.abs(normal_vector[0]) * layer_dist),
-            #                            Y / (np.abs(normal_vector[1]) * layer_dist),
-            #                            Z / (np.abs(normal_vector[2]) * layer_dist)]))
-            # n_layers = np.int32(n_layers) + 2 + 2
-
             plane_dist = (
-                x * normal_vector[0]
-                + y * normal_vector[1]
-                + z * normal_vector[2]
+                x_e * normal_vector[0]
+                + y_e * normal_vector[1]
+                + z_e * normal_vector[2]
                 - shift
             )
             plane_dist = np.ravel(plane_dist)
@@ -160,19 +149,26 @@ def half_ellipsoid(
             ns = np.floor(plane_dist / layer_dist) + (n_layers // 2)
             ns = ns.astype(np.int32)
             facies_output = np.array([facies_array[n] for n in ns])
-            facies_output = np.where(logic, facies_output, -1)
+            
         else:
-            facies_output = np.where(logic, facies[0], -1)
+            facies_output = np.repeat(facies, np.sum(logic))
         dip = np.deg2rad(dip)
         dip_dir = coterminal_angle(dip_dir)
-        dip_output = np.where(logic, dip, np.nan)
-        dip_dir_output = np.where(logic, dip_dir, np.nan)
+        dip_output = np.repeat(dip, np.sum(logic))
+        dip_dir_output = np.repeat(dip_dir, np.sum(logic))
 
     # reshaping final arrays and assigning values
-    f_array.ravel()[gross_limit_logic] = facies_output
-    f_array.reshape(original_shape)
-    dip_array.ravel()[gross_limit_logic] = dip_output
-    dip_array.reshape(original_shape)
-    dip_dir_array.ravel()[gross_limit_logic] = dip_dir_output
-    dip_dir_array.reshape(original_shape)
+    assignment_f = np.zeros(np.sum(gross_limit_logic), dtype=np.int32)
+    assignment_f[logic] = facies_output
+    assignment_f[~logic] = f_array.ravel()[gross_limit_logic][~logic]
+    f_array.ravel()[gross_limit_logic] = assignment_f
+    assignment_dip = np.zeros(np.sum(gross_limit_logic), dtype=np.float32)
+    assignment_dip[logic] = dip_output
+    assignment_dip[~logic] = dip_array.ravel()[gross_limit_logic][~logic]
+    dip_array.ravel()[gross_limit_logic] = assignment_dip
+    assignment_dip_dir = np.zeros(np.sum(gross_limit_logic), dtype=np.float32)
+    assignment_dip_dir[logic] = dip_dir_output
+    assignment_dip_dir[~logic] = dip_dir_array.ravel()[gross_limit_logic][~logic]
+    dip_dir_array.ravel()[gross_limit_logic] = assignment_dip_dir
+    #Wdip_dir_array.reshape(original_shape)
     #return facies_final, dip_final, dip_dir_final

@@ -5,21 +5,21 @@ import scipy
 
 
 var = 2**2
-corr_lengths = np.array([100**2, 200**2])
+corr_lengths = np.array([1000, 2000])
 
 kernel = var*ExpSquaredKernel(corr_lengths, ndim=2, )
 
-kernel.get_parameter_names()
-kernel.get_parameter_vector()
+print(kernel.get_parameter_names())
+print(kernel.get_parameter_vector())
 np.exp(kernel.get_parameter_vector())
 
-top_botm = np.loadtxt("top_botm.csv",delimiter=",", skiprows=1,usecols=(1,2,3,4))
+top_botm = np.loadtxt("examples/ammer/top_botm.csv",delimiter=",", skiprows=1,usecols=(1,2,3,4))
 top = top_botm[:,2]
 bottom = top_botm[:,3]
 x_y = top_botm[:,0:2]
 
-gp_top = george.GP(kernel, mean=np.mean(top), fit_mean=True,
-               white_noise=np.log(0.5**2), fit_white_noise=True)
+gp_top = george.GP(kernel, mean=np.mean(top), fit_mean=False,
+               white_noise=np.log(0.5**2), fit_white_noise=False)
 gp_top.compute(x_y)
 print(gp_top.log_likelihood(top))
 print(gp_top.grad_log_likelihood(top))
@@ -50,6 +50,8 @@ gp_top.get_parameter_names()
 params = gp_top.get_parameter_vector()
 params = np.concatenate([np.array([params[0]]), np.exp(params[1:])])
 params
+
+
 
 kernelb = var*ExpSquaredKernel(corr_lengths, ndim=2, )
 

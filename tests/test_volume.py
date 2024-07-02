@@ -8,9 +8,9 @@ def test_trough_volume():
     Tests the area of a trough in a dense grid.
     """
     #creating a grid according to the MODFLOW convention
-    xs = np.linspace(0,100,200)
-    ys = np.linspace(0,80,160)
-    zs = np.linspace(0,20,50)
+    xs = np.arange(0,100.1,0.5)
+    ys = np.arange(0,80.1,0.5)
+    zs = np.arange(0,20.1,0.4)
     z,y,x = np.meshgrid(zs,ys,xs,indexing='ij')
     z = np.flip(z,axis=0)
     y = np.flip(y,axis=1)
@@ -24,9 +24,12 @@ def test_trough_volume():
                                                       dims,
                                                       azim = 20.,facies = np.array([1]),
                                                       )
-    area_meas = np.sum(facies == 1)*np.diff(xs)[0]*np.diff(ys)[0]*np.diff(zs)[0]
+    area_meas = np.sum(facies == 1)*np.diff(x, axis=2)[0,0,0]*np.diff(y, axis=1)[0,0,0]*np.diff(z,axis=0)[0,0,0]
     area_true = np.pi*4/3*dims[0]*dims[1]*dims[2]/2
     assert np.abs(area_meas-area_true) < area_true*0.01
+    total_area = 100.5*80.5*20.4
+    anti_area = np.sum(facies == -1)*np.diff(xs)[0]*np.diff(ys)[0]*np.diff(zs)[0]
+    assert np.abs(anti_area-total_area+area_true) < (total_area-area_true)*0.01
 
 def test_bulb_volume():
     """

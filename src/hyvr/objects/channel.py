@@ -1,7 +1,7 @@
 import numba
 import numpy as np
 
-from src.hyvr.utils import get_alternating_facies, min_distance
+from ..utils import get_alternating_facies, min_distance
 
 
 @numba.jit(nopython=True, parallel=True)
