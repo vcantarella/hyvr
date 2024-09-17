@@ -1,7 +1,10 @@
+from typing import List
+
 import numba
 import numpy as np
 import numpy.typing as npt
 import scipy
+
 
 
 @numba.njit()
@@ -256,6 +259,11 @@ def sign(x: float):
     return (x >= 0) - (x < 0)
 
 
+@numba.njit(nogil=True)
+def distance(X, x, y):
+    return np.sqrt((X[0] - x) ** 2 + (X[1] - y) ** 2)
+
+
 @numba.jit(nopython=True, parallel=True)
 def min_distance(x, y, P):
     """
@@ -268,7 +276,6 @@ def min_distance(x, y, P):
 
     Returns min indexes and distances array.
     """
-    distance = lambda X, x, y: np.sqrt((X[0] - x) ** 2 + (X[1] - y) ** 2)
     # compute distance
     d_array = np.zeros((P.shape[0]))
     glob_min_idx = np.zeros((P.shape[0]))
@@ -279,7 +286,14 @@ def min_distance(x, y, P):
     return d_array, glob_min_idx
 
 
-def ferguson_theta_ode(s_max: np.float64, eps_factor: np.float64, k:np.float64, h:np.float64, omega:np.float64, err:np.float64):
+def ferguson_theta_ode(
+    s_max: np.float64,
+    eps_factor: np.float64,
+    k: np.float64,
+    h: np.float64,
+    omega: np.float64,
+    err: np.float64 = 1e-8,
+):
     """
     Implementation of  (Ferguson, 1976, Eq.9).
     The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
@@ -291,6 +305,7 @@ def ferguson_theta_ode(s_max: np.float64, eps_factor: np.float64, k:np.float64, 
         h:		Height
         eps_factor:	Random background noise (normal variance)
         omega: initial angle
+        err: small error added to the covariance matrix to avoid singular matrix
 
     Returns:
         theta : angle array
@@ -311,8 +326,7 @@ def ferguson_theta_ode(s_max: np.float64, eps_factor: np.float64, k:np.float64, 
     u = np.random.multivariate_normal(
         np.zeros_like(s_range), np.eye((s_range).shape[0])
     )
-    epsilon = 1e-8
-    cov = cov + epsilon * np.eye(cov.shape[0])
+    cov = cov + err * np.eye(cov.shape[0])
     L = scipy.linalg.cholesky(cov)
     e_s = L @ u
 
@@ -360,26 +374,39 @@ def ferguson_theta_ode(s_max: np.float64, eps_factor: np.float64, k:np.float64, 
 
     return theta, s, x, y, tau
 
-def R_1(s,s_arr,curv_arr,k_1,Cf,W,D,Omega = -1, F = 2.5):
+
+def R_1(s, s_arr, curv_arr, k_1, Cf, W, D, Omega=-1, F=2.5):
     # interpolate to find the value of tau at s
     tau = np.interp(s, s_arr, curv_arr)
-    Ro = k_1 *tau * W
+    Ro = k_1 * tau * W
     s_prime = np.where(s_arr < s, s_arr, 0)
     s_prime = s_prime[s_prime != 0]
-    curv_prime = curv_arr[:len(s_prime)]
+    curv_prime = curv_arr[: len(s_prime)]
     sau = s - s_prime
-    G_sau = np.exp(-2* Cf * sau/D)
+    G_sau = np.exp(-2 * Cf * sau / D)
     Ro_prime = k_1 * curv_prime * W
-    integration = np.trapz(Ro_prime * G_sau, sau)/np.trapz(G_sau, sau)
+    integration = np.trapz(Ro_prime * G_sau, sau) / np.trapz(G_sau, sau)
     return Omega * Ro + F * integration
 
-def Rs(s_arr, curv_arr, k_1, W,Cf, D, Omega = -1, F = 2.5):
+
+def Rs(s_arr, curv_arr, k_1, W, Cf, D, Omega=-1, F=2.5):
     Rs_arr = np.zeros(len(s_arr))
     for i in range(len(s_arr)):
         Rs_arr[i] = R_1(s_arr[i], s_arr, curv_arr, k_1, Cf, W, D, Omega, F)
     return Rs_arr
 
-def howard_knudson_ode(s_max, eps_factor, k, h, omega, k_1, Cf, Omega = -1, F=2.5, ):
+
+def howard_knudson_ode(
+    s_max,
+    eps_factor,
+    k,
+    h,
+    omega,
+    k_1,
+    Cf,
+    Omega=-1,
+    F=2.5,
+):
     """
     Implementation of  (Ferguson, 1976, Eq.9).
     The equation is formulated as an initial value problem and integrated with scipy function for integration (solve_ivp)
@@ -413,10 +440,6 @@ def howard_knudson_ode(s_max, eps_factor, k, h, omega, k_1, Cf, Omega = -1, F=2.
     )
     L = scipy.linalg.cholesky(cov)
     e_s = L @ u
-
-
-
-
 
     def rhs(t, y, k, h):
         eps_t = np.interp(np.array([t]), s_range, e_s)
@@ -460,6 +483,97 @@ def howard_knudson_ode(s_max, eps_factor, k, h, omega, k_1, Cf, Omega = -1, F=2.
     y = y[3, :]
 
     return theta, s, x, y
+
+
+def gaussian_kernel(r, phi, M):
+    """
+    Gaussian kernel function
+
+    Parameters
+    ----------
+    r : np.ndarray
+        Distance vector between two points
+    phi : float
+        Variance of the gaussian kernel
+    M : np.ndarray
+        Matrix with the correlation structure of the kernel
+    """
+    r = np.atleast_2d(r)
+    # Perform the vector-matrix multiplication with einsum (r.T @ M @ r, for stacked vectors in r)
+    result =  phi * np.exp(-0.5 * np.einsum('bi,ij,bj->b', r, M, r))
+    
+    return result
+
+
+
+def matern_kernel(r, nu, M):
+    """
+    Matern kernel function
+
+    Parameters
+    ----------
+    r : np.ndarray
+        Distance vector between two points
+    nu : float
+        order of the matern kernel
+    M : np.ndarray
+        Matrix with the correlation structure of the kernel
+
+    """
+    r = np.atleast_2d(r)
+    r2 = np.einsum('bi,ij,bj->b', r, M, r)
+    kv_ = scipy.special.kv(nu, np.sqrt(2 * nu * r2))
+    gamma_ = (
+        2 ** (1 - nu)
+        / scipy.special.gamma(nu)
+        * (np.sqrt(2 * nu * r2)) ** nu
+    )
+    return gamma_ * kv_
+
+
+def specsim_syn(kernel, coords: List[np.ndarray], mean=0.0, args=()):
+    """
+    Generate random variables with stationary covariance function using spectral
+    techniques of Dietrich & Newsam (1993)
+
+    Parameters
+    ----------
+    coords: (x,y,z,...) : 1D, 2D or 3D np.ndarray with x,y,z, coordinates of the grid. Dimensions must match.
+    mean: mean value of the random field
+    kernel: callable
+        Function which computes the covariance function between two points.
+        the of the function must be the distance vector between the points
+    args: tuple
+        Contain the aditional parameters of the covariance function
+         (eg. variance, correlation structure, etc. Empty by default.
+        The calling signature is ``kernel(x, *args)
+
+    Returns
+    -------
+    Y : 1d, 2d, or 3d numpy array
+        Numpy array of random field given in the same dimensions of x, y and z.
+    """
+    # calculate the distance to centre
+    shape = coords[0].shape
+    for i in range(len(coords)):
+        coords[i] = coords[i].ravel() - np.nanmean(coords[i])
+    # calculate the kernel distance:
+    r = np.stack(coords)
+    r = r.T
+    ryy = kernel(r, *args)
+    ryy = ryy.reshape(shape)
+    # FFT of the kernel and calculations according to Dietrich & Newsam (1993)
+    ntot = ryy.size
+    syy = np.fft.fftn(np.fft.fftshift(ryy)) / ntot
+    syy = np.abs(syy)  # Remove imaginary artifacts
+    syy[0] = 0
+    real = np.random.randn(*syy.shape)
+    imag = np.random.randn(*syy.shape)
+    epsilon = real + 1j * imag
+    rand = epsilon * np.sqrt(syy)
+    Y = np.real(np.fft.ifftn(rand * ntot))
+    Y = Y + mean
+    return Y
 
 
 # so far this function is not jitted. I plan to adapt a gaussian random function generator
@@ -507,23 +621,26 @@ def specsim(
     if covmod not in ["gaussian", "exp"]:
         raise ValueError("covariance model must be 'gaussian' or 'exp'")
     if mask is None:
-        x_calc = x
-        y_calc = y
+        x_calc = x - np.mean(x)
+        y_calc = y - np.mean(y)
     else:
         x_calc = np.where(mask, x, np.nan)
+        x_calc = x_calc - np.nanmean(x_calc)
         y_calc = np.where(mask, y, np.nan)
+        y_calc = y_calc - np.nanmean(y_calc)
     two_dim = len(corl) < 3  # boolean weather calculations should be done in two or 3D
     if two_dim:
         Y = np.empty(x.shape)
-        h_square = 0.5*(x_calc / corl[0]) ** 2 + 0.5*(y_calc / corl[1]) ** 2
+        h_square = 0.5 * (x_calc / corl[0]) ** 2 + 0.5 * (y_calc / corl[1]) ** 2
     else:
         if mask is None:
-            z_calc = z
+            z_calc = z - np.mean(z)
         else:
             z_calc = np.where(mask, z, z_calc)
+            z_calc = z_calc - np.nanmean(z_calc)
         Y = np.empty(z.shape)
-        h_square = (
-            0.5 * (x_calc / corl[0]) ** 2 + 0.5* (y_calc / corl[1]) ** 2 + 0.5 * (z_calc / corl[2]) ** 2
+        h_square = 0.5 * (
+            (x_calc / corl[0]) ** 2 + (y_calc / corl[1]) ** 2 + (z_calc / corl[2]) ** 2
         )
     ntot = h_square.size
     # Covariance matrix of variables
@@ -542,5 +659,6 @@ def specsim(
     epsilon = real + 1j * imag
     rand = epsilon * np.sqrt(syy)
     Y = np.real(np.fft.ifftn(rand * ntot))
+    print(Y.shape)
     Y = Y + mean
     return Y

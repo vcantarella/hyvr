@@ -14,7 +14,6 @@ src/hyvr/objects/channel.py
 src/hyvr/objects/sheet.py
 src/hyvr/objects/trough.py
 src/hyvr/postprocess/__init__.py
-src/hyvr/postprocess/plotting.py
 tests/test_angles.py
 tests/test_surface.py
 tests/test_volume.py

@@ -83,27 +83,17 @@ def half_ellipsoid(
         & (z >= zmin)
         & (z <= zmax)
     )
-
-    # copy for later
-    original_shape = x.shape
     # modifying the reference so we calculate on less points:
     gross_limit_logic = np.ravel(gross_limit_logic)
     x = x.ravel()[gross_limit_logic]
     y = y.ravel()[gross_limit_logic]
     z = z.ravel()[gross_limit_logic]
 
-    # gross_limit_logic = np.ravel(gross_limit_logic)
-    # # To decide whether the point is inside, we can just use the normalized
-    # # distance. Therefore, we first calculate the normalized distance vector
-
-    # l2 = normalized_dx ** 2 + normalized_dy ** 2 + normalized_dz ** 2
-    # logic = l2 < 1
     logic = is_point_inside_ellipsoid(x, y, z, x_c, y_c, z_c, a, b, c, alpha)
-    # # To ensure the semi-ellipse shape, we cut the ellipse in half by assuming a negative distance:
+    # To ensure the semi-ellipse shape, we cut the ellipse in half by assuming a negative distance:
     dz = z - z_c
     logic = logic & (np.ravel(dz) <= 0)
 
-    # print(np.sum(logic))
     if np.sum(logic) == 0:  # return empty dataset:
         print("No points inside the ellipsoid")
         return
@@ -116,14 +106,11 @@ def half_ellipsoid(
         dip_output, dip_dir_output, norm_distance = dip_dip_dir_bulbset(
             x_e, y_e, z_e, x_c, y_c, z_c, a, b, c, alpha, dip
         )
-        #dip_output = np.where(logic, dip_output, np.nan)
-        #dip_dir_output = np.where(logic, dip_dir_output, np.nan)
         if internal_layering:
             n_layers = np.int32(np.ceil(np.max(norm_distance) * c / layer_dist))
             ns = (np.floor((norm_distance) * c / layer_dist)).astype(np.int32)
             facies_array = get_alternating_facies(facies, n_layers, alternating_facies)
             facies_output = np.array([facies_array[n] for n in ns])
-            
         else:
             facies_output = np.repeat(facies, np.sum(logic))
     else:  # no bulbset
@@ -149,14 +136,12 @@ def half_ellipsoid(
             ns = np.floor(plane_dist / layer_dist) + (n_layers // 2)
             ns = ns.astype(np.int32)
             facies_output = np.array([facies_array[n] for n in ns])
-            
         else:
             facies_output = np.repeat(facies, np.sum(logic))
         dip = np.deg2rad(dip)
         dip_dir = coterminal_angle(dip_dir)
         dip_output = np.repeat(dip, np.sum(logic))
         dip_dir_output = np.repeat(dip_dir, np.sum(logic))
-
     # reshaping final arrays and assigning values
     assignment_f = np.zeros(np.sum(gross_limit_logic), dtype=np.int32)
     assignment_f[logic] = facies_output
@@ -170,5 +155,3 @@ def half_ellipsoid(
     assignment_dip_dir[logic] = dip_dir_output
     assignment_dip_dir[~logic] = dip_dir_array.ravel()[gross_limit_logic][~logic]
     dip_dir_array.ravel()[gross_limit_logic] = assignment_dip_dir
-    #Wdip_dir_array.reshape(original_shape)
-    #return facies_final, dip_final, dip_dir_final

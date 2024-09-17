@@ -25,7 +25,8 @@ def channel(
     Assigns a channel to the grid points x,y,z.
     The channel is defined by a curve, which represents the
     trajectory of the channel and a parabola, which defines the cross section.
-    Besides, it may have internal structure.
+    Besides, it may have internal structure (Not currently implemented).
+
     params:
     ---
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
@@ -81,12 +82,11 @@ def channel(
     y_curve = curve[:, 1]
     xy_dist[filter_zone], idx_curve[filter_zone] = min_distance(x_curve, y_curve, P)
     logic_xy = np.full(x.size, False)
-    logic_xy[filter_zone] = xy_dist[filter_zone]**2 <= (
+    logic_xy[filter_zone] = xy_dist[filter_zone] ** 2 <= (
         width**2 / 4 + width**2 * dz[filter_zone] / (4 * depth)
     )  # From the HyVR documentation.
 
     logic_inside = logic_xy
-    #facies_output = np.ones_like(logic_inside, dtype=np.int32) * (-1)
     if internal_layering:
         # distance between neighbouring points:
         dif = np.diff(np.ascontiguousarray(curve[:, 0:2])) ** 2
@@ -96,10 +96,11 @@ def channel(
         srqt_dif = np.ravel(srqt_dif)
         dist_curve = np.concatenate((np.zeros(1), srqt_dif))
         # gradient values:
-        vx = curve[:, 2]
-        vy = curve[:, 3]
+        # vx = curve[:, 2]
+        # vy = curve[:, 3]
         # azimuth from inverse distance weighted velocity
-        azim = np.where(logic_inside, np.arctan2(vy, vx) / np.pi * 180, -1)
+        # dip and azimuth for the channel internal features is not currently implemented
+        # azim = np.where(logic_inside, np.arctan2(vy, vx) / np.pi * 180, -1)
         dip = np.radians(dip)
         # create facies array:
         curve_length = np.sum(dist_curve)
@@ -119,19 +120,12 @@ def channel(
         for i in numba.prange(idx_curve.shape[0]):
             d_grid[i] = d[idx_curve[i]]
             ns_grid[i] = ns[idx_curve[i]]
-        # print(np.max(ns))
-        # print(self.object_facies_array.shape)
-
         facies = np.array([facies_array[n] for n in ns_grid])
         f_array.ravel()[logic_inside] = facies
     else:
         f_array.ravel()[logic_inside] = np.repeat(facies[0], np.sum(logic_inside))
     dip_array.ravel()[logic_inside] = np.repeat(0.0, np.sum(logic_inside))
     dip_dir_array.ravel()[logic_inside] = np.repeat(0.0, np.sum(logic_inside))
-    #dip_output = np.where(logic_inside, 0.0, np.nan)
-    #dip_direction = np.where(logic_inside, 0.0, np.nan)
     f_array = np.reshape(f_array, x.shape)
     dip_array = np.reshape(dip_array, x.shape)
     dip_dir_array = np.reshape(dip_dir_array, x.shape)
-
-    # return facies_output, dip_output, dip_direction

@@ -1,18 +1,9 @@
-# Status
+# HyVR - simple
 
-# Introduction
+[![Build Status]!(https://github.com/vcantarella/hyvr/actions/workflows/python-package-conda.yml/badge.svg?event=push)]
+[![codecov](https://codecov.io/github/vcantarella/hyvr/graph/badge.svg?token=QWGCQVEJ3G)](https://codecov.io/github/vcantarella/hyvr)
 
-**HyVR**
-
-This is a fork from the original HyVR package with minimal implementation of
-the core features the idea to keep the original ideas alive, 
-but maintainable in the fast python development ecosystem.
-Thus, most of the non-essencial functionality, that is nowadays done much better in other packages, 
-has been dropped. The functionality is now focus on the creation of geobodies to grids.
-
-Eveything that could be done before is still doable, and more. But the user should understand a bit more about
-operating on arrays and using python.
-
+This is a fork from the original HyVR package with minimal implementation of the core features the idea to keep the original ideas alive, but maintainable in the fast python development ecosystem.
 
 The Hydrogeological Virtual Reality simulation package (HyVR) is a Python module
 that helps researchers and practitioners generate sedimentary subsurface models with

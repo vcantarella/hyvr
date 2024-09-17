@@ -50,7 +50,7 @@ def sheet(
     dip_dir: dip direction in degrees of the internal dipping layers. Leave the default value for massive structure.
     follows the mathematical convention, anticlockwise from east
     layer_dist: perpendicular to dip distance between layers
-    
+
     Modified arrays:
     ---
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
@@ -59,17 +59,12 @@ def sheet(
     """
     true_array_x = (x >= xmin) & (x <= xmax)
     true_array_y = (y >= ymin) & (y <= ymax)
-    # if len(bottom_surface.shape) != len(z.shape):
-    #     bottom_surface = np.broadcast_to(bottom_surface, z.shape)
-    # if len(top_surface.shape) != len(z.shape):
-    #     top_surface = np.broadcast_to(top_surface, z.shape)
-
     true_array_z = (z >= np.broadcast_to(bottom_surface, z.shape)) & (
         z <= np.broadcast_to(top_surface, z.shape)
     )
     true_array = true_array_z & true_array_y & true_array_x
     true_array = np.ravel(true_array)
-    #facies_output = np.ones(x.size, dtype=np.int32) * (-1)
+    # facies_output = np.ones(x.size, dtype=np.int32) * (-1)
     if internal_layering:
         normal_vector = normal_plane_from_dip_dip_dir(dip, dip_dir)
         xcenter = xmin + (xmax - xmin) / 2
@@ -99,9 +94,6 @@ def sheet(
     dip_dir = coterminal_angle(dip_dir)
     dip_array.ravel()[true_array] = np.repeat(dip, np.sum(true_array))
     dip_dir_array.ravel()[true_array] = np.repeat(dip_dir, np.sum(true_array))
-    #dip = np.repeat(dip, x.size)
-    #dip_direction = np.repeat(dip_dir, x.size)
     f_array = np.reshape(f_array, x.shape)
     dip_array = np.reshape(dip_array, x.shape)
     dip_dir_array = np.reshape(dip_dir_array, x.shape)
-    # return facies_output, dip, dip_direction

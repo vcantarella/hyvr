@@ -16,6 +16,7 @@ import scipy  # general scientific calculations
 import flopy  # our modelling interface
 import numpy as np  # general numerical functions and array manipulation
 from hyvr.utils import specsim
+from hyvr.tools import specsim_surface
 import numba
 
 # %% [markdown]
@@ -63,7 +64,7 @@ dis = flopy.mf6.ModflowGwfdis(
     ncol=ncol,
     delr=dely,
     delc=delx,
-    top=7.0,
+    top=H,
     botm=np.arange(H - delz, 0 - delz, -delz),
 )
 
@@ -115,21 +116,40 @@ Y = np.broadcast_to(Y, Z.shape)
 #
 # %%
 # Define the top and bottom of the model as the top and bottom of the sequence. Assign the unassigned cells to the facies 4 (background facies).
+
 np.random.seed(37893)
-mean_top = H - 1.93
-var_top = 6.59e-2
-corl_top = np.array([2.0e2, 6e2])
+mean_top = H - 1.86
+var_top = 0.7
+corl_top = np.array([70, 792])
 surf_top = specsim(X[0, :, :], Y[0, :, :], mean=mean_top, var=var_top, corl=corl_top)
 
-mean_botm = H - 5.82
-var_botm = 0.67
-corl_botm = np.array([200, 600])
+mean_botm = H - 8.3
+var_botm = .9
+corl_botm = np.array([300, 900])
 surf_botm = specsim(
-    X[0, :, :], Y[0, :, :], mean=mean_botm, var=var_botm, corl=corl_botm
+    X[0, :, :], Y[0, :, :], mean=mean_botm, var=var_botm, corl=corl_top
 )
 
-
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(12, 6))
+ax.plot( X[0, int(nrow/2), :],surf_top[int(nrow/2),:], label="Top")
+ax.plot(X[0, int(nrow/2), :],surf_botm[int(nrow/2),:],  label="Botm")
+ax.legend()
+plt.show()
 # %% [markdown]
+surf_top2 = specsim_surface(X[0, :, :], Y[0, :, :], mean=mean_top, var=var_top, corl=corl_top)
+surf_botm2 = specsim_surface(X[0, :, :], Y[0, :, :], mean=mean_botm, var=var_botm, corl=corl_top)
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots(figsize=(12, 6))
+ax.plot( X[0, int(nrow/2), :],surf_top[int(nrow/2),:], label="Top")
+ax.plot( X[0, int(nrow/2), :],surf_top2[int(nrow/2),:], label="Top2")
+ax.plot(X[0, int(nrow/2), :],surf_botm[int(nrow/2),:],  label="Botm")
+ax.plot(X[0, int(nrow/2), :],surf_botm2[int(nrow/2),:],  label="Botm2")
+ax.legend()
+plt.show()
+
+
+# %%
 # ### Defining the sequence of thicknesses
 #
 # We will assume an average thickness of 0.7 m. The first layer in the system is modelled deterministically. It is $\approx$ 0.4 m thickness and composed with light color tufa with fossil and low organic matter content. The remaining layers are modelled probabilistically.
@@ -140,7 +160,7 @@ surf_botm = specsim(
 # %%
 # according to answer in : https://math.stackexchange.com/questions/291174/probability-distribution-of-the-subinterval-lengths-from-a-random-interval-divis
 # The cumulative distribution function for intervals randomly sampled from the interval [0,a] is:
-simulated_thickness = (mean_top - 0) - 0.4
+simulated_thickness = (mean_top) - 1
 n = 8
 print(f"With the number of layers: {n}")
 F = lambda t: 1 - ((simulated_thickness - t) / simulated_thickness) ** (n - 1)

@@ -1,8 +1,9 @@
-import numpy as np
 import numba
+import numpy as np
 import scipy
-from .utils import ferguson_theta_ode
 from scipy.spatial.distance import pdist, squareform
+
+from .utils import ferguson_theta_ode, gaussian_kernel, specsim_syn
 
 
 def ferguson_curve(
@@ -35,7 +36,7 @@ def ferguson_curve(
     xstart, ystart : float
         Starting coordinates of the channel centerline
     extra_noise : float
-        Added extra noise for the matrix stability of the underlying Gaussian error curve
+        small error added to the covariance matrix to avoid singular matrix in the underlying Gaussian error curve
 
     Returns
     -------
@@ -89,6 +90,40 @@ def ferguson_curve(
     outputs[:, 1] = outputs[:, 1] + ystart
 
     return outputs[:, 0], outputs[:, 1], outputs[:, 2], outputs[:, 3], outputs[:, 4]
+
+
+def specsim_surface(
+    x: np.array,
+    y: np.array,
+    mean: np.float64,
+    var: np.float64,
+    corl: np.array,
+    mask=None,
+):
+    """
+    Creates gaussian random surface with mean value and variance input
+    with the spectral method from  Dietrich & Newsam (1993).
+    Input:
+    -------------
+    x,y: 2D grid of x and y points
+    mean: mean value
+    var: variance
+    corl: correlation lenghts (same unit as x and y) in x and y directions
+    mask: mask array (same dimensions as x and y)
+    Returns:
+    Z: output np.array with same dimensions as x and y and with Z values corrensponding to the surface
+    """
+    M = np.diag(1 / corl ** 2)
+    if mask is not None:
+        x[~mask] = np.nan
+        y[~mask] = np.nan
+        coords = [x, y]
+        Z = specsim_syn(gaussian_kernel, coords, mean, (var, M))
+        Z[~mask] = np.nan
+    else:
+        coords = [x, y]
+        Z = specsim_syn(gaussian_kernel, coords, mean, (var, M))
+    return Z
 
 
 def contact_surface(

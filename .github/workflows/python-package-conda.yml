@@ -24,15 +24,13 @@ jobs:
     - name: Lint with ruff
       run: |
         pip install ruff
-        ruff check                          # Lint all files in the current directory (and any subdirectories).
         ruff format                          # Format all files in the current directory (and any subdirectories).
+        ruff check                          # Lint all files in the current directory (and any subdirectories).
     - name: Test with pytest
       run: |
-        conda install pytest
-        pip install pytest-html
-        pytest
-    - name: Coverage tests
-      run: |
-        pip install coverage
-        NUMBA_DISABLE_JIT=1 coverage run -m pytest
-        coverage report -m
+        pip install pytest pytest-cov
+        NUMBA_DISABLE_JIT=1 pytest --cov
+    - name: Upload results to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
