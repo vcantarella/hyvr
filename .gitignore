@@ -20,3 +20,8 @@ htmlcov
 
 # external
 external
+
+# examples
+examples/ammer
+examples/channels
+examples/heinz_highenergy

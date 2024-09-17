@@ -7,9 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
 import sys
-import pathlib
-import re
-sys.path.insert(0, os.path.abspath('..'))
+
+sys.path.insert(0, os.path.abspath(".."))
 sys.path.append("../hyvr")
 
 project = "HyVR-fork"
@@ -38,7 +37,7 @@ extensions = [
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-bibtex_bibfiles = ['hyvr.bib']
+bibtex_bibfiles = ["hyvr.bib"]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -75,13 +74,11 @@ html_context = {
 }
 
 # -- Napoleon settings ----------------------------------------------------------------
-
 napoleon_include_init_with_doc = False
 napoleon_use_param = True
 napoleon_type_aliases = {"ml": "ttim.Model"}
 
 # -- Autodoc, autosummary, and autosectionlabel settings ------------------------------
-
 autodoc_typehints = "description"
 autodoc_typehints_format = "short"
 
@@ -92,7 +89,6 @@ autoclass_content = "class"
 autosectionlabel_prefix_document = True
 
 # -- Numpydoc settings ----------------------------------------------------------------
-
 numpydoc_class_members_toctree = True
 numpydoc_show_class_members = False
 
@@ -103,9 +99,7 @@ intersphinx_mapping = {
     "numba": ("https://numba.readthedocs.io/en/stable/#", None),
     "matplotlib": ("https://matplotlib.org/stable", None),
 }
-
 # -- myst_nb options ------------------------------------------------------------------
-
 nb_execution_allow_errors = True  # Allow errors in notebooks, to see the error online
 nb_execution_mode = "auto"
 #

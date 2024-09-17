@@ -1,1 +1,5 @@
-{}
+{
+    "ruff.interpreter": [
+        "C:/Users/vcant/miniconda3/envs/flopy-env/python.exe"
+    ]
+}
