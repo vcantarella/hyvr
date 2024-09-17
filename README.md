@@ -1,6 +1,6 @@
 # HyVR - simple
 
-[![Build Status]!(https://github.com/vcantarella/hyvr/actions/workflows/python-package-conda.yml/badge.svg?event=push)]
+[![Build Status](https://github.com/vcantarella/hyvr/actions/workflows/python-package-conda.yml/badge.svg?event=push)]
 [![codecov](https://codecov.io/github/vcantarella/hyvr/graph/badge.svg?token=QWGCQVEJ3G)](https://codecov.io/github/vcantarella/hyvr)
 
 This is a fork from the original HyVR package with minimal implementation of the core features the idea to keep the original ideas alive, but maintainable in the fast python development ecosystem.
