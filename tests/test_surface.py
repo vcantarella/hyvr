@@ -42,14 +42,10 @@ def test_specsim_surface():
     x = np.linspace(0, 100, 1000)
     y = np.linspace(0, 100, 1000)
     x, y = np.meshgrid(x, y)
-    mask = (x > 25) & (x < 75) & (y > 25) & (y < 75)
     mean = 2.5
     variance = 0.05**2
     corl = np.array([100., 100.])
-    Z = specsim_surface(x,y, mean, variance, corl, mask=None)
-    Z_masked = specsim_surface(x,y, mean, variance, corl, mask=mask)
+    Z = specsim_surface(x,y, mean, variance, corl)
     assert Z.shape == x.shape
-    assert Z_masked.shape == x.shape
     assert np.allclose(Z.mean(), mean, atol=1e-3)
-    assert np.allclose(np.nanmean(Z_masked), mean, atol=1e-3)
 

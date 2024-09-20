@@ -587,7 +587,6 @@ def specsim(
     var=1.0,
     corl=np.array([1.0, 1.0]),
     z_axis=0,
-    mask=None,
     covmod="gaussian",
 ):
     """
@@ -606,8 +605,6 @@ def specsim(
     z_axis: int
         location of the z_axis in the numpy grid.
         The refernce value is axis 0 (the first), as in the MODFLOW convention.
-    mask: np.array optional:
-        adds a mask to calculate the gaussian random field in a subset of the grid: x[mask]
     covmod : str, optional (default: "gaussian")
         Which covariance model to use ("gaussian" or "exp").
 
@@ -620,24 +617,16 @@ def specsim(
     """
     if covmod not in ["gaussian", "exp"]:
         raise ValueError("covariance model must be 'gaussian' or 'exp'")
-    if mask is None:
-        x_calc = x - np.mean(x)
-        y_calc = y - np.mean(y)
-    else:
-        x_calc = np.where(mask, x, np.nan)
-        x_calc = x_calc - np.nanmean(x_calc)
-        y_calc = np.where(mask, y, np.nan)
-        y_calc = y_calc - np.nanmean(y_calc)
+    
+    x_calc = x - np.mean(x)
+    y_calc = y - np.mean(y)
+
     two_dim = len(corl) < 3  # boolean weather calculations should be done in two or 3D
     if two_dim:
         Y = np.empty(x.shape)
         h_square = 0.5 * (x_calc / corl[0]) ** 2 + 0.5 * (y_calc / corl[1]) ** 2
     else:
-        if mask is None:
-            z_calc = z - np.mean(z)
-        else:
-            z_calc = np.where(mask, z, z_calc)
-            z_calc = z_calc - np.nanmean(z_calc)
+        z_calc = z - np.mean(z)
         Y = np.empty(z.shape)
         h_square = 0.5 * (
             (x_calc / corl[0]) ** 2 + (y_calc / corl[1]) ** 2 + (z_calc / corl[2]) ** 2
