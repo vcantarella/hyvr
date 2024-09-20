@@ -33,8 +33,9 @@ def sheet(
     Assigns a sheet to the grid points x,y,z.
     The sheet is a layer is defined by bounding x and y coordinates and top and bottom contacts.
     It may have internal layering (inclined or planar)
-    params:
-    ---
+    
+    Parameters
+    ----------
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
     dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
     dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
@@ -51,8 +52,9 @@ def sheet(
     follows the mathematical convention, anticlockwise from east
     layer_dist: perpendicular to dip distance between layers
 
-    Modified arrays:
-    ---
+    Returns
+    -------
+    Modifies the following arrays in place:
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
     dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
     dip_dir_array: ndarray(float32) of the dip-direction of the internal structure

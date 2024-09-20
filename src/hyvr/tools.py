@@ -103,14 +103,16 @@ def specsim_surface(
     """
     Creates gaussian random surface with mean value and variance input
     with the spectral method from  Dietrich & Newsam (1993).
-    Input:
+    Parameters:
     -------------
     x,y: 2D grid of x and y points
     mean: mean value
     var: variance
     corl: correlation lenghts (same unit as x and y) in x and y directions
     mask: mask array (same dimensions as x and y)
-    Returns:
+
+    Returns
+    -------
     Z: output np.array with same dimensions as x and y and with Z values corrensponding to the surface
     """
     M = np.diag(1 / corl ** 2)
@@ -137,14 +139,17 @@ def contact_surface(
     """
     Creates gaussian random contact surface with mean value and variance input
     with the spectral method from  Dietrich & Newsam (1993).
-    Input:
+
+    Parameters:
     -------------
     x,y: 2D grid of x and y points
     mean: mean value
     var: variance
     corl: correlation lenghts (same unit as x and y) in x and y directions
     mask: mask array (same dimensions as x and y)
-    Returns:
+
+    Returns
+    -------
     Z: output np.array with same dimensions as x and y and with Z values corrensponding to the surface
     """
     return None
@@ -162,10 +167,12 @@ def surface_gauss_regression(
     """
     Performs surface gaussian regression on input x,y data with given dataset (x,y,z) and error
     Based on the algorithm from Rasmussen & Williams (2006) Gaussian Processes for Machine Learning
-    Input:
+    Parameters:
     -------------
     x,y: 2D grid of x and y points
-    Returns:
+    
+    Returns
+    -------
     Z: output np.array with same dimensions as x and y and with Z values corrensponding to the surface
     """
     # Calculating distances:

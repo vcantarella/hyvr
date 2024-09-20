@@ -27,8 +27,8 @@ def channel(
     trajectory of the channel and a parabola, which defines the cross section.
     Besides, it may have internal structure (Not currently implemented).
 
-    params:
-    ---
+    Parameters
+    ----------
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
     dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
     dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
@@ -43,8 +43,9 @@ def channel(
     layer_dist: perpendicular to dip distance between layers
     facies: np.array(int32) with the facies code (1 in case no layering or more in case of layering)
 
-    Modified arrays:
-    ---
+    Returns
+    -------
+    Modifies the following arrays in place:
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
     dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
     dip_dir_array: ndarray(float32) of the dip-direction of the internal structure

@@ -34,8 +34,8 @@ def half_ellipsoid(
     Half ellipsoid is the lower half of an ellipsoid, defined by its center, dimensions and azimuth.
     It can be used to model discrete lenses, trough structure, scour pool fills, etc.
 
-    params:
-    ---
+    Parameters
+    ----------
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
     dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
     dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
@@ -53,8 +53,9 @@ def half_ellipsoid(
     follows the mathematical convention, anticlockwise from east
     layer_dist: perpendicular to dip distance between layers
 
-    Modified arrays:
-    ---
+    Returns
+    -------
+    Modifies the following arrays in place:
     f_array: ndarray(int32) of the facies values at the coordinates (x,y,z)
     dip_array: ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)
     dip_dir_array: ndarray(float32) of the dip-direction of the internal structure
