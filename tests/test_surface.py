@@ -32,7 +32,6 @@ def test_specsim():
         mean=mean,
         var=variance,
         corl=np.array([100, 100]),
-        mask=None,
         covmod="gaussian",
     )
     assert Z.shape == x.shape
