@@ -36,6 +36,7 @@ def channel(
     z_top: top coordinate (flat) of the channel.
     curve: [x,y,(vx,vy)] 2D array where the first and second columns are the x and y posiiton of the points defining the curve.
     In case the internal layering, then the 3rd and 4th columns must be defined, which are the curve gradient (dc/dx and dc/dy) at each point.
+    parabola_pars: [width, depth] of the parabola defining the channel cross section.
     internal_layering: True if internal layering, currently not implemented.
     alternating_facies: True if the facies alternate according to the order in the argument facies
     dip: dip of the internal dipping layers. Leave the default value for massive structure.
