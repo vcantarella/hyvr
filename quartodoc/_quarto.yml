@@ -1,0 +1,19 @@
+quartodoc:
+  style: pkgdown
+  dir: reference
+  package: null
+  source_dir: ../src/hyvr
+  sidebar: _sidebar.yaml
+  sections:
+    - title: Sedimentary Structure objects
+      desc: Functions that create objects representing sedimentary structures according of object-based sedimentary structure modelling framework.
+      contents:
+        - objects.trough.half_ellipsoid
+        - objects.channel.channel
+        - objects.sheet.sheet
+    - title: Additional Tools
+      desc: Functions that provide additional tools for working with sedimentary structures.
+      contents:
+        - tools.ferguson_curve
+        - tools.specsim_surface
+        - tools.contact_surface

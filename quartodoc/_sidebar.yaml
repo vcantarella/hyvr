@@ -1,0 +1,16 @@
+website:
+  sidebar:
+  - contents:
+    - reference/index.qmd
+    - contents:
+      - reference/objects.trough.half_ellipsoid.qmd
+      - reference/objects.channel.channel.qmd
+      - reference/objects.sheet.sheet.qmd
+      section: Sedimentary Structure objects
+    - contents:
+      - reference/tools.ferguson_curve.qmd
+      - reference/tools.specsim_surface.qmd
+      - reference/tools.contact_surface.qmd
+      section: Additional Tools
+    id: reference
+  - id: dummy-sidebar

@@ -1,0 +1,35 @@
+# objects.channel.channel { #objects.channel.channel }
+
+`channel.channel(f_array, dip_array, dip_dir_array, x, y, z, z_top, curve, parabola_pars, facies, internal_layering=False, alternating_facies=False, dip=0.0, layer_dist=0.0)`
+
+Assigns a channel to the grid points x,y,z.
+The channel is defined by a curve, which represents the
+trajectory of the channel and a parabola, which defines the cross section.
+Besides, it may have internal structure (Not currently implemented).
+
+## Parameters
+
+| Name                 | Type   | Description   | Default    |
+|----------------------|--------|---------------|------------|
+| `f_array`            |        |               | _required_ |
+| `dip_array`          |        |               | _required_ |
+| `dip_dir_array`      |        |               | _required_ |
+| `x`                  |        |               | _required_ |
+| `z_top`              |        |               | _required_ |
+| `curve`              |        |               | _required_ |
+| `In`                 |        |               | _required_ |
+| `parabola_pars`      |        |               | _required_ |
+| `internal_layering`  |        |               | `False`    |
+| `alternating_facies` |        |               | `False`    |
+| `dip`                |        |               | `0.0`      |
+| `layer_dist`         |        |               | `0.0`      |
+| `facies`             |        |               | _required_ |
+
+## Returns
+
+| Type                                                                              | Description   |
+|-----------------------------------------------------------------------------------|---------------|
+| Modifies the following arrays in place:                                           |               |
+| ndarray(int32) of the facies values at the coordinates (x,y,z)                    |               |
+| ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z) |               |
+| ndarray(float32) of the dip-direction of the internal structure                   |               |

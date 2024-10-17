@@ -1,0 +1,36 @@
+# objects.trough.half_ellipsoid { #objects.trough.half_ellipsoid }
+
+`trough.half_ellipsoid(f_array, dip_array, dip_dir_array, x, y, z, center_coords, dims, azim, facies, internal_layering=False, alternating_facies=False, bulb=False, dip=0.0, dip_dir=0.0, layer_dist=0.0)`
+
+Assigns a half ellipsoid (trough) to the grid points x,y,z.
+Half ellipsoid is the lower half of an ellipsoid, defined by its center, dimensions and azimuth.
+It can be used to model discrete lenses, trough structure, scour pool fills, etc.
+
+## Parameters
+
+| Name                 | Type   | Description                                                      | Default    |
+|----------------------|--------|------------------------------------------------------------------|------------|
+| `f_array`            |        |                                                                  | _required_ |
+| `dip_array`          |        |                                                                  | _required_ |
+| `dip_dir_array`      |        |                                                                  | _required_ |
+| `x`                  |        |                                                                  | _required_ |
+| `center_coords`      |        |                                                                  | _required_ |
+| `dims`               |        |                                                                  | _required_ |
+| `azim`               |        | It follows the mathematical convention, anticlockwise from east. | _required_ |
+| `facies`             |        |                                                                  | _required_ |
+| `internal_layering`  |        |                                                                  | `False`    |
+| `alternating_facies` |        |                                                                  | `False`    |
+| `bulb`               |        |                                                                  | `False`    |
+| `dip`                |        |                                                                  | `0.0`      |
+| `dip_dir`            |        |                                                                  | `0.0`      |
+| `follows`            |        |                                                                  | _required_ |
+| `layer_dist`         |        |                                                                  | `0.0`      |
+
+## Returns
+
+| Type                                                                              | Description   |
+|-----------------------------------------------------------------------------------|---------------|
+| Modifies the following arrays in place:                                           |               |
+| ndarray(int32) of the facies values at the coordinates (x,y,z)                    |               |
+| ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z) |               |
+| ndarray(float32) of the dip-direction of the internal structure                   |               |

@@ -1,0 +1,26 @@
+# tools.ferguson_curve { #tools.ferguson_curve }
+
+`ferguson_curve(h, k, eps_factor, flow_angle, s_max, xstart, ystart, extra_noise=0.0)`
+
+Simulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model
+Implementation of AR2 autoregressive model
+http://onlinelibrary.wiley.com/doi/10.1002/esp.3290010403/full
+
+## Parameters
+
+| Name          | Type   | Description                                                                                                | Default    |
+|---------------|--------|------------------------------------------------------------------------------------------------------------|------------|
+| `h`           | float  | Height (Ferguson model parameter)                                                                          | _required_ |
+| `k`           | float  | Wave number (Ferguson model parameter)                                                                     | _required_ |
+| `eps_factor`  | float  | Random background noise (Ferguson model parameter)                                                         | _required_ |
+| `flow_angle`  | float  | Angle of mean flow direction, in radians                                                                   | _required_ |
+| `s_max`       | float  | Length of the domain in mean flow direction                                                                | _required_ |
+| `xstart`      | float  | Starting coordinates of the channel centerline                                                             | _required_ |
+| `ystart`      | float  | Starting coordinates of the channel centerline                                                             | _required_ |
+| `extra_noise` | float  | small error added to the covariance matrix to avoid singular matrix in the underlying Gaussian error curve | `0.0`      |
+
+## Returns
+
+| Type         | Description                                                                                                        |
+|--------------|--------------------------------------------------------------------------------------------------------------------|
+| float matrix | Simulated extruded parabola centerlines: storage array containing values for x coordinate, y coordinate, vx and vy |

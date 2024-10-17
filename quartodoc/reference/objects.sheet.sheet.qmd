@@ -1,0 +1,36 @@
+# objects.sheet.sheet { #objects.sheet.sheet }
+
+`sheet.sheet(f_array, dip_array, dip_dir_array, x, y, z, xmin, xmax, ymin, ymax, bottom_surface, top_surface, facies, internal_layering=False, alternating_facies=False, dip=0.0, dip_dir=0.0, layer_dist=0.0)`
+
+Assigns a sheet to the grid points x,y,z.
+The sheet is a layer is defined by bounding x and y coordinates and top and bottom contacts.
+It may have internal layering (inclined or planar)
+
+## Parameters
+
+| Name                 | Type   | Description   | Default    |
+|----------------------|--------|---------------|------------|
+| `f_array`            |        |               | _required_ |
+| `dip_array`          |        |               | _required_ |
+| `dip_dir_array`      |        |               | _required_ |
+| `x`                  |        |               | _required_ |
+| `xmin`               |        |               | _required_ |
+| `ymin`               |        |               | _required_ |
+| `bottom_surface`     |        |               | _required_ |
+| `top_surface`        |        |               | _required_ |
+| `facies`             |        |               | _required_ |
+| `internal_layering`  |        |               | `False`    |
+| `alternating_facies` |        |               | `False`    |
+| `dip`                |        |               | `0.0`      |
+| `dip_dir`            |        |               | `0.0`      |
+| `follows`            |        |               | _required_ |
+| `layer_dist`         |        |               | `0.0`      |
+
+## Returns
+
+| Type                                                                              | Description   |
+|-----------------------------------------------------------------------------------|---------------|
+| Modifies the following arrays in place:                                           |               |
+| ndarray(int32) of the facies values at the coordinates (x,y,z)                    |               |
+| ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z) |               |
+| ndarray(float32) of the dip-direction of the internal structure                   |               |

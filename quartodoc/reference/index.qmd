@@ -1,0 +1,21 @@
+# Function reference {.doc .doc-index}
+
+## Sedimentary Structure objects
+
+Functions that create objects representing sedimentary structures according of object-based sedimentary structure modelling framework.
+
+| | |
+| --- | --- |
+| [objects.trough.half_ellipsoid](objects.trough.half_ellipsoid.qmd#objects.trough.half_ellipsoid) | Assigns a half ellipsoid (trough) to the grid points x,y,z. |
+| [objects.channel.channel](objects.channel.channel.qmd#objects.channel.channel) | Assigns a channel to the grid points x,y,z. |
+| [objects.sheet.sheet](objects.sheet.sheet.qmd#objects.sheet.sheet) | Assigns a sheet to the grid points x,y,z. |
+
+## Additional Tools
+
+Functions that provide additional tools for working with sedimentary structures.
+
+| | |
+| --- | --- |
+| [tools.ferguson_curve](tools.ferguson_curve.qmd#tools.ferguson_curve) | Simulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model |
+| [tools.specsim_surface](tools.specsim_surface.qmd#tools.specsim_surface) | Creates gaussian random surface with mean value and variance input |
+| [tools.contact_surface](tools.contact_surface.qmd#tools.contact_surface) | Creates gaussian random contact surface with mean value and variance input |

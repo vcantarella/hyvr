@@ -1,0 +1,20 @@
+# tools.specsim_surface { #tools.specsim_surface }
+
+`specsim_surface(x, y, mean, var, corl, mask=None)`
+
+Creates gaussian random surface with mean value and variance input
+with the spectral method from  Dietrich & Newsam (1993).
+
+## Parameters:
+
+x,y: 2D grid of x and y points
+mean: mean value
+var: variance
+corl: correlation lenghts (same unit as x and y) in x and y directions
+mask: mask array (same dimensions as x and y)
+
+## Returns
+
+| Type                                                                                            | Description   |
+|-------------------------------------------------------------------------------------------------|---------------|
+| output np.array with same dimensions as x and y and with Z values corrensponding to the surface |               |
