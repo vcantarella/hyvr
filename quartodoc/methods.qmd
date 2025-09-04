@@ -1,87 +1,51 @@
 ---
-title: "Computational methods"
+title: "Computational Methods"
 ---
 
-Contrary to the original work, the user should build his/her model from a python script file.
-A detailed documentation of all the options can be found in the API reference.
-Ideally, major strata contact surfaces are generated first. Then 
-architectural elements, and their internal heterogeneity are then generated inside the stratum accoding to some probability rule.
-Model building and grid assignment (facies, dip, dip direction) are done at the same time.
+Unlike the original HyVR, models are now built using a Python script. For detailed documentation of all options, please refer to the API reference.
 
-Based on these values (facies, dip, dip direction), the user can create the hydralic parameters (porosity, isotropic hydraulic
-conductivity, full hydraulic conductivity tensor), and potentially heterogeneity in these parameters on the given level.
+The recommended workflow is to first generate the major strata contact surfaces. Then, architectural elements and their internal heterogeneity are generated within each stratum according to a defined probability rule. Model building and grid assignment (facies, dip, and dip direction) are performed simultaneously.
+
+Based on these values, you can define hydraulic parameters such as porosity, isotropic hydraulic conductivity, and the full hydraulic conductivity tensor, including any heterogeneity at the desired level.
 
 ![Hierarchical modeling framework implemented in HyVR.](../docs/img/hfm.png)
 
-*Note that in this section model input parameters are denoted in the following manner:* `parameter-section.parameter`.
+*Note: In this section, model input parameters are denoted as `parameter-section.parameter`.*
 
 ---
 
-## Simulation of strata and architectural element contact surfaces
+## Simulation of Strata and Architectural Element Contact Surfaces
 
-Strata are defined in the input parameter file by their bottom surface contact
-models and the architectural elements that are to be included within them. The
-top contact surface is then generated and all model cells between the upper
-and lower contact surface (which is the top of the next stratum) are assigned
-to the stratum.
+Strata are defined by their bottom contact surfaces and the architectural elements they contain. The top contact surface is generated, and all model cells between the upper and lower surfaces are assigned to that stratum.
 
-Random contact surfaces are generated using Multi-Gaussian spectral methods outlined by
-*Dietrich1993*. These methods require structural statistical parameters
-(i.e. mean and variance) for the quantity of interest, and a geostatistical
-covariance model. We used a Gaussian covariance model in the present study to
-produce smoothly varying surfaces:
+Random contact surfaces are generated using the Multi-Gaussian spectral methods outlined by Dietrich (1993). These methods require statistical parameters (mean and variance) and a geostatistical covariance model. In this study, we use a Gaussian covariance model to produce smoothly varying surfaces:
 
 $$
-R_{ss}(h)=\sigma^2_s \exp\left[ - \left[ \frac{\Delta x}{\lambda}\right]^2 \right]
+R_{ss}(h) = \sigma^2_s \exp\left( - \left( \frac{\Delta x}{\lambda} \right)^2 \right)
 $$
 
-where $s$ is the random quantity of interest, $\sigma^2_s$ is the
-variance of $s$ (here elevation), $\Delta x$ is the distance between
-the two points, and $\lambda$ is the correlation length.
+where $s$ is the random quantity of interest (e.g., elevation), $\sigma^2_s$ is its variance, $\Delta x$ is the distance between two points, and $\lambda$ is the correlation length.
 
-Unlike the original HyVR, the user must be able to select the grid cells and evaluate wether
-the cells are above or below the contact surface. This is easily done with numpy and 
-can be seen in the examples.
+Unlike the original HyVR, you must now select grid cells and determine whether they are above or below the contact surface. This can be easily done with NumPy, as shown in the examples.
 
-The user must also create rules (normally with probabilities) to assign architectural elements
-to a particular stratum. Usually, this starts with the random choice of an architectural element
-from those defined, given the probability of each architectural element being chosen. The thickness of the architectural
-element can be, for example, drawn from a random normal distribution. To account for the erosive nature of many
-sedimentary environments the algorithm may erode the underlying units (This is done by assigning an oject that intersect cells previously assigned to a previous unit).
-Thus the object creating order matters.
+You also need to create rules, typically based on probabilities, to assign architectural elements to a stratum. This usually begins with randomly selecting an architectural element from a predefined list, based on the probability of each element being chosen. The thickness of the element can be drawn from a random distribution, such as a normal distribution. To account for erosion, the algorithm can erode underlying units by assigning an object that intersects cells previously assigned to another unit. Therefore, the order in which objects are created is important.
 
 ---
 
-## Simulation of hydrofacies assemblages and hydrofacies geometries
+## Simulation of Hydrofacies Assemblages and Geometries
 
-The simulation of individual hydrofacies assemblages is object-based. The user controls where to place the objects,
-for example one might use random placement of features within an architectural element. Object-based methods have been implemented
-widely in subsurface simulation *Jussel1994,Bennett2017* as they are
-generally computationally efficient and relatively easy to parameterize. The
-HyVR program approximates hydrofacies assemblages with simple geometric shapes.
-Currently, three shapes are supported: troughs (truncated ellipsoids), channels (extruded
-parabolas), and sheets. All feastures are
-'erosive' hydrofacies assemblages, this means that they do not keep track of the previously assigned facies, the user must that themselves (see example).
-And therefore the architectural element (and strata) boundaries may be altered during the course of the simulation.
+The simulation of individual hydrofacies assemblages is object-based. You control the placement of objects, for example, by randomly placing features within an architectural element. Object-based methods are widely used in subsurface simulation (Jussel et al., 1994; Bennett & Hyman, 2017) because they are computationally efficient and relatively easy to parameterize.
+
+HyVR approximates hydrofacies assemblages with simple geometric shapes. Currently, three shapes are supported: troughs (truncated ellipsoids), channels (extruded parabolas), and sheets. All features are "erosive," meaning they do not keep track of previously assigned facies; you must manage this yourself (see examples). As a result, architectural element and strata boundaries may be altered during the simulation.
 
 ![Geometries implemented in HyVR.](../docs/img/hyvr_geometries.png)
 
-Fo each object, different properties must be assigned, such as the placement and dimensions. 
-One unique property is the facies code, which will be assigned by the function
-according to the facies assignment rules.
-*dip direction* $\kappa$ and *dip* $\psi$ may be created properties are associated with
-the bedding structure at each model grid cell and denote the angle of the
-bedding plane from the mean direction of flow and horizontal, respectively.
+For each object, various properties must be assigned, such as placement and dimensions. A unique property is the facies code, which is assigned by the function according to facies assignment rules. *Dip direction* ($\kappa$) and *dip* ($\psi$) are properties associated with the bedding structure in each model grid cell, representing the angle of the bedding plane from the mean flow direction and the horizontal, respectively.
 
-### Truncated ellipsoids
+### Truncated Ellipsoids
 
-Truncated ellipsoids are generated as a proxy for trough-like or lenses features. The
-method for generating the boundaries of these features has been described
-previously in *Bennett2017*. The internal
-structure of truncated ellipsoids can be defined in the following ways:
-	
-* trough-wise homogeneous, with constant azimuth and dip; 
-* bulb-dip, with azimuth and dip values based on the three-dimensional gradient
-  at the ellipsoid boundary ('bulb dip');
-* bulb-sets, comprising nested alternating hydrofacies with $\kappa$ and
-  $\psi$ values generated as for bulb-type;
+Truncated ellipsoids are used as a proxy for trough-like or lens-shaped features. The method for generating the boundaries of these features has been described previously by Bennett & Hyman (2017). The internal structure of truncated ellipsoids can be defined in the following ways:
+
+*   **Trough-wise homogeneous:** with constant azimuth and dip.
+*   **Bulb-dip:** with azimuth and dip values based on the three-dimensional gradient at the ellipsoid boundary.
+*   **Bulb-sets:** comprising nested, alternating hydrofacies with $\kappa$ and $\psi$ values generated as in the bulb-dip method.

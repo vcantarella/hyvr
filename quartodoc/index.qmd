@@ -2,8 +2,6 @@
 title: "HyVR"
 ---
 
-Welcome to the documentation for HyVR.
+Welcome to the HyVR documentation.
 
-HyVR is a Python package for generating virtual sedimentary structures.
-
-This documentation is a work in progress.
+HyVR is a Python package for generating virtual sedimentary structures. This documentation is a work in progress.
