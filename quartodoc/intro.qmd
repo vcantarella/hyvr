@@ -1,0 +1,18 @@
+---
+title: "Introduction"
+---
+
+This is a fork from the original HyVR package with minimal implementation of the core features the idea to keep the original ideas alive, but maintainable in the fast python development ecosystem.
+
+The Hydrogeological Virtual Reality simulation package (HyVR) is a Python module that helps researchers and practitioners generate sedimentary subsurface models with multiple scales of heterogeneity that are based on geological concepts. The simulation outputs can then be used to explore groundwater flow and solute transport behaviour, for example. The user must work with a previously created regular grid, which can be used directly in MODFLOW or interpolated to the simulation grid that the user will need.
+
+The original motivation for HyVR was the lack of tools for modelling sedimentary deposits that include bedding structure model outputs (i.e., dip and azimuth).
+Such bedding parameters were required to approximate full hydraulic-conductivity tensors for groundwater flow modelling. HyVR is able to simulate these bedding
+parameters and generate spatially distributed parameter fields, including full hydraulic-conductivity tensors.
+
+For more information, the original HyVR information is available in the online `technical documentation <https://driftingtides.github.io/hyvr/index.html>`_.
+
+For citation of the original software and development, please use the following reference:
+
+* Bennett, J. P., Haslauer, C. P., Ross, M., & Cirpka, O. A. (2018). An open, object-based framework for generating anisotropy in sedimentary subsurface models. Groundwater. DOI:* [10.1111/gwat.12803](https://onlinelibrary.wiley.com/doi/abs/10.1111/gwat.12803>).
+    * A preprint version of the article is available* [here](https://github.com/driftingtides/hyvr/blob/master/docs/Bennett_GW_2018.pdf) .

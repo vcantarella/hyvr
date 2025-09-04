@@ -1,19 +1,51 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "HyVR"
+  sidebar:
+    - id: user-guide
+      style: "docked"
+      background: "light"
+      contents:
+        - href: index.qmd
+          text: "HyVR"
+        - section: "User Guide"
+          contents:
+            - href: intro.qmd
+              text: "Introduction"
+            - href: methods.qmd
+              text: "Methods"
+        - section: "Examples"
+          contents:
+            - href: tutorials/simple_channel.ipynb
+              text: "Simple Channel"
+            - href: tutorials/simple_lense.ipynb
+              text: "Simple Lense"
+            - href: tutorials/more_complex_structure.ipynb
+              text: "More Complex Structure"
+        - section: "API Reference"
+          contents:
+            - href: reference/index.qmd
+              text: "Reference"
+
 quartodoc:
   style: pkgdown
   dir: reference
-  package: null
+  package: hyvr
   source_dir: ../src/hyvr
   sidebar: _sidebar.yaml
   sections:
-    - title: Sedimentary Structure objects
-      desc: Functions that create objects representing sedimentary structures according of object-based sedimentary structure modelling framework.
+    - title: "Sedimentary Structure objects"
+      desc: "Functions that create objects representing sedimentary structures according of object-based sedimentary structure modelling framework."
       contents:
-        - objects.trough.half_ellipsoid
-        - objects.channel.channel
-        - objects.sheet.sheet
-    - title: Additional Tools
-      desc: Functions that provide additional tools for working with sedimentary structures.
+        - hyvr.objects.trough.half_ellipsoid
+        - hyvr.objects.channel.channel
+        - hyvr.objects.sheet.sheet
+    - title: "Additional Tools"
+      desc: "Functions that provide additional tools for working with sedimentary structures."
       contents:
-        - tools.ferguson_curve
-        - tools.specsim_surface
-        - tools.contact_surface
+        - hyvr.tools.ferguson_curve
+        - hyvr.tools.specsim_surface
+        - hyvr.tools.contact_surface

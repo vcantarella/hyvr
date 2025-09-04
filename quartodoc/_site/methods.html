@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>HyVR</title>
+<title>HyVR - Computational methods</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +23,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,164 +67,215 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="fullcontent">
+<body class="nav-sidebar docked fullcontent">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">User Guide</a></li><li class="breadcrumb-item"><a href="./methods.html">Methods</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">HyVR</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">HyVR</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">User Guide</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./methods.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Examples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorials/simple_channel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Channel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorials/simple_lense.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Lense</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorials/more_complex_structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">More Complex Structure</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">API Reference</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./reference/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reference</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html">User Guide</a></li><li class="breadcrumb-item"><a href="./methods.html">Methods</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Computational methods</h1>
+</div>
 
 
 
-<section id="objects.sheet.sheet" class="level1">
-<h1>objects.sheet.sheet</h1>
-<p><code>sheet.sheet(f_array, dip_array, dip_dir_array, x, y, z, xmin, xmax, ymin, ymax, bottom_surface, top_surface, facies, internal_layering=False, alternating_facies=False, dip=0.0, dip_dir=0.0, layer_dist=0.0)</code></p>
-<p>Assigns a sheet to the grid points x,y,z. The sheet is a layer is defined by bounding x and y coordinates and top and bottom contacts. It may have internal layering (inclined or planar)</p>
-<section id="parameters" class="level2">
-<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>f_array</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td><code>dip_array</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td><code>dip_dir_array</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td><code>x</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td><code>xmin</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td><code>ymin</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td><code>bottom_surface</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td><code>top_surface</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td><code>facies</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td><code>internal_layering</code></td>
-<td></td>
-<td></td>
-<td><code>False</code></td>
-</tr>
-<tr class="odd">
-<td><code>alternating_facies</code></td>
-<td></td>
-<td></td>
-<td><code>False</code></td>
-</tr>
-<tr class="even">
-<td><code>dip</code></td>
-<td></td>
-<td></td>
-<td><code>0.0</code></td>
-</tr>
-<tr class="odd">
-<td><code>dip_dir</code></td>
-<td></td>
-<td></td>
-<td><code>0.0</code></td>
-</tr>
-<tr class="even">
-<td><code>follows</code></td>
-<td></td>
-<td></td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td><code>layer_dist</code></td>
-<td></td>
-<td></td>
-<td><code>0.0</code></td>
-</tr>
-</tbody>
-</table>
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Contrary to the original work, the user should build his/her model from a python script file. A detailed documentation of all the options can be found in the API reference. Ideally, major strata contact surfaces are generated first. Then architectural elements, and their internal heterogeneity are then generated inside the stratum accoding to some probability rule. Model building and grid assignment (facies, dip, dip direction) are done at the same time.</p>
+<p>Based on these values (facies, dip, dip direction), the user can create the hydralic parameters (porosity, isotropic hydraulic conductivity, full hydraulic conductivity tensor), and potentially heterogeneity in these parameters on the given level.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../docs/img/hfm.png" class="img-fluid figure-img"></p>
+<figcaption>Hierarchical modeling framework implemented in HyVR.</figcaption>
+</figure>
+</div>
+<p><em>Note that in this section model input parameters are denoted in the following manner:</em> <code>parameter-section.parameter</code>.</p>
+<hr>
+<section id="simulation-of-strata-and-architectural-element-contact-surfaces" class="level2">
+<h2 class="anchored" data-anchor-id="simulation-of-strata-and-architectural-element-contact-surfaces">Simulation of strata and architectural element contact surfaces</h2>
+<p>Strata are defined in the input parameter file by their bottom surface contact models and the architectural elements that are to be included within them. The top contact surface is then generated and all model cells between the upper and lower contact surface (which is the top of the next stratum) are assigned to the stratum.</p>
+<p>Random contact surfaces are generated using Multi-Gaussian spectral methods outlined by <em>Dietrich1993</em>. These methods require structural statistical parameters (i.e.&nbsp;mean and variance) for the quantity of interest, and a geostatistical covariance model. We used a Gaussian covariance model in the present study to produce smoothly varying surfaces:</p>
+<p><span class="math display">\[
+R_{ss}(h)=\sigma^2_s \exp\left[ - \left[ \frac{\Delta x}{\lambda}\right]^2 \right]
+\]</span></p>
+<p>where <span class="math inline">\(s\)</span> is the random quantity of interest, <span class="math inline">\(\sigma^2_s\)</span> is the variance of <span class="math inline">\(s\)</span> (here elevation), <span class="math inline">\(\Delta x\)</span> is the distance between the two points, and <span class="math inline">\(\lambda\)</span> is the correlation length.</p>
+<p>Unlike the original HyVR, the user must be able to select the grid cells and evaluate wether the cells are above or below the contact surface. This is easily done with numpy and can be seen in the examples.</p>
+<p>The user must also create rules (normally with probabilities) to assign architectural elements to a particular stratum. Usually, this starts with the random choice of an architectural element from those defined, given the probability of each architectural element being chosen. The thickness of the architectural element can be, for example, drawn from a random normal distribution. To account for the erosive nature of many sedimentary environments the algorithm may erode the underlying units (This is done by assigning an oject that intersect cells previously assigned to a previous unit). Thus the object creating order matters.</p>
+<hr>
 </section>
-<section id="returns" class="level2">
-<h2 class="anchored" data-anchor-id="returns">Returns</h2>
-<table class="table">
-<colgroup>
-<col style="width: 84%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Modifies the following arrays in place:</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>ndarray(int32) of the facies values at the coordinates (x,y,z)</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>ndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>ndarray(float32) of the dip-direction of the internal structure</td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<section id="simulation-of-hydrofacies-assemblages-and-hydrofacies-geometries" class="level2">
+<h2 class="anchored" data-anchor-id="simulation-of-hydrofacies-assemblages-and-hydrofacies-geometries">Simulation of hydrofacies assemblages and hydrofacies geometries</h2>
+<p>The simulation of individual hydrofacies assemblages is object-based. The user controls where to place the objects, for example one might use random placement of features within an architectural element. Object-based methods have been implemented widely in subsurface simulation <em>Jussel1994,Bennett2017</em> as they are generally computationally efficient and relatively easy to parameterize. The HyVR program approximates hydrofacies assemblages with simple geometric shapes. Currently, three shapes are supported: troughs (truncated ellipsoids), channels (extruded parabolas), and sheets. All feastures are ‘erosive’ hydrofacies assemblages, this means that they do not keep track of the previously assigned facies, the user must that themselves (see example). And therefore the architectural element (and strata) boundaries may be altered during the course of the simulation.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../docs/img/hyvr_geometries.png" class="img-fluid figure-img"></p>
+<figcaption>Geometries implemented in HyVR.</figcaption>
+</figure>
+</div>
+<p>Fo each object, different properties must be assigned, such as the placement and dimensions. One unique property is the facies code, which will be assigned by the function according to the facies assignment rules. <em>dip direction</em> <span class="math inline">\(\kappa\)</span> and <em>dip</em> <span class="math inline">\(\psi\)</span> may be created properties are associated with the bedding structure at each model grid cell and denote the angle of the bedding plane from the mean direction of flow and horizontal, respectively.</p>
+<section id="truncated-ellipsoids" class="level3">
+<h3 class="anchored" data-anchor-id="truncated-ellipsoids">Truncated ellipsoids</h3>
+<p>Truncated ellipsoids are generated as a proxy for trough-like or lenses features. The method for generating the boundaries of these features has been described previously in <em>Bennett2017</em>. The internal structure of truncated ellipsoids can be defined in the following ways:</p>
+<ul>
+<li>trough-wise homogeneous, with constant azimuth and dip;</li>
+<li>bulb-dip, with azimuth and dip values based on the three-dimensional gradient at the ellipsoid boundary (‘bulb dip’);</li>
+<li>bulb-sets, comprising nested alternating hydrofacies with <span class="math inline">\(\kappa\)</span> and <span class="math inline">\(\psi\)</span> values generated as for bulb-type;</li>
+</ul>
 
 
 </section>

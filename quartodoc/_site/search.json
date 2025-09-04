@@ -1,172 +1,45 @@
 [
   {
-    "objectID": "tutorials/simple_lense.html",
-    "href": "tutorials/simple_lense.html",
-    "title": "Simple Lense",
-    "section": "",
-    "text": "In this first tutorial, we are going to learn how HyVR works and how to create simple objects that represent sedimentary structures and add tehm to a simulation grid."
-  },
-  {
-    "objectID": "tutorials/simple_lense.html#creating-a-simulation-grid",
-    "href": "tutorials/simple_lense.html#creating-a-simulation-grid",
-    "title": "Simple Lense",
-    "section": "1. Creating a simulation grid",
-    "text": "1. Creating a simulation grid\nHyVR works with a 3D grid that represents the domain where the simulation will be performed. A simple way of doing that is to create a 3D numpy array where each cell contains the properties of the media and the sedimentary structures that are present in that cell. But any grid that can be reduced to a numpy array of cell coordinates can be used.\nSince we use MODFLOW a lot. The numpy grid is done with the axis according to the MODFLOW convention. That is, the first axis is the layer, the second is the row and the third is the column. Moreover, the first layer is the top layer and the last layer is the bottom layer, and the first row is the top row and the last row is the bottom row (like a matrix).\n\nimport numpy as np\n\n# creating a grid according to the MODFLOW convention\nxs = np.arange(0, 100.1, 0.5)\nys = np.arange(0, 80.1, 0.5)\nzs = np.arange(0, 20.1, 0.4)\nz, y, x = np.meshgrid(zs, ys, xs, indexing=\"ij\")\nz = np.flip(z, axis=0)\ny = np.flip(y, axis=1)"
-  },
-  {
-    "objectID": "tutorials/simple_lense.html#initialize-the-sedimentary-attribute-arrays",
-    "href": "tutorials/simple_lense.html#initialize-the-sedimentary-attribute-arrays",
-    "title": "Simple Lense",
-    "section": "2. Initialize the sedimentary attribute arrays",
-    "text": "2. Initialize the sedimentary attribute arrays\nThe objects that we simulate define a certain structure. This structure in a cell can be represented by the attributes: - facies: the sedimentary facies assigned to each cell - dip: the dip of the sedimentary structure - dip_direction: the dip direction of the sedimentary structure\nSince we modify these attributes in place when we create an object, we have to initialize these objects before. We can do that by creating a numpy array with the same shape as the simulation grid. The facies is an integer array with the facies code. (-1) facies code is used to represent a non assigned cell. The dip and dip_direction are float arrays with the dip and dip direction of the sedimentary structure in degrees.\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)"
-  },
-  {
-    "objectID": "tutorials/simple_lense.html#create-a-simple-lense-that-modifies-the-attribute-arrays",
-    "href": "tutorials/simple_lense.html#create-a-simple-lense-that-modifies-the-attribute-arrays",
-    "title": "Simple Lense",
-    "section": "3. Create a simple lense that modifies the attribute arrays",
-    "text": "3. Create a simple lense that modifies the attribute arrays\nA discontinuous sedimentary lens can be represented by a half-ellipsoid object. This object is the lower part of an ellipsoid cut in half in the horizontal direction. Itis defined by the center of the ellipsoid, the major and minor axis, in the horizontal direction and the height in the vertical direction, and the azimuth of the major axis.\n\nfrom hyvr import half_ellipsoid\n\ncentercoord = np.array([50, 40, 19])\ndims = np.array([40, 20, 10])\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1]),\n)"
-  },
-  {
-    "objectID": "tutorials/simple_lense.html#plotting",
-    "href": "tutorials/simple_lense.html#plotting",
-    "title": "Simple Lense",
-    "section": "Plotting",
-    "text": "Plotting\n\nimport matplotlib.pyplot as plt\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\nax.scatter(x[facies == 1], y[facies == 1], z[facies == 1], c=\"r\", marker=\"o\")\nax.view_init(elev=40, azim=275)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()"
-  },
-  {
-    "objectID": "tutorials/simple_lense.html#more-complex-lense-with-internal-structure",
-    "href": "tutorials/simple_lense.html#more-complex-lense-with-internal-structure",
-    "title": "Simple Lense",
-    "section": "4. More complex lense with internal structure",
-    "text": "4. More complex lense with internal structure\nThat was very simple and can represent a discontinuous clay lense for example. But other sedimentary process may be more heterogeneous. One way to represent that is to create a lense with internal structure. This can be done by creating a lense with a different facies inside it. with different angles of dip and dip direction. Lets see the examples of the two types of internal structures implemented in HyVR.\n\n4.1. Lense with internal layering\nWe know specify the internal structure in the half-ellipsoid function with the following arguments:\n\nfacies: a numpy array with the internal facies that will be assigned with the object\ninternal_layering: boolean that specifies if the internal structure is layering or not\nalternating_facies: boolean that specifies if the internal structure is alternating sequence of facies or, if False, it is a random sequence of facies.\nbulb: boolean that specifies if, True, the internal structure is a bulb or a layering (Defaults is false).\nlayer_dist: a float that specifies the distance between the layers in the internal structure.\ndip_dir: a float that specifies the dip direction of the internal structure.\ndip: a float that specifies the dip of the internal structure.\n\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1, 2, 3]),\n    internal_layering=True,\n    alternating_facies=True,\n    bulb=False,\n    layer_dist=3,\n    dip_dir=20.0,\n    dip=25.0,\n)\n\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\n# facies = facies.flatten()\ncolors = np.where(\n    facies == 1, \"r\", np.where(facies == 2, \"g\", np.where(facies == 3, \"b\", \"k\"))\n)\nax.scatter(\n    x[facies != -1],\n    y[facies != -1],\n    z[facies != -1],\n    c=colors[facies != -1],\n    marker=\"o\",\n)\nax.view_init(elev=10, azim=145)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()"
-  },
-  {
-    "objectID": "tutorials/simple_lense.html#bulb-structure",
-    "href": "tutorials/simple_lense.html#bulb-structure",
-    "title": "Simple Lense",
-    "section": "Bulb structure",
-    "text": "Bulb structure\nSome sedimentary features have bulb structures that can also be modelled with HyVR. The following arguments are used to specify the bulb structure:\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1, 2, 3]),\n    internal_layering=True,\n    alternating_facies=True,\n    bulb=True,\n    layer_dist=4,\n    dip_dir=20.0,\n)\n\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\n# facies = facies.flatten()\ncolors = np.where(\n    facies == 1, \"r\", np.where(facies == 2, \"g\", np.where(facies == 3, \"b\", \"k\"))\n)\nax.scatter(\n    x[facies != -1],\n    y[facies != -1],\n    z[facies != -1],\n    c=colors[facies != -1],\n    marker=\"o\",\n)\nax.view_init(elev=10, azim=180)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()"
-  },
-  {
-    "objectID": "tutorials/more_complex_structure.html",
-    "href": "tutorials/more_complex_structure.html",
-    "title": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
-    "section": "",
-    "text": "import numpy as np\nnp.random.seed(37893)\nmin_thick = 0\nn = 10\nsimulated_thickness = 20\nwhile min_thick &lt; 0.3:\n    zs = np.random.uniform(0, simulated_thickness, size=n - 1)\n    ordered_zs = np.sort(zs)\n    ordered_zs = np.append(ordered_zs, simulated_thickness)\n    ordered_zs = np.append(0, ordered_zs)\n    thicknesses = np.diff(ordered_zs)\n    min_thick = np.min(thicknesses)\nprint(f\"The thickness array is:{thicknesses})\")\nprint(f\"The minimum thickness is:{min_thick}\")\nprint(f\"The total thickness is:{np.sum(thicknesses)}\")\nprint(f\"The mean thickness is:{np.mean(thicknesses)}\")\nprint(f\"The number of layers is:{len(thicknesses)}\")\n\nThe thickness array is:[2.0682547  3.9534124  2.29212944 0.79664357 1.42553114 0.59364403\n 1.21076477 4.53873408 0.68882167 2.4320642 ])\nThe minimum thickness is:0.5936440340197162\nThe total thickness is:20.0\nThe mean thickness is:2.0\nTHe number of layers is:10"
-  },
-  {
-    "objectID": "tutorials/more_complex_structure.html#create-a-complex-algorithm-that-represent-a-certain-environment",
-    "href": "tutorials/more_complex_structure.html#create-a-complex-algorithm-that-represent-a-certain-environment",
-    "title": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
-    "section": "Create a complex algorithm that represent a certain environment:",
-    "text": "Create a complex algorithm that represent a certain environment:\n\nfrom hyvr import channel, half_ellipsoid\nfrom hyvr.tools import ferguson_curve\nfrom hyvr.utils import min_distance\n\nz0 = 0.0\nP = np.column_stack([x[0, :, :].ravel(), y[0, :, :].ravel()])\nfor thick in thicknesses:\n    # creating anastamosing channel pattern:\n    main_channels = []\n    channels = []\n    for i in range(6):\n        ystart = np.random.uniform(0, 600)\n        channel_curve = ferguson_curve(\n            h=0.3,\n            k=np.pi / 200,\n            eps_factor=(np.pi / 1.5) ** 2,\n            flow_angle=0.0,\n            s_max=1500,\n            xstart=-500,\n            ystart=ystart,\n        )\n        main_channels.append(channel_curve)\n        indexes = np.random.choice(\n            np.arange(channel_curve[0].shape[0]), size=4, replace=False\n        )\n        xstart = channel_curve[0][indexes]\n        ystart = channel_curve[1][indexes]\n        for xp, yp in zip(xstart, ystart):\n            channel_derived_channel = ferguson_curve(\n                h=0.3,\n                k=np.pi / 200,\n                eps_factor=(np.pi / 1.5) ** 2,\n                flow_angle=np.random.uniform(-np.pi / 18, np.pi / 18),\n                s_max=1000,\n                xstart=xp,\n                ystart=yp,\n            )\n            channels.append(channel_derived_channel)\n    total_channels = main_channels + channels\n    min_distance_array = np.zeros((P.shape[0], len(total_channels)))\n    for i, channel_ in enumerate(total_channels):\n        min_distance_array[:, i], _ = min_distance(channel_[0], channel_[1], P)\n    # cut the proportion to 30 % of the cells in the x, y plane\n    min_arr = min_distance_array.min(axis=1)\n    # Assuming `min_array` and `t` are already defined\n    # Get the sorted indices of t\n    sorted_indices = np.argsort(min_arr)\n    # Calculate the number of indices to select (30% of the total)\n    num_indices = int(len(sorted_indices) * 0.3)\n    # Select the last 30% of the indices\n    selected_indices = sorted_indices[-num_indices:]\n\n    primitive = np.ones_like(min_arr, dtype=np.int32) * 7\n    primitive = np.ravel(primitive)\n    primitive[selected_indices] = 6\n    primitive = primitive.reshape(z.shape[1], z.shape[2])\n    z_ = z[:, 0, 0]\n    for i in range(z_.shape[0]):\n        if z_[i] &gt;= z0:\n            facies[i, :, :] = primitive\n    print(f\"Finished the primitive of layer {z0 + thick}\")\n    ## Adding ponds:\n    p_ponds = 0\n    logic_tufa = (z &gt;= z0) & (z &lt;= z0 + thick)\n    while p_ponds &lt; 0.30:\n        x_c = np.random.uniform(0, 900)\n        y_c = np.random.uniform(0, 600)\n        z_c = z0 + thick + np.random.uniform(0, 0.1)\n        a = np.random.uniform(50, 80)\n        b = np.random.uniform(30, 60)\n        c = thick\n        azim = np.random.uniform(20, -20)\n        half_ellipsoid(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            center_coords=np.array([x_c, y_c, z_c]),\n            dims=np.array([a, b, c]),\n            azim=azim,\n            facies=np.array([2]),\n        )\n        # k[facies_trough != -1] = np.random.lognormal(mu_tufa, sigma=sigma_tufa)\n        p_ponds = np.sum(facies[logic_tufa] == 2) / np.sum(logic_tufa)\n    print(f\"Finished ponds in layer {z0 + thick}\")\n    ## Adding the channels, the ponds and the peat lenses\n    for channel_ in main_channels:\n        channel(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            z_top=z0 + thick,\n            curve=np.c_[channel_[0], channel_[1]],\n            parabola_pars=np.array([30, thick]),\n            facies=np.array([4]),\n        )\n    for channel_ in channels:\n        channel(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            z_top=z0 + thick,\n            curve=np.c_[channel_[0], channel_[1]],\n            parabola_pars=np.array([20, thick]),\n            facies=np.array([4]),\n        )\n    print(f\"Finished channels in layer {z0 + thick}\")\n    ## assiging peat to areas close to water bodies:\n    water_bodies = (facies == 2) | (facies == 4)\n    z_ = z[:, 0, 0]\n    ind = np.where(z_ &lt;= z0 + thick)\n    layer = np.min(ind[0])\n    layer\n    water_bodies = water_bodies[layer, :, :]\n    xs = x[layer, :, :][water_bodies]\n    ys = x[layer, :, :][water_bodies]\n    xs.shape\n    ys.shape\n    index_ = np.random.choice(np.arange(0, xs.shape[0]))\n    ## Adding peat lenses:\n    p_peat = 0\n    if thick &gt; 0.4:\n        c = 0.4\n    else:\n        c = thick\n    while p_peat &lt; 0.20:\n        index_ = np.random.choice(np.arange(0, xs.shape[0]))\n        x_c = xs[index_]\n        y_c = ys[index_]\n        z_c = z0 + thick\n        a = np.random.uniform(30, 60)\n        b = np.random.uniform(20, 40)\n        c = c\n        azim = np.random.uniform(-20, 20)\n        facies_code = np.random.choice([8, 9])\n        half_ellipsoid(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            center_coords=np.array([x_c, y_c, z_c]),\n            dims=np.array([a, b, c]),\n            azim=azim,\n            facies=np.array([facies_code]),\n        )\n        # k[facies_trough != -1] = np.random.lognormal(mu_tufa, sigma=sigma_tufa)\n        logic_tufa = (z &gt;= z0 + thick - c) & (z &lt;= z0 + thick)\n        p_peat = np.sum(facies[logic_tufa] == facies_code) / np.sum(logic_tufa)\n    print(f\"Finished the layer {z0 + thick}\")\n    # resetting z_0:\n    z0 += thick\n\nFinished the primitive of layer 2.0682546963182324\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 2.0682546963182324\nFinished channels in layer 2.0682546963182324\nFinished the layer 2.0682546963182324\nFinished the primitive of layer 6.021667098997843\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 6.021667098997843\nFinished channels in layer 6.021667098997843\nFinished the layer 6.021667098997843\nFinished the primitive of layer 8.31379653524133\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 8.31379653524133\nFinished channels in layer 8.31379653524133\nFinished the layer 8.31379653524133\nFinished the primitive of layer 9.11044010573822\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 9.11044010573822\nFinished channels in layer 9.11044010573822\nFinished the layer 9.11044010573822\nFinished the primitive of layer 10.535971242587879\nNo points inside the ellipsoid\nFinished ponds in layer 10.535971242587879\nFinished channels in layer 10.535971242587879\nFinished the layer 10.535971242587879\nFinished the primitive of layer 11.129615276607595\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 11.129615276607595\nFinished channels in layer 11.129615276607595\nNo points inside the ellipsoid\nFinished the layer 11.129615276607595\nFinished the primitive of layer 12.340380049586386\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 12.340380049586386\nFinished channels in layer 12.340380049586386\nFinished the layer 12.340380049586386\nFinished the primitive of layer 16.87911413060696\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 16.87911413060696\nFinished channels in layer 16.87911413060696\nFinished the layer 16.87911413060696\nFinished the primitive of layer 17.567935804686865\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 17.567935804686865\nFinished channels in layer 17.567935804686865\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished the layer 17.567935804686865\nFinished the primitive of layer 20.0\nFinished ponds in layer 20.0\nFinished channels in layer 20.0\nFinished the layer 20.0"
-  },
-  {
-    "objectID": "tutorials/more_complex_structure.html#visualizing-the-results",
-    "href": "tutorials/more_complex_structure.html#visualizing-the-results",
-    "title": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
-    "section": "Visualizing the Results",
-    "text": "Visualizing the Results\n\nimport matplotlib.pyplot as plt\n\nfig, ax = plt.subplots(2, 2, figsize=(10, 10))\nax[0, 0].imshow(facies[int(facies.shape[0] / 2), :, :], origin=\"lower\")\nax[0, 0].set_title(\"Planar view middle section\")\nax[0, 1].imshow(facies[:, int(facies.shape[1] / 2), :], origin=\"lower\")\nax[0, 1].set_title(\"Crossectional view middle column cross-section\")\nax[1, 0].imshow(facies[:, :, int(facies.shape[2] / 2)], origin=\"lower\")\nax[1, 0].set_title(\"Longitudinal view middle row cross-section\")\n# 3D view\nax3d = fig.add_subplot(224, projection=\"3d\")\nax3d.scatter(\n    x.ravel(), y.ravel(), z.ravel(), c=facies.ravel(), cmap=\"viridis\", marker=\".\"\n)\nax3d.set_title(\"3D view of the grid\")\nax3d.set_xlabel(\"X\")\nax3d.set_ylabel(\"Y\")\nax3d.set_zlabel(\"Z\")\n\nText(0.5, 0, 'Z')"
-  },
-  {
-    "objectID": "reference/tools.ferguson_curve.html",
-    "href": "reference/tools.ferguson_curve.html",
-    "title": "tools.ferguson_curve",
-    "section": "",
-    "text": "ferguson_curve(h, k, eps_factor, flow_angle, s_max, xstart, ystart, extra_noise=0.0)\nSimulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model Implementation of AR2 autoregressive model http://onlinelibrary.wiley.com/doi/10.1002/esp.3290010403/full\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nh\nfloat\nHeight (Ferguson model parameter)\nrequired\n\n\nk\nfloat\nWave number (Ferguson model parameter)\nrequired\n\n\neps_factor\nfloat\nRandom background noise (Ferguson model parameter)\nrequired\n\n\nflow_angle\nfloat\nAngle of mean flow direction, in radians\nrequired\n\n\ns_max\nfloat\nLength of the domain in mean flow direction\nrequired\n\n\nxstart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nystart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nextra_noise\nfloat\nsmall error added to the covariance matrix to avoid singular matrix in the underlying Gaussian error curve\n0.0\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nfloat matrix\nSimulated extruded parabola centerlines: storage array containing values for x coordinate, y coordinate, vx and vy",
-    "crumbs": [
-      "Additional Tools",
-      "tools.ferguson_curve"
-    ]
-  },
-  {
-    "objectID": "reference/tools.ferguson_curve.html#parameters",
-    "href": "reference/tools.ferguson_curve.html#parameters",
-    "title": "tools.ferguson_curve",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nh\nfloat\nHeight (Ferguson model parameter)\nrequired\n\n\nk\nfloat\nWave number (Ferguson model parameter)\nrequired\n\n\neps_factor\nfloat\nRandom background noise (Ferguson model parameter)\nrequired\n\n\nflow_angle\nfloat\nAngle of mean flow direction, in radians\nrequired\n\n\ns_max\nfloat\nLength of the domain in mean flow direction\nrequired\n\n\nxstart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nystart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nextra_noise\nfloat\nsmall error added to the covariance matrix to avoid singular matrix in the underlying Gaussian error curve\n0.0",
-    "crumbs": [
-      "Additional Tools",
-      "tools.ferguson_curve"
-    ]
-  },
-  {
-    "objectID": "reference/tools.ferguson_curve.html#returns",
-    "href": "reference/tools.ferguson_curve.html#returns",
-    "title": "tools.ferguson_curve",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nfloat matrix\nSimulated extruded parabola centerlines: storage array containing values for x coordinate, y coordinate, vx and vy",
-    "crumbs": [
-      "Additional Tools",
-      "tools.ferguson_curve"
-    ]
-  },
-  {
-    "objectID": "reference/objects.trough.half_ellipsoid.html",
-    "href": "reference/objects.trough.half_ellipsoid.html",
-    "title": "objects.trough.half_ellipsoid",
-    "section": "",
-    "text": "trough.half_ellipsoid(f_array, dip_array, dip_dir_array, x, y, z, center_coords, dims, azim, facies, internal_layering=False, alternating_facies=False, bulb=False, dip=0.0, dip_dir=0.0, layer_dist=0.0)\nAssigns a half ellipsoid (trough) to the grid points x,y,z. Half ellipsoid is the lower half of an ellipsoid, defined by its center, dimensions and azimuth. It can be used to model discrete lenses, trough structure, scour pool fills, etc.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\ncenter_coords\n\n\nrequired\n\n\ndims\n\n\nrequired\n\n\nazim\n\nIt follows the mathematical convention, anticlockwise from east.\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\nbulb\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.trough.half_ellipsoid"
-    ]
-  },
-  {
-    "objectID": "reference/objects.trough.half_ellipsoid.html#parameters",
-    "href": "reference/objects.trough.half_ellipsoid.html#parameters",
-    "title": "objects.trough.half_ellipsoid",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\ncenter_coords\n\n\nrequired\n\n\ndims\n\n\nrequired\n\n\nazim\n\nIt follows the mathematical convention, anticlockwise from east.\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\nbulb\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.trough.half_ellipsoid"
-    ]
-  },
-  {
-    "objectID": "reference/objects.trough.half_ellipsoid.html#returns",
-    "href": "reference/objects.trough.half_ellipsoid.html#returns",
-    "title": "objects.trough.half_ellipsoid",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.trough.half_ellipsoid"
-    ]
-  },
-  {
     "objectID": "reference/objects.channel.channel.html",
     "href": "reference/objects.channel.channel.html",
     "title": "objects.channel.channel",
     "section": "",
-    "text": "channel.channel(f_array, dip_array, dip_dir_array, x, y, z, z_top, curve, parabola_pars, facies, internal_layering=False, alternating_facies=False, dip=0.0, layer_dist=0.0)\nAssigns a channel to the grid points x,y,z. The channel is defined by a curve, which represents the trajectory of the channel and a parabola, which defines the cross section. Besides, it may have internal structure (Not currently implemented).\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nz_top\n\n\nrequired\n\n\ncurve\n\n\nrequired\n\n\nIn\n\n\nrequired\n\n\nparabola_pars\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\nlayer_dist\n\n\n0.0\n\n\nfacies\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.channel.channel"
-    ]
+    "text": "channel.channel(f_array, dip_array, dip_dir_array, x, y, z, z_top, curve, parabola_pars, facies, internal_layering=False, alternating_facies=False, dip=0.0, layer_dist=0.0)\nAssigns a channel to the grid points x,y,z. The channel is defined by a curve, which represents the trajectory of the channel and a parabola, which defines the cross section. Besides, it may have internal structure (Not currently implemented).\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nz_top\n\n\nrequired\n\n\ncurve\n\n\nrequired\n\n\nIn\n\n\nrequired\n\n\nparabola_pars\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\nlayer_dist\n\n\n0.0\n\n\nfacies\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure"
   },
   {
     "objectID": "reference/objects.channel.channel.html#parameters",
     "href": "reference/objects.channel.channel.html#parameters",
     "title": "objects.channel.channel",
     "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nz_top\n\n\nrequired\n\n\ncurve\n\n\nrequired\n\n\nIn\n\n\nrequired\n\n\nparabola_pars\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\nlayer_dist\n\n\n0.0\n\n\nfacies\n\n\nrequired",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.channel.channel"
-    ]
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nz_top\n\n\nrequired\n\n\ncurve\n\n\nrequired\n\n\nIn\n\n\nrequired\n\n\nparabola_pars\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\nlayer_dist\n\n\n0.0\n\n\nfacies\n\n\nrequired"
   },
   {
     "objectID": "reference/objects.channel.channel.html#returns",
     "href": "reference/objects.channel.channel.html#returns",
     "title": "objects.channel.channel",
     "section": "",
-    "text": "Type\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.channel.channel"
-    ]
+    "text": "Type\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure"
+  },
+  {
+    "objectID": "reference/objects.sheet.sheet.html",
+    "href": "reference/objects.sheet.sheet.html",
+    "title": "objects.sheet.sheet",
+    "section": "",
+    "text": "sheet.sheet(f_array, dip_array, dip_dir_array, x, y, z, xmin, xmax, ymin, ymax, bottom_surface, top_surface, facies, internal_layering=False, alternating_facies=False, dip=0.0, dip_dir=0.0, layer_dist=0.0)\nAssigns a sheet to the grid points x,y,z. The sheet is a layer is defined by bounding x and y coordinates and top and bottom contacts. It may have internal layering (inclined or planar)\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nxmin\n\n\nrequired\n\n\nymin\n\n\nrequired\n\n\nbottom_surface\n\n\nrequired\n\n\ntop_surface\n\n\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure"
+  },
+  {
+    "objectID": "reference/objects.sheet.sheet.html#parameters",
+    "href": "reference/objects.sheet.sheet.html#parameters",
+    "title": "objects.sheet.sheet",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nxmin\n\n\nrequired\n\n\nymin\n\n\nrequired\n\n\nbottom_surface\n\n\nrequired\n\n\ntop_surface\n\n\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0"
+  },
+  {
+    "objectID": "reference/objects.sheet.sheet.html#returns",
+    "href": "reference/objects.sheet.sheet.html#returns",
+    "title": "objects.sheet.sheet",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure"
   },
   {
     "objectID": "reference/index.html",
@@ -175,7 +48,8 @@
     "section": "",
     "text": "Functions that create objects representing sedimentary structures according of object-based sedimentary structure modelling framework.\n\n\n\nobjects.trough.half_ellipsoid\nAssigns a half ellipsoid (trough) to the grid points x,y,z.\n\n\nobjects.channel.channel\nAssigns a channel to the grid points x,y,z.\n\n\nobjects.sheet.sheet\nAssigns a sheet to the grid points x,y,z.\n\n\n\n\n\n\nFunctions that provide additional tools for working with sedimentary structures.\n\n\n\ntools.ferguson_curve\nSimulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model\n\n\ntools.specsim_surface\nCreates gaussian random surface with mean value and variance input\n\n\ntools.contact_surface\nCreates gaussian random contact surface with mean value and variance input",
     "crumbs": [
-      "Function reference"
+      "API Reference",
+      "Reference"
     ]
   },
   {
@@ -185,7 +59,8 @@
     "section": "",
     "text": "Functions that create objects representing sedimentary structures according of object-based sedimentary structure modelling framework.\n\n\n\nobjects.trough.half_ellipsoid\nAssigns a half ellipsoid (trough) to the grid points x,y,z.\n\n\nobjects.channel.channel\nAssigns a channel to the grid points x,y,z.\n\n\nobjects.sheet.sheet\nAssigns a sheet to the grid points x,y,z.",
     "crumbs": [
-      "Function reference"
+      "API Reference",
+      "Reference"
     ]
   },
   {
@@ -195,40 +70,8 @@
     "section": "",
     "text": "Functions that provide additional tools for working with sedimentary structures.\n\n\n\ntools.ferguson_curve\nSimulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model\n\n\ntools.specsim_surface\nCreates gaussian random surface with mean value and variance input\n\n\ntools.contact_surface\nCreates gaussian random contact surface with mean value and variance input",
     "crumbs": [
-      "Function reference"
-    ]
-  },
-  {
-    "objectID": "reference/objects.sheet.sheet.html",
-    "href": "reference/objects.sheet.sheet.html",
-    "title": "objects.sheet.sheet",
-    "section": "",
-    "text": "sheet.sheet(f_array, dip_array, dip_dir_array, x, y, z, xmin, xmax, ymin, ymax, bottom_surface, top_surface, facies, internal_layering=False, alternating_facies=False, dip=0.0, dip_dir=0.0, layer_dist=0.0)\nAssigns a sheet to the grid points x,y,z. The sheet is a layer is defined by bounding x and y coordinates and top and bottom contacts. It may have internal layering (inclined or planar)\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nxmin\n\n\nrequired\n\n\nymin\n\n\nrequired\n\n\nbottom_surface\n\n\nrequired\n\n\ntop_surface\n\n\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.sheet.sheet"
-    ]
-  },
-  {
-    "objectID": "reference/objects.sheet.sheet.html#parameters",
-    "href": "reference/objects.sheet.sheet.html#parameters",
-    "title": "objects.sheet.sheet",
-    "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\nxmin\n\n\nrequired\n\n\nymin\n\n\nrequired\n\n\nbottom_surface\n\n\nrequired\n\n\ntop_surface\n\n\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.sheet.sheet"
-    ]
-  },
-  {
-    "objectID": "reference/objects.sheet.sheet.html#returns",
-    "href": "reference/objects.sheet.sheet.html#returns",
-    "title": "objects.sheet.sheet",
-    "section": "",
-    "text": "Type\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure",
-    "crumbs": [
-      "Sedimentary Structure objects",
-      "objects.sheet.sheet"
+      "API Reference",
+      "Reference"
     ]
   },
   {
@@ -236,65 +79,151 @@
     "href": "reference/tools.contact_surface.html",
     "title": "tools.contact_surface",
     "section": "",
-    "text": "contact_surface(x, y, mean, var, corl, mask=None)\nCreates gaussian random contact surface with mean value and variance input with the spectral method from Dietrich & Newsam (1993).\n\n\nx,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface",
-    "crumbs": [
-      "Additional Tools",
-      "tools.contact_surface"
-    ]
+    "text": "contact_surface(x, y, mean, var, corl, mask=None)\nCreates gaussian random contact surface with mean value and variance input with the spectral method from Dietrich & Newsam (1993).\n\n\nx,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface"
   },
   {
     "objectID": "reference/tools.contact_surface.html#parameters",
     "href": "reference/tools.contact_surface.html#parameters",
     "title": "tools.contact_surface",
     "section": "",
-    "text": "x,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)",
-    "crumbs": [
-      "Additional Tools",
-      "tools.contact_surface"
-    ]
+    "text": "x,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)"
   },
   {
     "objectID": "reference/tools.contact_surface.html#returns",
     "href": "reference/tools.contact_surface.html#returns",
     "title": "tools.contact_surface",
     "section": "",
-    "text": "Type\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface",
+    "text": "Type\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface"
+  },
+  {
+    "objectID": "tutorials/simple_lense.html",
+    "href": "tutorials/simple_lense.html",
+    "title": "Simple Lense",
+    "section": "",
+    "text": "In this first tutorial, we are going to learn how HyVR works and how to create simple objects that represent sedimentary structures and add tehm to a simulation grid.\n\n\nHyVR works with a 3D grid that represents the domain where the simulation will be performed. A simple way of doing that is to create a 3D numpy array where each cell contains the properties of the media and the sedimentary structures that are present in that cell. But any grid that can be reduced to a numpy array of cell coordinates can be used.\nSince we use MODFLOW a lot. The numpy grid is done with the axis according to the MODFLOW convention. That is, the first axis is the layer, the second is the row and the third is the column. Moreover, the first layer is the top layer and the last layer is the bottom layer, and the first row is the top row and the last row is the bottom row (like a matrix).\n\nimport numpy as np\n\n# creating a grid according to the MODFLOW convention\nxs = np.arange(0, 100.1, 0.5)\nys = np.arange(0, 80.1, 0.5)\nzs = np.arange(0, 20.1, 0.4)\nz, y, x = np.meshgrid(zs, ys, xs, indexing=\"ij\")\nz = np.flip(z, axis=0)\ny = np.flip(y, axis=1)\n\n\n\n\nThe objects that we simulate define a certain structure. This structure in a cell can be represented by the attributes: - facies: the sedimentary facies assigned to each cell - dip: the dip of the sedimentary structure - dip_direction: the dip direction of the sedimentary structure\nSince we modify these attributes in place when we create an object, we have to initialize these objects before. We can do that by creating a numpy array with the same shape as the simulation grid. The facies is an integer array with the facies code. (-1) facies code is used to represent a non assigned cell. The dip and dip_direction are float arrays with the dip and dip direction of the sedimentary structure in degrees.\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\n\n\n\n\nA discontinuous sedimentary lens can be represented by a half-ellipsoid object. This object is the lower part of an ellipsoid cut in half in the horizontal direction. Itis defined by the center of the ellipsoid, the major and minor axis, in the horizontal direction and the height in the vertical direction, and the azimuth of the major axis.\n\nfrom hyvr import half_ellipsoid\n\ncentercoord = np.array([50, 40, 19])\ndims = np.array([40, 20, 10])\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1]),\n)\n\n\n\n\n\nimport matplotlib.pyplot as plt\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\nax.scatter(x[facies == 1], y[facies == 1], z[facies == 1], c=\"r\", marker=\"o\")\nax.view_init(elev=40, azim=275)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()\n\n\n\n\n\n\n\n\n\n\n\nThat was very simple and can represent a discontinuous clay lense for example. But other sedimentary process may be more heterogeneous. One way to represent that is to create a lense with internal structure. This can be done by creating a lense with a different facies inside it. with different angles of dip and dip direction. Lets see the examples of the two types of internal structures implemented in HyVR.\n\n\nWe know specify the internal structure in the half-ellipsoid function with the following arguments:\n\nfacies: a numpy array with the internal facies that will be assigned with the object\ninternal_layering: boolean that specifies if the internal structure is layering or not\nalternating_facies: boolean that specifies if the internal structure is alternating sequence of facies or, if False, it is a random sequence of facies.\nbulb: boolean that specifies if, True, the internal structure is a bulb or a layering (Defaults is false).\nlayer_dist: a float that specifies the distance between the layers in the internal structure.\ndip_dir: a float that specifies the dip direction of the internal structure.\ndip: a float that specifies the dip of the internal structure.\n\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1, 2, 3]),\n    internal_layering=True,\n    alternating_facies=True,\n    bulb=False,\n    layer_dist=3,\n    dip_dir=20.0,\n    dip=25.0,\n)\n\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\n# facies = facies.flatten()\ncolors = np.where(\n    facies == 1, \"r\", np.where(facies == 2, \"g\", np.where(facies == 3, \"b\", \"k\"))\n)\nax.scatter(\n    x[facies != -1],\n    y[facies != -1],\n    z[facies != -1],\n    c=colors[facies != -1],\n    marker=\"o\",\n)\nax.view_init(elev=10, azim=145)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()\n\n\n\n\n\n\n\n\n\n\n\n\nSome sedimentary features have bulb structures that can also be modelled with HyVR. The following arguments are used to specify the bulb structure:\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1, 2, 3]),\n    internal_layering=True,\n    alternating_facies=True,\n    bulb=True,\n    layer_dist=4,\n    dip_dir=20.0,\n)\n\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\n# facies = facies.flatten()\ncolors = np.where(\n    facies == 1, \"r\", np.where(facies == 2, \"g\", np.where(facies == 3, \"b\", \"k\"))\n)\nax.scatter(\n    x[facies != -1],\n    y[facies != -1],\n    z[facies != -1],\n    c=colors[facies != -1],\n    marker=\"o\",\n)\nax.view_init(elev=10, azim=180)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()",
     "crumbs": [
-      "Additional Tools",
-      "tools.contact_surface"
+      "Examples",
+      "Simple Lense"
     ]
   },
   {
-    "objectID": "reference/tools.specsim_surface.html",
-    "href": "reference/tools.specsim_surface.html",
-    "title": "tools.specsim_surface",
+    "objectID": "tutorials/simple_lense.html#creating-a-simulation-grid",
+    "href": "tutorials/simple_lense.html#creating-a-simulation-grid",
+    "title": "Simple Lense",
     "section": "",
-    "text": "specsim_surface(x, y, mean, var, corl, mask=None)\nCreates gaussian random surface with mean value and variance input with the spectral method from Dietrich & Newsam (1993).\n\n\nx,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface",
+    "text": "HyVR works with a 3D grid that represents the domain where the simulation will be performed. A simple way of doing that is to create a 3D numpy array where each cell contains the properties of the media and the sedimentary structures that are present in that cell. But any grid that can be reduced to a numpy array of cell coordinates can be used.\nSince we use MODFLOW a lot. The numpy grid is done with the axis according to the MODFLOW convention. That is, the first axis is the layer, the second is the row and the third is the column. Moreover, the first layer is the top layer and the last layer is the bottom layer, and the first row is the top row and the last row is the bottom row (like a matrix).\n\nimport numpy as np\n\n# creating a grid according to the MODFLOW convention\nxs = np.arange(0, 100.1, 0.5)\nys = np.arange(0, 80.1, 0.5)\nzs = np.arange(0, 20.1, 0.4)\nz, y, x = np.meshgrid(zs, ys, xs, indexing=\"ij\")\nz = np.flip(z, axis=0)\ny = np.flip(y, axis=1)",
     "crumbs": [
-      "Additional Tools",
-      "tools.specsim_surface"
+      "Examples",
+      "Simple Lense"
     ]
   },
   {
-    "objectID": "reference/tools.specsim_surface.html#parameters",
-    "href": "reference/tools.specsim_surface.html#parameters",
-    "title": "tools.specsim_surface",
+    "objectID": "tutorials/simple_lense.html#initialize-the-sedimentary-attribute-arrays",
+    "href": "tutorials/simple_lense.html#initialize-the-sedimentary-attribute-arrays",
+    "title": "Simple Lense",
     "section": "",
-    "text": "x,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)",
+    "text": "The objects that we simulate define a certain structure. This structure in a cell can be represented by the attributes: - facies: the sedimentary facies assigned to each cell - dip: the dip of the sedimentary structure - dip_direction: the dip direction of the sedimentary structure\nSince we modify these attributes in place when we create an object, we have to initialize these objects before. We can do that by creating a numpy array with the same shape as the simulation grid. The facies is an integer array with the facies code. (-1) facies code is used to represent a non assigned cell. The dip and dip_direction are float arrays with the dip and dip direction of the sedimentary structure in degrees.\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)",
     "crumbs": [
-      "Additional Tools",
-      "tools.specsim_surface"
+      "Examples",
+      "Simple Lense"
     ]
   },
   {
-    "objectID": "reference/tools.specsim_surface.html#returns",
-    "href": "reference/tools.specsim_surface.html#returns",
-    "title": "tools.specsim_surface",
+    "objectID": "tutorials/simple_lense.html#create-a-simple-lense-that-modifies-the-attribute-arrays",
+    "href": "tutorials/simple_lense.html#create-a-simple-lense-that-modifies-the-attribute-arrays",
+    "title": "Simple Lense",
     "section": "",
-    "text": "Type\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface",
+    "text": "A discontinuous sedimentary lens can be represented by a half-ellipsoid object. This object is the lower part of an ellipsoid cut in half in the horizontal direction. Itis defined by the center of the ellipsoid, the major and minor axis, in the horizontal direction and the height in the vertical direction, and the azimuth of the major axis.\n\nfrom hyvr import half_ellipsoid\n\ncentercoord = np.array([50, 40, 19])\ndims = np.array([40, 20, 10])\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1]),\n)",
     "crumbs": [
-      "Additional Tools",
-      "tools.specsim_surface"
+      "Examples",
+      "Simple Lense"
+    ]
+  },
+  {
+    "objectID": "tutorials/simple_lense.html#plotting",
+    "href": "tutorials/simple_lense.html#plotting",
+    "title": "Simple Lense",
+    "section": "",
+    "text": "import matplotlib.pyplot as plt\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\nax.scatter(x[facies == 1], y[facies == 1], z[facies == 1], c=\"r\", marker=\"o\")\nax.view_init(elev=40, azim=275)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()",
+    "crumbs": [
+      "Examples",
+      "Simple Lense"
+    ]
+  },
+  {
+    "objectID": "tutorials/simple_lense.html#more-complex-lense-with-internal-structure",
+    "href": "tutorials/simple_lense.html#more-complex-lense-with-internal-structure",
+    "title": "Simple Lense",
+    "section": "",
+    "text": "That was very simple and can represent a discontinuous clay lense for example. But other sedimentary process may be more heterogeneous. One way to represent that is to create a lense with internal structure. This can be done by creating a lense with a different facies inside it. with different angles of dip and dip direction. Lets see the examples of the two types of internal structures implemented in HyVR.\n\n\nWe know specify the internal structure in the half-ellipsoid function with the following arguments:\n\nfacies: a numpy array with the internal facies that will be assigned with the object\ninternal_layering: boolean that specifies if the internal structure is layering or not\nalternating_facies: boolean that specifies if the internal structure is alternating sequence of facies or, if False, it is a random sequence of facies.\nbulb: boolean that specifies if, True, the internal structure is a bulb or a layering (Defaults is false).\nlayer_dist: a float that specifies the distance between the layers in the internal structure.\ndip_dir: a float that specifies the dip direction of the internal structure.\ndip: a float that specifies the dip of the internal structure.\n\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1, 2, 3]),\n    internal_layering=True,\n    alternating_facies=True,\n    bulb=False,\n    layer_dist=3,\n    dip_dir=20.0,\n    dip=25.0,\n)\n\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\n# facies = facies.flatten()\ncolors = np.where(\n    facies == 1, \"r\", np.where(facies == 2, \"g\", np.where(facies == 3, \"b\", \"k\"))\n)\nax.scatter(\n    x[facies != -1],\n    y[facies != -1],\n    z[facies != -1],\n    c=colors[facies != -1],\n    marker=\"o\",\n)\nax.view_init(elev=10, azim=145)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()",
+    "crumbs": [
+      "Examples",
+      "Simple Lense"
+    ]
+  },
+  {
+    "objectID": "tutorials/simple_lense.html#bulb-structure",
+    "href": "tutorials/simple_lense.html#bulb-structure",
+    "title": "Simple Lense",
+    "section": "",
+    "text": "Some sedimentary features have bulb structures that can also be modelled with HyVR. The following arguments are used to specify the bulb structure:\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\nhalf_ellipsoid(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x,\n    y,\n    z,\n    centercoord,\n    dims,\n    azim=20.0,\n    facies=np.array([1, 2, 3]),\n    internal_layering=True,\n    alternating_facies=True,\n    bulb=True,\n    layer_dist=4,\n    dip_dir=20.0,\n)\n\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\n# facies = facies.flatten()\ncolors = np.where(\n    facies == 1, \"r\", np.where(facies == 2, \"g\", np.where(facies == 3, \"b\", \"k\"))\n)\nax.scatter(\n    x[facies != -1],\n    y[facies != -1],\n    z[facies != -1],\n    c=colors[facies != -1],\n    marker=\"o\",\n)\nax.view_init(elev=10, azim=180)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()",
+    "crumbs": [
+      "Examples",
+      "Simple Lense"
+    ]
+  },
+  {
+    "objectID": "methods.html",
+    "href": "methods.html",
+    "title": "Computational methods",
+    "section": "",
+    "text": "Contrary to the original work, the user should build his/her model from a python script file. A detailed documentation of all the options can be found in the API reference. Ideally, major strata contact surfaces are generated first. Then architectural elements, and their internal heterogeneity are then generated inside the stratum accoding to some probability rule. Model building and grid assignment (facies, dip, dip direction) are done at the same time.\nBased on these values (facies, dip, dip direction), the user can create the hydralic parameters (porosity, isotropic hydraulic conductivity, full hydraulic conductivity tensor), and potentially heterogeneity in these parameters on the given level.\nNote that in this section model input parameters are denoted in the following manner: parameter-section.parameter.",
+    "crumbs": [
+      "User Guide",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#simulation-of-strata-and-architectural-element-contact-surfaces",
+    "href": "methods.html#simulation-of-strata-and-architectural-element-contact-surfaces",
+    "title": "Computational methods",
+    "section": "Simulation of strata and architectural element contact surfaces",
+    "text": "Simulation of strata and architectural element contact surfaces\nStrata are defined in the input parameter file by their bottom surface contact models and the architectural elements that are to be included within them. The top contact surface is then generated and all model cells between the upper and lower contact surface (which is the top of the next stratum) are assigned to the stratum.\nRandom contact surfaces are generated using Multi-Gaussian spectral methods outlined by Dietrich1993. These methods require structural statistical parameters (i.e. mean and variance) for the quantity of interest, and a geostatistical covariance model. We used a Gaussian covariance model in the present study to produce smoothly varying surfaces:\n\\[\nR_{ss}(h)=\\sigma^2_s \\exp\\left[ - \\left[ \\frac{\\Delta x}{\\lambda}\\right]^2 \\right]\n\\]\nwhere \\(s\\) is the random quantity of interest, \\(\\sigma^2_s\\) is the variance of \\(s\\) (here elevation), \\(\\Delta x\\) is the distance between the two points, and \\(\\lambda\\) is the correlation length.\nUnlike the original HyVR, the user must be able to select the grid cells and evaluate wether the cells are above or below the contact surface. This is easily done with numpy and can be seen in the examples.\nThe user must also create rules (normally with probabilities) to assign architectural elements to a particular stratum. Usually, this starts with the random choice of an architectural element from those defined, given the probability of each architectural element being chosen. The thickness of the architectural element can be, for example, drawn from a random normal distribution. To account for the erosive nature of many sedimentary environments the algorithm may erode the underlying units (This is done by assigning an oject that intersect cells previously assigned to a previous unit). Thus the object creating order matters.",
+    "crumbs": [
+      "User Guide",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#simulation-of-hydrofacies-assemblages-and-hydrofacies-geometries",
+    "href": "methods.html#simulation-of-hydrofacies-assemblages-and-hydrofacies-geometries",
+    "title": "Computational methods",
+    "section": "Simulation of hydrofacies assemblages and hydrofacies geometries",
+    "text": "Simulation of hydrofacies assemblages and hydrofacies geometries\nThe simulation of individual hydrofacies assemblages is object-based. The user controls where to place the objects, for example one might use random placement of features within an architectural element. Object-based methods have been implemented widely in subsurface simulation Jussel1994,Bennett2017 as they are generally computationally efficient and relatively easy to parameterize. The HyVR program approximates hydrofacies assemblages with simple geometric shapes. Currently, three shapes are supported: troughs (truncated ellipsoids), channels (extruded parabolas), and sheets. All feastures are ‘erosive’ hydrofacies assemblages, this means that they do not keep track of the previously assigned facies, the user must that themselves (see example). And therefore the architectural element (and strata) boundaries may be altered during the course of the simulation.\n\n\n\nGeometries implemented in HyVR.\n\n\nFo each object, different properties must be assigned, such as the placement and dimensions. One unique property is the facies code, which will be assigned by the function according to the facies assignment rules. dip direction \\(\\kappa\\) and dip \\(\\psi\\) may be created properties are associated with the bedding structure at each model grid cell and denote the angle of the bedding plane from the mean direction of flow and horizontal, respectively.\n\nTruncated ellipsoids\nTruncated ellipsoids are generated as a proxy for trough-like or lenses features. The method for generating the boundaries of these features has been described previously in Bennett2017. The internal structure of truncated ellipsoids can be defined in the following ways:\n\ntrough-wise homogeneous, with constant azimuth and dip;\nbulb-dip, with azimuth and dip values based on the three-dimensional gradient at the ellipsoid boundary (‘bulb dip’);\nbulb-sets, comprising nested alternating hydrofacies with \\(\\kappa\\) and \\(\\psi\\) values generated as for bulb-type;",
+    "crumbs": [
+      "User Guide",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "This is a fork from the original HyVR package with minimal implementation of the core features the idea to keep the original ideas alive, but maintainable in the fast python development ecosystem.\nThe Hydrogeological Virtual Reality simulation package (HyVR) is a Python module that helps researchers and practitioners generate sedimentary subsurface models with multiple scales of heterogeneity that are based on geological concepts. The simulation outputs can then be used to explore groundwater flow and solute transport behaviour, for example. The user must work with a previously created regular grid, which can be used directly in MODFLOW or interpolated to the simulation grid that the user will need.\nThe original motivation for HyVR was the lack of tools for modelling sedimentary deposits that include bedding structure model outputs (i.e., dip and azimuth). Such bedding parameters were required to approximate full hydraulic-conductivity tensors for groundwater flow modelling. HyVR is able to simulate these bedding parameters and generate spatially distributed parameter fields, including full hydraulic-conductivity tensors.\nFor more information, the original HyVR information is available in the online technical documentation &lt;https://driftingtides.github.io/hyvr/index.html&gt;_.\nFor citation of the original software and development, please use the following reference:\n\nBennett, J. P., Haslauer, C. P., Ross, M., & Cirpka, O. A. (2018). An open, object-based framework for generating anisotropy in sedimentary subsurface models. Groundwater. DOI:* 10.1111/gwat.12803.\n\nA preprint version of the article is available* here .",
+    "crumbs": [
+      "User Guide",
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "HyVR",
+    "section": "",
+    "text": "Welcome to the documentation for HyVR.\nHyVR is a Python package for generating virtual sedimentary structures.\nThis documentation is a work in progress.",
+    "crumbs": [
+      "HyVR"
     ]
   },
   {
@@ -302,41 +231,172 @@
     "href": "tutorials/simple_channel.html",
     "title": "Simple Channel",
     "section": "",
-    "text": "Channels are just like lenses but that require a centerline. The centerline is a line that goes through the center of the channel. The width of the channel is the distance between the two lines that are parallel to the centerline and tangent to the edges of the channel. The depth of the channel is the distance the horizontal plane and the bottom of the channel. THe channel shape is represented by an extruded parabola that follows the centerline."
+    "text": "Channels are just like lenses but that require a centerline. The centerline is a line that goes through the center of the channel. The width of the channel is the distance between the two lines that are parallel to the centerline and tangent to the edges of the channel. The depth of the channel is the distance the horizontal plane and the bottom of the channel. THe channel shape is represented by an extruded parabola that follows the centerline.\n\n\nHyVR works with a 3D grid that represents the domain where the simulation will be performed. A simple way of doing that is to create a 3D numpy array where each cell contains the properties of the media and the sedimentary structures that are present in that cell. But any grid that can be reduced to a numpy array of cell coordinates can be used.\nSince we use MODFLOW a lot. The numpy grid is done with the axis according to the MODFLOW convention. That is, the first axis is the layer, the second is the row and the third is the column. Moreover, the first layer is the top layer and the last layer is the bottom layer, and the first row is the top row and the last row is the bottom row (like a matrix).\n\nimport numpy as np\n\n# creating a grid according to the MODFLOW convention\nxs = np.arange(0, 100.1, 0.5)\nys = np.arange(0, 80.1, 0.5)\nzs = np.arange(0, 20.1, 0.4)\nz, y, x = np.meshgrid(zs, ys, xs, indexing=\"ij\")\nz = np.flip(z, axis=0)\ny = np.flip(y, axis=1)\n\n\n\n\nThe objects that we simulate define a certain structure. This structure in a cell can be represented by the attributes: - facies: the sedimentary facies assigned to each cell - dip: the dip of the sedimentary structure - dip_direction: the dip direction of the sedimentary structure\nSince we modify these attributes in place when we create an object, we have to initialize these objects before. We can do that by creating a numpy array with the same shape as the simulation grid. The facies is an integer array with the facies code. (-1) facies code is used to represent a non assigned cell. The dip and dip_direction are float arrays with the dip and dip direction of the sedimentary structure in degrees.\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)\n\n\n\n\nFerguson (1976) characterized channel centerlines as being heuritiscally modelled as a damped pendulum oscilator. Here we dont go into detail on the why, but we use this method to create realistic channel shapes. The method requires the following parameters:\n\nfrom hyvr.tools import ferguson_curve\n\ncurve = ferguson_curve(\n    h=0.05,\n    k=np.pi / 60,\n    eps_factor=(np.pi / 1) ** 2,\n    flow_angle=0.0,\n    s_max=150,\n    xstart=-1,\n    ystart=0.0,\n    extra_noise=1e-4,\n)\n\n\ncurve\n\n(array([-1.        , -0.99938477, -0.99876953, ..., 38.24121519,\n        38.240926  , 38.24079423]),\n array([ 0.00000000e+00, -5.33265199e-12, -2.29852656e-11, ...,\n         6.21699502e+01,  6.22028341e+01,  6.22270270e+01]),\n array([ 1.        ,  1.        ,  1.        , ..., -0.01072202,\n        -0.00686634, -0.00402722]),\n array([ 0.00000000e+00, -1.02710589e-08, -3.23969433e-08, ...,\n         9.99942517e-01,  9.99976426e-01,  9.99991891e-01]),\n array([0.00000000e+00, 6.15234184e-04, 1.23046837e-03, ...,\n        1.49942921e+02, 1.49975807e+02, 1.50000000e+02]))\n\n\nIt’s good to check if the curve created is a good representation of the channel. We can do that by plotting the centerline and the channel shape.\n\nimport matplotlib.pyplot as plt\n\nplt.plot(curve[0], curve[1])\n\n\n\n\n\n\n\n\n\n\n\nA discontinuous sedimentary lens can be represented by a half-ellipsoid object. This object is the lower part of an ellipsoid cut in half in the horizontal direction. Itis defined by the center of the ellipsoid, the major and minor axis, in the horizontal direction and the height in the vertical direction, and the azimuth of the major axis.\n\nfrom hyvr import channel\n\nparabola_pars = np.array([2.0, 2.0])\nchannel(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x=x,\n    y=y,\n    z=z,\n    z_top=10.0,\n    curve=np.c_[curve[0], curve[1]],\n    parabola_pars=parabola_pars,\n    facies=np.array([1]),\n)\n\n\n\n\n\nimport matplotlib.pyplot as plt\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\nax.scatter(x[facies == 1], y[facies == 1], z[facies == 1], c=\"r\", marker=\"o\")\nax.view_init(elev=20, azim=275)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()",
+    "crumbs": [
+      "Examples",
+      "Simple Channel"
+    ]
   },
   {
     "objectID": "tutorials/simple_channel.html#creating-a-simulation-grid",
     "href": "tutorials/simple_channel.html#creating-a-simulation-grid",
     "title": "Simple Channel",
-    "section": "1. Creating a simulation grid",
-    "text": "1. Creating a simulation grid\nHyVR works with a 3D grid that represents the domain where the simulation will be performed. A simple way of doing that is to create a 3D numpy array where each cell contains the properties of the media and the sedimentary structures that are present in that cell. But any grid that can be reduced to a numpy array of cell coordinates can be used.\nSince we use MODFLOW a lot. The numpy grid is done with the axis according to the MODFLOW convention. That is, the first axis is the layer, the second is the row and the third is the column. Moreover, the first layer is the top layer and the last layer is the bottom layer, and the first row is the top row and the last row is the bottom row (like a matrix).\n\nimport numpy as np\n\n# creating a grid according to the MODFLOW convention\nxs = np.arange(0, 100.1, 0.5)\nys = np.arange(0, 80.1, 0.5)\nzs = np.arange(0, 20.1, 0.4)\nz, y, x = np.meshgrid(zs, ys, xs, indexing=\"ij\")\nz = np.flip(z, axis=0)\ny = np.flip(y, axis=1)"
+    "section": "",
+    "text": "HyVR works with a 3D grid that represents the domain where the simulation will be performed. A simple way of doing that is to create a 3D numpy array where each cell contains the properties of the media and the sedimentary structures that are present in that cell. But any grid that can be reduced to a numpy array of cell coordinates can be used.\nSince we use MODFLOW a lot. The numpy grid is done with the axis according to the MODFLOW convention. That is, the first axis is the layer, the second is the row and the third is the column. Moreover, the first layer is the top layer and the last layer is the bottom layer, and the first row is the top row and the last row is the bottom row (like a matrix).\n\nimport numpy as np\n\n# creating a grid according to the MODFLOW convention\nxs = np.arange(0, 100.1, 0.5)\nys = np.arange(0, 80.1, 0.5)\nzs = np.arange(0, 20.1, 0.4)\nz, y, x = np.meshgrid(zs, ys, xs, indexing=\"ij\")\nz = np.flip(z, axis=0)\ny = np.flip(y, axis=1)",
+    "crumbs": [
+      "Examples",
+      "Simple Channel"
+    ]
   },
   {
     "objectID": "tutorials/simple_channel.html#initialize-the-sedimentary-attribute-arrays",
     "href": "tutorials/simple_channel.html#initialize-the-sedimentary-attribute-arrays",
     "title": "Simple Channel",
-    "section": "2. Initialize the sedimentary attribute arrays",
-    "text": "2. Initialize the sedimentary attribute arrays\nThe objects that we simulate define a certain structure. This structure in a cell can be represented by the attributes: - facies: the sedimentary facies assigned to each cell - dip: the dip of the sedimentary structure - dip_direction: the dip direction of the sedimentary structure\nSince we modify these attributes in place when we create an object, we have to initialize these objects before. We can do that by creating a numpy array with the same shape as the simulation grid. The facies is an integer array with the facies code. (-1) facies code is used to represent a non assigned cell. The dip and dip_direction are float arrays with the dip and dip direction of the sedimentary structure in degrees.\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)"
+    "section": "",
+    "text": "The objects that we simulate define a certain structure. This structure in a cell can be represented by the attributes: - facies: the sedimentary facies assigned to each cell - dip: the dip of the sedimentary structure - dip_direction: the dip direction of the sedimentary structure\nSince we modify these attributes in place when we create an object, we have to initialize these objects before. We can do that by creating a numpy array with the same shape as the simulation grid. The facies is an integer array with the facies code. (-1) facies code is used to represent a non assigned cell. The dip and dip_direction are float arrays with the dip and dip direction of the sedimentary structure in degrees.\n\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)",
+    "crumbs": [
+      "Examples",
+      "Simple Channel"
+    ]
   },
   {
     "objectID": "tutorials/simple_channel.html#create-a-centerline-with-fergusons-method.",
     "href": "tutorials/simple_channel.html#create-a-centerline-with-fergusons-method.",
     "title": "Simple Channel",
-    "section": "3. Create a centerline with Ferguson’s method.",
-    "text": "3. Create a centerline with Ferguson’s method.\nFerguson (1976) characterized channel centerlines as being heuritiscally modelled as a damped pendulum oscilator. Here we dont go into detail on the why, but we use this method to create realistic channel shapes. The method requires the following parameters:\n\nfrom hyvr.tools import ferguson_curve\n\ncurve = ferguson_curve(\n    h=0.05,\n    k=np.pi / 60,\n    eps_factor=(np.pi / 1) ** 2,\n    flow_angle=0.0,\n    s_max=150,\n    xstart=-1,\n    ystart=0.0,\n    extra_noise=1e-4,\n)\n\n\ncurve\n\n(array([-1.        , -0.99938477, -0.99876953, ..., 38.24121519,\n        38.240926  , 38.24079423]),\n array([ 0.00000000e+00, -5.33265199e-12, -2.29852656e-11, ...,\n         6.21699502e+01,  6.22028341e+01,  6.22270270e+01]),\n array([ 1.        ,  1.        ,  1.        , ..., -0.01072202,\n        -0.00686634, -0.00402722]),\n array([ 0.00000000e+00, -1.02710589e-08, -3.23969433e-08, ...,\n         9.99942517e-01,  9.99976426e-01,  9.99991891e-01]),\n array([0.00000000e+00, 6.15234184e-04, 1.23046837e-03, ...,\n        1.49942921e+02, 1.49975807e+02, 1.50000000e+02]))\n\n\nIt’s good to check if the curve created is a good representation of the channel. We can do that by plotting the centerline and the channel shape.\n\nimport matplotlib.pyplot as plt\n\nplt.plot(curve[0], curve[1])"
+    "section": "",
+    "text": "Ferguson (1976) characterized channel centerlines as being heuritiscally modelled as a damped pendulum oscilator. Here we dont go into detail on the why, but we use this method to create realistic channel shapes. The method requires the following parameters:\n\nfrom hyvr.tools import ferguson_curve\n\ncurve = ferguson_curve(\n    h=0.05,\n    k=np.pi / 60,\n    eps_factor=(np.pi / 1) ** 2,\n    flow_angle=0.0,\n    s_max=150,\n    xstart=-1,\n    ystart=0.0,\n    extra_noise=1e-4,\n)\n\n\ncurve\n\n(array([-1.        , -0.99938477, -0.99876953, ..., 38.24121519,\n        38.240926  , 38.24079423]),\n array([ 0.00000000e+00, -5.33265199e-12, -2.29852656e-11, ...,\n         6.21699502e+01,  6.22028341e+01,  6.22270270e+01]),\n array([ 1.        ,  1.        ,  1.        , ..., -0.01072202,\n        -0.00686634, -0.00402722]),\n array([ 0.00000000e+00, -1.02710589e-08, -3.23969433e-08, ...,\n         9.99942517e-01,  9.99976426e-01,  9.99991891e-01]),\n array([0.00000000e+00, 6.15234184e-04, 1.23046837e-03, ...,\n        1.49942921e+02, 1.49975807e+02, 1.50000000e+02]))\n\n\nIt’s good to check if the curve created is a good representation of the channel. We can do that by plotting the centerline and the channel shape.\n\nimport matplotlib.pyplot as plt\n\nplt.plot(curve[0], curve[1])",
+    "crumbs": [
+      "Examples",
+      "Simple Channel"
+    ]
   },
   {
     "objectID": "tutorials/simple_channel.html#create-a-simple-lense-that-modifies-the-attribute-arrays",
     "href": "tutorials/simple_channel.html#create-a-simple-lense-that-modifies-the-attribute-arrays",
     "title": "Simple Channel",
-    "section": "3. Create a simple lense that modifies the attribute arrays",
-    "text": "3. Create a simple lense that modifies the attribute arrays\nA discontinuous sedimentary lens can be represented by a half-ellipsoid object. This object is the lower part of an ellipsoid cut in half in the horizontal direction. Itis defined by the center of the ellipsoid, the major and minor axis, in the horizontal direction and the height in the vertical direction, and the azimuth of the major axis.\n\nfrom hyvr import channel\n\nparabola_pars = np.array([2.0, 2.0])\nchannel(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x=x,\n    y=y,\n    z=z,\n    z_top=10.0,\n    curve=np.c_[curve[0], curve[1]],\n    parabola_pars=parabola_pars,\n    facies=np.array([1]),\n)"
+    "section": "",
+    "text": "A discontinuous sedimentary lens can be represented by a half-ellipsoid object. This object is the lower part of an ellipsoid cut in half in the horizontal direction. Itis defined by the center of the ellipsoid, the major and minor axis, in the horizontal direction and the height in the vertical direction, and the azimuth of the major axis.\n\nfrom hyvr import channel\n\nparabola_pars = np.array([2.0, 2.0])\nchannel(\n    facies,\n    dip_array,\n    dip_dir_array,\n    x=x,\n    y=y,\n    z=z,\n    z_top=10.0,\n    curve=np.c_[curve[0], curve[1]],\n    parabola_pars=parabola_pars,\n    facies=np.array([1]),\n)",
+    "crumbs": [
+      "Examples",
+      "Simple Channel"
+    ]
   },
   {
     "objectID": "tutorials/simple_channel.html#plotting",
     "href": "tutorials/simple_channel.html#plotting",
     "title": "Simple Channel",
-    "section": "Plotting",
-    "text": "Plotting\n\nimport matplotlib.pyplot as plt\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\nax.scatter(x[facies == 1], y[facies == 1], z[facies == 1], c=\"r\", marker=\"o\")\nax.view_init(elev=20, azim=275)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()"
+    "section": "",
+    "text": "import matplotlib.pyplot as plt\n\nfig = plt.figure(figsize=(10, 7))\nax = fig.add_subplot(111, projection=\"3d\")\n\n# Plotting the facies array\nax.scatter(x[facies == 1], y[facies == 1], z[facies == 1], c=\"r\", marker=\"o\")\nax.view_init(elev=20, azim=275)\nax.set_xlabel(\"X axis\")\nax.set_ylabel(\"Y axis\")\nax.set_zlabel(\"Z axis\")\nax.set_title(\"3D Plot of Facies Array\")\nax.set_xlim(0, 100)\nax.set_ylim(0, 80)\nax.set_zlim(0, 20)\nax.set_box_aspect([4, 4, 1])  # Aspect ratio is 2:2:1 to reduce vertical exaggeration\nfig.tight_layout()",
+    "crumbs": [
+      "Examples",
+      "Simple Channel"
+    ]
+  },
+  {
+    "objectID": "tutorials/more_complex_structure.html",
+    "href": "tutorials/more_complex_structure.html",
+    "title": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
+    "section": "",
+    "text": "import numpy as np",
+    "crumbs": [
+      "Examples",
+      "More Complex Structure"
+    ]
+  },
+  {
+    "objectID": "tutorials/more_complex_structure.html#generate-a-sequence-of-thicknesses-representing-shifts-in-the-sedimentation-history",
+    "href": "tutorials/more_complex_structure.html#generate-a-sequence-of-thicknesses-representing-shifts-in-the-sedimentation-history",
+    "title": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
+    "section": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
+    "text": "Generate a sequence of thicknesses representing shifts in the sedimentation history:\n\nnp.random.seed(37893)\nmin_thick = 0\nn = 10\nsimulated_thickness = 20\nwhile min_thick &lt; 0.3:\n    zs = np.random.uniform(0, simulated_thickness, size=n - 1)\n    ordered_zs = np.sort(zs)\n    ordered_zs = np.append(ordered_zs, simulated_thickness)\n    ordered_zs = np.append(0, ordered_zs)\n    thicknesses = np.diff(ordered_zs)\n    min_thick = np.min(thicknesses)\n\n\nprint(f\"The thickness array is:{thicknesses})\")\nprint(f\"The minimum thickness is:{min_thick}\")\nprint(f\"The total thickness is:{np.sum(thicknesses)}\")\nprint(f\"The mean thickness is:{np.mean(thicknesses)}\")\nprint(f\"The number of layers is:{len(thicknesses)}\")\n\nThe thickness array is:[2.0682547  3.9534124  2.29212944 0.79664357 1.42553114 0.59364403\n 1.21076477 4.53873408 0.68882167 2.4320642 ])\nThe minimum thickness is:0.5936440340197162\nThe total thickness is:20.0\nThe mean thickness is:2.0\nTHe number of layers is:10\n\n\n\nThe domain (Grid and attributes)\n\n# creating a grid according to the MODFLOW convention\nxs = np.arange(0, 100.1, 0.5)\nys = np.arange(0, 80.1, 0.5)\nzs = np.arange(0, 20.1, 0.4)\nz, y, x = np.meshgrid(zs, ys, xs, indexing=\"ij\")\nz = np.flip(z, axis=0)\ny = np.flip(y, axis=1)\nfacies = np.ones_like(x, dtype=np.int32) * (-1)\ndip_array = np.zeros_like(x)\ndip_dir_array = np.zeros_like(x)",
+    "crumbs": [
+      "Examples",
+      "More Complex Structure"
+    ]
+  },
+  {
+    "objectID": "tutorials/more_complex_structure.html#create-a-complex-algorithm-that-represent-a-certain-environment",
+    "href": "tutorials/more_complex_structure.html#create-a-complex-algorithm-that-represent-a-certain-environment",
+    "title": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
+    "section": "Create a complex algorithm that represent a certain environment:",
+    "text": "Create a complex algorithm that represent a certain environment:\n\nfrom hyvr import channel, half_ellipsoid\nfrom hyvr.tools import ferguson_curve\nfrom hyvr.utils import min_distance\n\nz0 = 0.0\nP = np.column_stack([x[0, :, :].ravel(), y[0, :, :].ravel()])\nfor thick in thicknesses:\n    # creating anastamosing channel pattern:\n    main_channels = []\n    channels = []\n    for i in range(6):\n        ystart = np.random.uniform(0, 600)\n        channel_curve = ferguson_curve(\n            h=0.3,\n            k=np.pi / 200,\n            eps_factor=(np.pi / 1.5) ** 2,\n            flow_angle=0.0,\n            s_max=1500,\n            xstart=-500,\n            ystart=ystart,\n        )\n        main_channels.append(channel_curve)\n        indexes = np.random.choice(\n            np.arange(channel_curve[0].shape[0]), size=4, replace=False\n        )\n        xstart = channel_curve[0][indexes]\n        ystart = channel_curve[1][indexes]\n        for xp, yp in zip(xstart, ystart):\n            channel_derived_channel = ferguson_curve(\n                h=0.3,\n                k=np.pi / 200,\n                eps_factor=(np.pi / 1.5) ** 2,\n                flow_angle=np.random.uniform(-np.pi / 18, np.pi / 18),\n                s_max=1000,\n                xstart=xp,\n                ystart=yp,\n            )\n            channels.append(channel_derived_channel)\n    total_channels = main_channels + channels\n    min_distance_array = np.zeros((P.shape[0], len(total_channels)))\n    for i, channel_ in enumerate(total_channels):\n        min_distance_array[:, i], _ = min_distance(channel_[0], channel_[1], P)\n    # cut the proportion to 30 % of the cells in the x, y plane\n    min_arr = min_distance_array.min(axis=1)\n    # Assuming `min_array` and `t` are already defined\n    # Get the sorted indices of t\n    sorted_indices = np.argsort(min_arr)\n    # Calculate the number of indices to select (30% of the total)\n    num_indices = int(len(sorted_indices) * 0.3)\n    # Select the last 30% of the indices\n    selected_indices = sorted_indices[-num_indices:]\n\n    primitive = np.ones_like(min_arr, dtype=np.int32) * 7\n    primitive = np.ravel(primitive)\n    primitive[selected_indices] = 6\n    primitive = primitive.reshape(z.shape[1], z.shape[2])\n    z_ = z[:, 0, 0]\n    for i in range(z_.shape[0]):\n        if z_[i] &gt;= z0:\n            facies[i, :, :] = primitive\n    print(f\"Finished the primitive of layer {z0 + thick}\")\n    ## Adding ponds:\n    p_ponds = 0\n    logic_tufa = (z &gt;= z0) & (z &lt;= z0 + thick)\n    while p_ponds &lt; 0.30:\n        x_c = np.random.uniform(0, 900)\n        y_c = np.random.uniform(0, 600)\n        z_c = z0 + thick + np.random.uniform(0, 0.1)\n        a = np.random.uniform(50, 80)\n        b = np.random.uniform(30, 60)\n        c = thick\n        azim = np.random.uniform(20, -20)\n        half_ellipsoid(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            center_coords=np.array([x_c, y_c, z_c]),\n            dims=np.array([a, b, c]),\n            azim=azim,\n            facies=np.array([2]),\n        )\n        # k[facies_trough != -1] = np.random.lognormal(mu_tufa, sigma=sigma_tufa)\n        p_ponds = np.sum(facies[logic_tufa] == 2) / np.sum(logic_tufa)\n    print(f\"Finished ponds in layer {z0 + thick}\")\n    ## Adding the channels, the ponds and the peat lenses\n    for channel_ in main_channels:\n        channel(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            z_top=z0 + thick,\n            curve=np.c_[channel_[0], channel_[1]],\n            parabola_pars=np.array([30, thick]),\n            facies=np.array([4]),\n        )\n    for channel_ in channels:\n        channel(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            z_top=z0 + thick,\n            curve=np.c_[channel_[0], channel_[1]],\n            parabola_pars=np.array([20, thick]),\n            facies=np.array([4]),\n        )\n    print(f\"Finished channels in layer {z0 + thick}\")\n    ## assiging peat to areas close to water bodies:\n    water_bodies = (facies == 2) | (facies == 4)\n    z_ = z[:, 0, 0]\n    ind = np.where(z_ &lt;= z0 + thick)\n    layer = np.min(ind[0])\n    layer\n    water_bodies = water_bodies[layer, :, :]\n    xs = x[layer, :, :][water_bodies]\n    ys = x[layer, :, :][water_bodies]\n    xs.shape\n    ys.shape\n    index_ = np.random.choice(np.arange(0, xs.shape[0]))\n    ## Adding peat lenses:\n    p_peat = 0\n    if thick &gt; 0.4:\n        c = 0.4\n    else:\n        c = thick\n    while p_peat &lt; 0.20:\n        index_ = np.random.choice(np.arange(0, xs.shape[0]))\n        x_c = xs[index_]\n        y_c = ys[index_]\n        z_c = z0 + thick\n        a = np.random.uniform(30, 60)\n        b = np.random.uniform(20, 40)\n        c = c\n        azim = np.random.uniform(-20, 20)\n        facies_code = np.random.choice([8, 9])\n        half_ellipsoid(\n            facies,\n            dip_array,\n            dip_dir_array,\n            x,\n            y,\n            z,\n            center_coords=np.array([x_c, y_c, z_c]),\n            dims=np.array([a, b, c]),\n            azim=azim,\n            facies=np.array([facies_code]),\n        )\n        # k[facies_trough != -1] = np.random.lognormal(mu_tufa, sigma=sigma_tufa)\n        logic_tufa = (z &gt;= z0 + thick - c) & (z &lt;= z0 + thick)\n        p_peat = np.sum(facies[logic_tufa] == facies_code) / np.sum(logic_tufa)\n    print(f\"Finished the layer {z0 + thick}\")\n    # resetting z_0:\n    z0 += thick\n\nFinished the primitive of layer 2.0682546963182324\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 2.0682546963182324\nFinished channels in layer 2.0682546963182324\nFinished the layer 2.0682546963182324\nFinished the primitive of layer 6.021667098997843\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 6.021667098997843\nFinished channels in layer 6.021667098997843\nFinished the layer 6.021667098997843\nFinished the primitive of layer 8.31379653524133\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 8.31379653524133\nFinished channels in layer 8.31379653524133\nFinished the layer 8.31379653524133\nFinished the primitive of layer 9.11044010573822\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 9.11044010573822\nFinished channels in layer 9.11044010573822\nFinished the layer 9.11044010573822\nFinished the primitive of layer 10.535971242587879\nNo points inside the ellipsoid\nFinished ponds in layer 10.535971242587879\nFinished channels in layer 10.535971242587879\nFinished the layer 10.535971242587879\nFinished the primitive of layer 11.129615276607595\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 11.129615276607595\nFinished channels in layer 11.129615276607595\nNo points inside the ellipsoid\nFinished the layer 11.129615276607595\nFinished the primitive of layer 12.340380049586386\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 12.340380049586386\nFinished channels in layer 12.340380049586386\nFinished the layer 12.340380049586386\nFinished the primitive of layer 16.87911413060696\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 16.87911413060696\nFinished channels in layer 16.87911413060696\nFinished the layer 16.87911413060696\nFinished the primitive of layer 17.567935804686865\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished ponds in layer 17.567935804686865\nFinished channels in layer 17.567935804686865\nNo points inside the ellipsoid\nNo points inside the ellipsoid\nFinished the layer 17.567935804686865\nFinished the primitive of layer 20.0\nFinished ponds in layer 20.0\nFinished channels in layer 20.0\nFinished the layer 20.0",
+    "crumbs": [
+      "Examples",
+      "More Complex Structure"
+    ]
+  },
+  {
+    "objectID": "tutorials/more_complex_structure.html#visualizing-the-results",
+    "href": "tutorials/more_complex_structure.html#visualizing-the-results",
+    "title": "Generate a sequence of thicknesses representing shifts in the sedimentation history:",
+    "section": "Visualizing the Results",
+    "text": "Visualizing the Results\n\nimport matplotlib.pyplot as plt\n\nfig, ax = plt.subplots(2, 2, figsize=(10, 10))\nax[0, 0].imshow(facies[int(facies.shape[0] / 2), :, :], origin=\"lower\")\nax[0, 0].set_title(\"Planar view middle section\")\nax[0, 1].imshow(facies[:, int(facies.shape[1] / 2), :], origin=\"lower\")\nax[0, 1].set_title(\"Crossectional view middle column cross-section\")\nax[1, 0].imshow(facies[:, :, int(facies.shape[2] / 2)], origin=\"lower\")\nax[1, 0].set_title(\"Longitudinal view middle row cross-section\")\n# 3D view\nax3d = fig.add_subplot(224, projection=\"3d\")\nax3d.scatter(\n    x.ravel(), y.ravel(), z.ravel(), c=facies.ravel(), cmap=\"viridis\", marker=\".\"\n)\nax3d.set_title(\"3D view of the grid\")\nax3d.set_xlabel(\"X\")\nax3d.set_ylabel(\"Y\")\nax3d.set_zlabel(\"Z\")\n\nText(0.5, 0, 'Z')",
+    "crumbs": [
+      "Examples",
+      "More Complex Structure"
+    ]
+  },
+  {
+    "objectID": "reference/objects.trough.half_ellipsoid.html",
+    "href": "reference/objects.trough.half_ellipsoid.html",
+    "title": "objects.trough.half_ellipsoid",
+    "section": "",
+    "text": "trough.half_ellipsoid(f_array, dip_array, dip_dir_array, x, y, z, center_coords, dims, azim, facies, internal_layering=False, alternating_facies=False, bulb=False, dip=0.0, dip_dir=0.0, layer_dist=0.0)\nAssigns a half ellipsoid (trough) to the grid points x,y,z. Half ellipsoid is the lower half of an ellipsoid, defined by its center, dimensions and azimuth. It can be used to model discrete lenses, trough structure, scour pool fills, etc.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\ncenter_coords\n\n\nrequired\n\n\ndims\n\n\nrequired\n\n\nazim\n\nIt follows the mathematical convention, anticlockwise from east.\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\nbulb\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure"
+  },
+  {
+    "objectID": "reference/objects.trough.half_ellipsoid.html#parameters",
+    "href": "reference/objects.trough.half_ellipsoid.html#parameters",
+    "title": "objects.trough.half_ellipsoid",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nf_array\n\n\nrequired\n\n\ndip_array\n\n\nrequired\n\n\ndip_dir_array\n\n\nrequired\n\n\nx\n\n\nrequired\n\n\ncenter_coords\n\n\nrequired\n\n\ndims\n\n\nrequired\n\n\nazim\n\nIt follows the mathematical convention, anticlockwise from east.\nrequired\n\n\nfacies\n\n\nrequired\n\n\ninternal_layering\n\n\nFalse\n\n\nalternating_facies\n\n\nFalse\n\n\nbulb\n\n\nFalse\n\n\ndip\n\n\n0.0\n\n\ndip_dir\n\n\n0.0\n\n\nfollows\n\n\nrequired\n\n\nlayer_dist\n\n\n0.0"
+  },
+  {
+    "objectID": "reference/objects.trough.half_ellipsoid.html#returns",
+    "href": "reference/objects.trough.half_ellipsoid.html#returns",
+    "title": "objects.trough.half_ellipsoid",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nModifies the following arrays in place:\n\n\n\nndarray(int32) of the facies values at the coordinates (x,y,z)\n\n\n\nndarray(float32) of the dip (positive value) of the internal structure at (x,y,z)\n\n\n\nndarray(float32) of the dip-direction of the internal structure"
+  },
+  {
+    "objectID": "reference/tools.ferguson_curve.html",
+    "href": "reference/tools.ferguson_curve.html",
+    "title": "tools.ferguson_curve",
+    "section": "",
+    "text": "ferguson_curve(h, k, eps_factor, flow_angle, s_max, xstart, ystart, extra_noise=0.0)\nSimulate extruded parabola centrelines using the Ferguson (1976) disturbed meander model Implementation of AR2 autoregressive model http://onlinelibrary.wiley.com/doi/10.1002/esp.3290010403/full\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nh\nfloat\nHeight (Ferguson model parameter)\nrequired\n\n\nk\nfloat\nWave number (Ferguson model parameter)\nrequired\n\n\neps_factor\nfloat\nRandom background noise (Ferguson model parameter)\nrequired\n\n\nflow_angle\nfloat\nAngle of mean flow direction, in radians\nrequired\n\n\ns_max\nfloat\nLength of the domain in mean flow direction\nrequired\n\n\nxstart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nystart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nextra_noise\nfloat\nsmall error added to the covariance matrix to avoid singular matrix in the underlying Gaussian error curve\n0.0\n\n\n\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\nfloat matrix\nSimulated extruded parabola centerlines: storage array containing values for x coordinate, y coordinate, vx and vy"
+  },
+  {
+    "objectID": "reference/tools.ferguson_curve.html#parameters",
+    "href": "reference/tools.ferguson_curve.html#parameters",
+    "title": "tools.ferguson_curve",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nh\nfloat\nHeight (Ferguson model parameter)\nrequired\n\n\nk\nfloat\nWave number (Ferguson model parameter)\nrequired\n\n\neps_factor\nfloat\nRandom background noise (Ferguson model parameter)\nrequired\n\n\nflow_angle\nfloat\nAngle of mean flow direction, in radians\nrequired\n\n\ns_max\nfloat\nLength of the domain in mean flow direction\nrequired\n\n\nxstart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nystart\nfloat\nStarting coordinates of the channel centerline\nrequired\n\n\nextra_noise\nfloat\nsmall error added to the covariance matrix to avoid singular matrix in the underlying Gaussian error curve\n0.0"
+  },
+  {
+    "objectID": "reference/tools.ferguson_curve.html#returns",
+    "href": "reference/tools.ferguson_curve.html#returns",
+    "title": "tools.ferguson_curve",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\nfloat matrix\nSimulated extruded parabola centerlines: storage array containing values for x coordinate, y coordinate, vx and vy"
+  },
+  {
+    "objectID": "reference/tools.specsim_surface.html",
+    "href": "reference/tools.specsim_surface.html",
+    "title": "tools.specsim_surface",
+    "section": "",
+    "text": "specsim_surface(x, y, mean, var, corl, mask=None)\nCreates gaussian random surface with mean value and variance input with the spectral method from Dietrich & Newsam (1993).\n\n\nx,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)\n\n\n\n\n\n\n\n\n\n\nType\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface"
+  },
+  {
+    "objectID": "reference/tools.specsim_surface.html#parameters",
+    "href": "reference/tools.specsim_surface.html#parameters",
+    "title": "tools.specsim_surface",
+    "section": "",
+    "text": "x,y: 2D grid of x and y points mean: mean value var: variance corl: correlation lenghts (same unit as x and y) in x and y directions mask: mask array (same dimensions as x and y)"
+  },
+  {
+    "objectID": "reference/tools.specsim_surface.html#returns",
+    "href": "reference/tools.specsim_surface.html#returns",
+    "title": "tools.specsim_surface",
+    "section": "",
+    "text": "Type\nDescription\n\n\n\n\noutput np.array with same dimensions as x and y and with Z values corrensponding to the surface"
   }
 ]
