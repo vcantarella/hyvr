@@ -1,0 +1,17 @@
+---
+title: "Installation"
+---
+
+## Installing the HyVR package
+
+The package is designed to work in a Conda or other virtual environment. Before installation, ensure your environment has up-to-date versions of the following libraries:
+
+- numpy
+- numba
+- scipy
+
+Once your virtual environment is activated, you can install HyVR using `pip`. First, clone the repository from GitHub, navigate into the project's root directory, and run the following command:
+
+```bash
+pip install .
+```
