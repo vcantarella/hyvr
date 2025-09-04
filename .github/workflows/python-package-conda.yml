@@ -1,36 +1,44 @@
-name: Python Package using Conda
+# This workflow is based on the example at https://github.com/conda-incubator/setup-miniconda
+# It will install Python dependencies from the environment.yml file and run tests on multiple Python versions.
 
-on: [push]
+name: Python package
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  build-linux:
+  build-and-test:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 5
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.11'
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
-    - name: Install dependencies
-      run: |
-        conda update conda
-        conda env update --file environment.yml --name base
-    - name: Lint with ruff
-      run: |
-        pip install ruff
-        ruff format                          # Format all files in the current directory (and any subdirectories).
-        ruff check                          # Lint all files in the current directory (and any subdirectories).
-    - name: Test with pytest
-      run: |
-        pip install pytest pytest-cov
-        NUMBA_DISABLE_JIT=1 pytest --cov --cov-report=xml
-    - name: Upload results to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+      - uses: actions/checkout@v4
+
+      - name: Set up mamba
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          channel-priority: strict
+          activate-environment: hyvr-dev
+          environment-file: environment.yml
+          use-mamba: true
+
+      - name: Install package
+        shell: bash -l {0}
+        run: |
+          pip install . --no-deps
+
+      - name: Test with pytest
+        shell: bash -l {0}
+        run: |
+          pip install pytest
+          NUMBA_DISABLE_JIT=1 pytest

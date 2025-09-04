@@ -1,5 +1,5 @@
 name: hyvr
 dependencies:
-  - numpy < 2.0
+  - numpy
   - scipy
   - numba
